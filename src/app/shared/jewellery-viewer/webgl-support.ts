@@ -1,8 +1,11 @@
 let webglSupport: boolean | undefined;
 
-/** True when WebGL is available and the device isn't asking us to save data. */
+// Also returns false when the visitor has data saver on.
 export function canRender3d(): boolean {
-  const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
+  const nav = navigator as Navigator & {
+    connection?: { saveData?: boolean };
+    deviceMemory?: number;
+  };
   if (nav.connection?.saveData) return false;
   if (nav.deviceMemory !== undefined && nav.deviceMemory < 2) return false;
   if (webglSupport === undefined) {

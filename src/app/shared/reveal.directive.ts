@@ -1,11 +1,8 @@
 import { Directive, ElementRef, inject, input, OnInit } from '@angular/core';
 import { MotionService } from '../core/services/motion.service';
 
-/**
- * Scroll-reveal via AOS: `<section appReveal="fade-up" [revealDelay]="150">`.
- * The data-aos attribute is only added when the visitor allows motion, so content is never
- * left hidden for reduced-motion users.
- */
+// <section appReveal="fade-up" [revealDelay]="150">
+// Skipped for users who prefer reduced motion, so content is never left hidden.
 @Directive({ selector: '[appReveal]' })
 export class RevealDirective implements OnInit {
   readonly appReveal = input<string>('fade-up');

@@ -32,7 +32,9 @@
     background: #fff;
     border: 1px solid var(--line);
     border-radius: 50%;
-    transition: border-color 0.2s, color 0.2s;
+    transition:
+      border-color 0.2s,
+      color 0.2s;
 
     &:hover {
       border-color: var(--accent);
@@ -125,7 +127,9 @@ dl {
     background: none;
     border: 1px solid transparent;
     border-radius: var(--radius-sm);
-    transition: background 0.2s, border-color 0.2s;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
 
     &:hover {
       background: var(--surface);

@@ -27,12 +27,11 @@ export class SiteHeader {
   readonly scrolled = signal(false);
   readonly enquireHref = computed(() => this.whatsapp.generalLink());
 
-  /** Category row under the main bar. */
   readonly categories = CATEGORIES.filter((c) => c.slug !== 'traditional');
 
-  /** Main links (right side on desktop, top of the mobile menu). */
-  readonly links = [
-    { path: '/', label: 'Gold Rate', fragment: 'gold-rate' },
+  readonly links: { path: string; label: string; fragment?: string; exact?: boolean }[] = [
+    // Same path as Home, so match exactly (including #gold-rate).
+    { path: '/', label: 'Gold Rate', fragment: 'gold-rate', exact: true },
     { path: '/bridal', label: 'Bridal' },
     { path: '/about', label: 'About' },
     { path: '/contact', label: 'Contact' },

@@ -19,20 +19,28 @@
   <div class="rates" role="table" aria-label="Gold rates in Indian rupees">
     @for (row of v.rows; track row.label) {
       <div class="rate" role="row" [class.k24]="row.purity === '24K'">
-        <span class="purity" role="rowheader">{{ row.purity }} Gold <small>{{ row.grams === 1 ? '1 gram' : '8 grams' }}</small></span>
+        <span class="purity" role="rowheader">
+          {{ row.purity }} Gold
+          <small>{{ row.grams === 1 ? '1 gram' : '8 grams' }}</small>
+        </span>
         <span class="price" role="cell">{{ format(row.price) }}</span>
       </div>
     }
   </div>
 } @else {
   <div class="unavailable">
-    <p>Today's rate has not been published yet. Please contact the showroom for the current rate.</p>
+    <p>
+      Today's rate has not been published yet. Please contact the showroom for the current rate.
+    </p>
     @if (rateEnquiry(); as href) {
-      <a class="btn btn-whatsapp btn-sm" [href]="href" target="_blank" rel="noopener">Ask on WhatsApp</a>
+      <a class="btn btn-whatsapp btn-sm" [href]="href" target="_blank" rel="noopener">
+        Ask on WhatsApp
+      </a>
     }
   </div>
 }
 
 <p class="disclaimer">
-  Rates are indicative. The final price of jewellery includes making charges, wastage, GST and other applicable charges.
+  Rates are indicative. The final price of jewellery includes making charges, wastage, GST and other
+  applicable charges.
 </p>

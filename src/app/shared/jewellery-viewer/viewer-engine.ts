@@ -12,11 +12,7 @@ export interface EngineOptions {
   onContextLost: () => void;
 }
 
-/**
- * Showroom renderer: physically based gold under studio lighting, image-based reflections from
- * a room environment, soft contact shadow, orbit/zoom/pan controls. This module (and Three.js)
- * is code-split and only downloaded when a viewer scrolls into view.
- */
+// Three.js scene for the jewellery viewer. Loaded lazily by jewellery-viewer.ts.
 export class ViewerEngine {
   private readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
@@ -41,7 +37,12 @@ export class ViewerEngine {
     private readonly opts: EngineOptions,
   ) {
     const mobile = matchMedia('(max-width: 768px)').matches;
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: !mobile || devicePixelRatio < 2, alpha: true, powerPreference: 'high-performance' });
+    this.renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: !mobile || devicePixelRatio < 2,
+      alpha: true,
+      powerPreference: 'high-performance',
+    });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.5 : 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -54,7 +55,7 @@ export class ViewerEngine {
     this.scene.environmentRotation.set(0, Math.PI / 5, 0);
     pmrem.dispose();
 
-    // Warm studio lighting: soft key with shadows, cool fill, bright rim to catch edges.
+    // Warm key light with shadows, cool fill, and a rim light to catch the edges.
     const key = new THREE.DirectionalLight(0xfff1dc, 2.2);
     key.position.set(3, 6, 4);
     key.castShadow = true;
@@ -68,7 +69,10 @@ export class ViewerEngine {
     rim.position.set(-2, 3, -5);
     this.scene.add(key, fill, rim, new THREE.HemisphereLight(0xfff8ee, 0x3b2a1e, 0.35));
 
-    this.shadowPlane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.ShadowMaterial({ opacity: 0.16 }));
+    this.shadowPlane = new THREE.Mesh(
+      new THREE.PlaneGeometry(20, 20),
+      new THREE.ShadowMaterial({ opacity: 0.16 }),
+    );
     this.shadowPlane.rotation.x = -Math.PI / 2;
     this.shadowPlane.receiveShadow = true;
     this.scene.add(this.stage, this.shadowPlane);
@@ -81,7 +85,7 @@ export class ViewerEngine {
     this.controls.enabled = opts.interactive;
     this.controls.enablePan = opts.interactive;
     this.controls.maxPolarAngle = Math.PI * 0.62;
-    // Pause auto-rotation while the visitor inspects the piece.
+    // stop spinning once the user grabs it
     this.controls.addEventListener('start', () => (this.controls.autoRotate = false));
     if (!opts.interactive) canvas.style.touchAction = 'pan-y';
 
@@ -96,10 +100,12 @@ export class ViewerEngine {
     this.opts.onContextLost();
   };
 
-  /** Loads and presents a piece, cross-fading (by scale) from the previous one. */
   async show(model: Model3d): Promise<void> {
     const token = ++this.loadToken;
-    const object = model.type === 'gltf' ? await this.loadGltf(model.url) : buildProcedural(model.shape, this.materials, model.gem, model.scale ?? 1);
+    const object =
+      model.type === 'gltf'
+        ? await this.loadGltf(model.url)
+        : buildProcedural(model.shape, this.materials, model.gem, model.scale ?? 1);
     if (token !== this.loadToken) {
       this.disposeObject(object);
       return;
@@ -126,7 +132,7 @@ export class ViewerEngine {
     return gltf.scene;
   }
 
-  /** Centres the object, scales it to a consistent size and sits it on the shadow plane. */
+  // Centre and scale every piece the same way so the camera framing stays consistent.
   private frameObject(object: THREE.Object3D): void {
     const wrapper = object;
     const box = new THREE.Box3().setFromObject(wrapper);
@@ -157,37 +163,20 @@ export class ViewerEngine {
 
   zoom(factor: number): void {
     const offset = this.camera.position.clone().sub(this.controls.target);
-    const len = THREE.MathUtils.clamp(offset.length() * factor, this.controls.minDistance, this.controls.maxDistance);
+    const len = THREE.MathUtils.clamp(
+      offset.length() * factor,
+      this.controls.minDistance,
+      this.controls.maxDistance,
+    );
     this.camera.position.copy(this.controls.target).add(offset.setLength(len));
     this.controls.update();
     this.renderOnce();
   }
 
-  /** Keyboard rotation: rotates the stage instead of the camera so it works without pointer input. */
+  // For the arrow keys.
   rotate(radians: number): void {
     this.stage.rotation.y += radians;
     this.renderOnce();
-  }
-
-  /**
-   * Renders the current piece from an orbit angle onto a solid background and returns it as an
-   * image data URL. Used to produce product shots from the 3D models.
-   */
-  snapshot(azimuth: number, elevation: number, background: string, distance = 0.95, type = 'image/webp', quality = 0.9): string {
-    this.transition = 1;
-    this.applyTransition();
-    this.controls.target.set(0, 0, 0);
-    this.camera.position.setFromSphericalCoords(this.homeDistance * distance, Math.PI / 2 - elevation, azimuth);
-    this.camera.lookAt(0, 0, 0);
-    this.renderer.render(this.scene, this.camera);
-    const out = document.createElement('canvas');
-    out.width = this.canvas.width;
-    out.height = this.canvas.height;
-    const ctx = out.getContext('2d')!;
-    ctx.fillStyle = background;
-    ctx.fillRect(0, 0, out.width, out.height);
-    ctx.drawImage(this.canvas, 0, 0);
-    return out.toDataURL(type, quality);
   }
 
   setAutoRotate(on: boolean): void {
@@ -257,7 +246,7 @@ export class ViewerEngine {
       if (!mesh.isMesh) return;
       mesh.geometry.dispose();
       const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-      // Shared procedural materials are disposed with the engine, not per piece.
+      // shared materials are disposed in dispose()
       const shared = this.sharedMaterials();
       mats.filter((m) => !shared.has(m)).forEach((m) => m.dispose());
     });

@@ -1,0 +1,18 @@
+.page {
+  background: #f6f5f2;
+}
+.login {
+  width: min(440px, 100%);
+  background: #fff;
+  border-radius: 1rem;
+}
+.mark {
+  width: 2.2rem;
+  height: 2.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #b8862f, #e3c27a 50%, #a8741f);
+  color: #fff;
+  font-weight: 800;
+}

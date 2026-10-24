@@ -6,10 +6,7 @@ import { LocalCollection } from './local-collection';
 const now = () => new Date().toISOString();
 const daysAgo = (n: number) => new Date(Date.now() - n * 86_400_000).toISOString();
 
-/**
- * UI-only data for the admin screens planned in the backend (Categories, Admin users,
- * Enquiries, Gold-rate history). Seeded with clearly fictional sample rows.
- */
+// Local data for the screens that don't have an API yet. Swap for HttpClient calls later.
 @Injectable({ providedIn: 'root' })
 export class AdminDataService {
   readonly categories = new LocalCollection<AdminCategory>('kj.admin.categories', () =>
@@ -57,7 +54,7 @@ export class AdminDataService {
       message: 'Sample enquiry: please share the latest price and availability.',
       followUpDate: null,
       assignedTo: 'admin',
-      notes: 'Demo row — delete once real enquiries are recorded.',
+      notes: 'Demo row. Delete once real enquiries come in.',
     },
     {
       id: 'enq-sample-2',
@@ -76,5 +73,8 @@ export class AdminDataService {
     },
   ]);
 
-  readonly goldRateHistory = new LocalCollection<GoldRateHistoryEntry>('kj.admin.goldRateHistory', () => []);
+  readonly goldRateHistory = new LocalCollection<GoldRateHistoryEntry>(
+    'kj.admin.goldRateHistory',
+    () => [],
+  );
 }

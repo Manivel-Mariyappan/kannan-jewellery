@@ -3,24 +3,48 @@
   <div class="hero">
     <div class="hero-copy">
       <span class="badge" appReveal="fade-up">22K &amp; 18K Gold · Bridal · Daily Wear</span>
-      <h1 class="display" appReveal="fade-up" [revealDelay]="80">Timeless Gold.<br /><span class="accent">Eternal Elegance.</span></h1>
+      <h1 class="display" appReveal="fade-up" [revealDelay]="80">
+        Timeless Gold.
+        <br />
+        <span class="accent">Eternal Elegance.</span>
+      </h1>
       <p class="lead" appReveal="fade-up" [revealDelay]="140">
-        Handpicked gold necklaces, bangles, earrings and bridal sets at {{ settings()?.shopName ?? 'Kannan Jewellery' }}. See every piece in 3D and enquire instantly on WhatsApp.
+        Handpicked gold necklaces, bangles, earrings and bridal sets at
+        {{ settings()?.shopName ?? 'Kannan Jewellery' }}. See every piece in 3D and enquire
+        instantly on WhatsApp.
       </p>
       <div class="cta" appReveal="fade-up" [revealDelay]="200">
         <a class="btn btn-gold" routerLink="/collections">Explore Our Collections</a>
-        <app-whatsapp-button [message]="messages.general(settings()?.shopName ?? 'Kannan Jewellery')" variant="outline" />
+        <app-whatsapp-button
+          [message]="messages.general(settings()?.shopName ?? 'Kannan Jewellery')"
+          variant="outline"
+        />
       </div>
       <ul class="trust" appReveal="fade-up" [revealDelay]="260">
-        <li><strong>Purity</strong> stated on every piece</li>
-        <li><strong>Weight</strong> shown in grams</li>
-        <li><strong>Prices</strong> explained clearly</li>
+        <li>
+          <strong>Purity</strong>
+          stated on every piece
+        </li>
+        <li>
+          <strong>Weight</strong>
+          shown in grams
+        </li>
+        <li>
+          <strong>Prices</strong>
+          explained clearly
+        </li>
       </ul>
     </div>
 
     <div class="hero-visual">
       @if (heroPiece(); as piece) {
-        <app-jewellery-viewer [model]="piece.model3d" [poster]="piece.images.at(0) ?? ''" [alt]="piece.name" [interactive]="false" [showModelNote]="false" />
+        <app-jewellery-viewer
+          [model]="piece.model3d"
+          [poster]="piece.images.at(0) ?? ''"
+          [alt]="piece.name"
+          [interactive]="false"
+          [showModelNote]="false"
+        />
         <a class="hero-chip" [routerLink]="['/jewellery', piece.slug]">
           <span class="meta">{{ piece.code }} · {{ piece.purity }}</span>
           <strong>{{ piece.name }}</strong>
@@ -38,8 +62,15 @@
   </div>
   <div class="cats">
     @for (c of categories; track c.slug; let i = $index) {
-      <a class="cat" [routerLink]="['/collections', c.slug]" appReveal="fade-up" [revealDelay]="i * 40">
-        <span class="cat-img"><img [src]="assetUrl(c.image)" [alt]="" loading="lazy" width="200" height="200" /></span>
+      <a
+        class="cat"
+        [routerLink]="['/collections', c.slug]"
+        appReveal="fade-up"
+        [revealDelay]="i * 40"
+      >
+        <span class="cat-img">
+          <img [src]="assetUrl(c.image)" [alt]="" loading="lazy" width="200" height="200" />
+        </span>
         <span class="cat-name">{{ c.name.replace('Gold ', '').replace(' Jewellery', '') }}</span>
       </a>
     }
@@ -78,16 +109,33 @@
       <p>Harams, layered necklaces, kadas and jhumkas, in traditional and modern styles.</p>
       <span class="btn btn-gold btn-sm">Explore Bridal</span>
     </div>
-    <img [src]="assetUrl('demo/shots/maharani-bridal-haram-1.webp')" alt="" loading="lazy" width="1000" height="1000" />
+    <img
+      [src]="assetUrl('demo/shots/maharani-bridal-haram-1.webp')"
+      alt=""
+      loading="lazy"
+      width="1000"
+      height="1000"
+    />
   </a>
-  <a class="promo daily" routerLink="/collections/daily-wear" appReveal="fade-up" [revealDelay]="100">
+  <a
+    class="promo daily"
+    routerLink="/collections/daily-wear"
+    appReveal="fade-up"
+    [revealDelay]="100"
+  >
     <div class="promo-copy">
       <span class="badge">Daily Wear</span>
       <h2>Light gold for every day</h2>
       <p>Fine chains, studs and rings that are comfortable from morning to night.</p>
       <span class="btn btn-dark btn-sm">Shop Daily Wear</span>
     </div>
-    <img [src]="assetUrl('demo/shots/mallika-flower-ring-2.webp')" alt="" loading="lazy" width="1000" height="1000" />
+    <img
+      [src]="assetUrl('demo/shots/mallika-flower-ring-2.webp')"
+      alt=""
+      loading="lazy"
+      width="1000"
+      height="1000"
+    />
   </a>
 </section>
 
@@ -143,7 +191,7 @@
   </div>
 </section>
 
-<!-- Testimonials: only rendered when genuine testimonials are added in settings -->
+<!-- Only shown once real testimonials are added to settings.json -->
 @if (settings()?.testimonials?.length) {
   <section class="container section">
     <div class="section-head"><h2>What our customers say</h2></div>
@@ -151,7 +199,12 @@
       @for (t of settings()!.testimonials!; track t.name) {
         <figure class="card">
           <blockquote>“{{ t.quote }}”</blockquote>
-          <figcaption>{{ t.name }}@if (t.place) {, {{ t.place }}}</figcaption>
+          <figcaption>
+            {{ t.name }}
+            @if (t.place) {
+              , {{ t.place }}
+            }
+          </figcaption>
         </figure>
       }
     </div>
@@ -163,20 +216,40 @@
   <div class="visit card">
     <div class="visit-info">
       <h2>Visit our showroom</h2>
-      <p class="address"><app-icon name="pin" [size]="18" />{{ fullAddress() }}</p>
+      <p class="address">
+        <app-icon name="pin" [size]="18" />
+        {{ fullAddress() }}
+      </p>
       @if (settings()?.phone; as phone) {
-        <p><app-icon name="phone" [size]="18" /><a [href]="'tel:' + phone">{{ phone }}</a></p>
+        <p>
+          <app-icon name="phone" [size]="18" />
+          <a [href]="'tel:' + phone">{{ phone }}</a>
+        </p>
       }
       @for (h of settings()?.openingHours ?? []; track h.days) {
-        <p><app-icon name="clock" [size]="18" />{{ h.days }}: <strong>{{ h.hours }}</strong></p>
+        <p>
+          <app-icon name="clock" [size]="18" />
+          {{ h.days }}:
+          <strong>{{ h.hours }}</strong>
+        </p>
       }
       <div class="cta">
-        <a class="btn btn-dark" [href]="directionsUrl()" target="_blank" rel="noopener">Get directions</a>
-        <app-whatsapp-button [message]="messages.general(settings()?.shopName ?? 'Kannan Jewellery')" label="WhatsApp us" />
+        <a class="btn btn-dark" [href]="directionsUrl()" target="_blank" rel="noopener">
+          Get directions
+        </a>
+        <app-whatsapp-button
+          [message]="messages.general(settings()?.shopName ?? 'Kannan Jewellery')"
+          label="WhatsApp us"
+        />
       </div>
     </div>
     <div class="visit-map">
-      <iframe [src]="mapUrl()" title="Map to the showroom" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe
+        [src]="mapUrl()"
+        title="Map to the showroom"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
     </div>
   </div>
 </section>

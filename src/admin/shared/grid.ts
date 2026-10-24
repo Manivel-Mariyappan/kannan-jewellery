@@ -1,8 +1,13 @@
-import { AllCommunityModule, ICellRendererParams, ModuleRegistry, themeQuartz } from 'ag-grid-community';
+import {
+  AllCommunityModule,
+  ICellRendererParams,
+  ModuleRegistry,
+  themeQuartz,
+} from 'ag-grid-community';
+import { assetUrl } from '../../app/core/utils/url';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-/** Shared AG Grid look for every admin table. */
 export const adminGridTheme = themeQuartz.withParams({
   accentColor: '#a8741f',
   fontFamily: 'Inter, system-ui, sans-serif',
@@ -13,7 +18,7 @@ export const adminGridTheme = themeQuartz.withParams({
   wrapperBorderRadius: 0,
 });
 
-/** Edit / Delete buttons for an actions column (built with DOM APIs, no HTML strings). */
+// Edit / Delete buttons for the actions column.
 export function actionButtons<T>(onEdit: (row: T) => void, onDelete: (row: T) => void) {
   return (p: ICellRendererParams<T>) => {
     const wrap = document.createElement('div');
@@ -26,12 +31,30 @@ export function actionButtons<T>(onEdit: (row: T) => void, onDelete: (row: T) =>
       b.onclick = () => p.data && fn(p.data);
       return b;
     };
-    wrap.append(make('Edit', 'btn-outline-primary', onEdit), make('Delete', 'btn-outline-danger', onDelete));
+    wrap.append(
+      make('Edit', 'btn-outline-primary', onEdit),
+      make('Delete', 'btn-outline-danger', onDelete),
+    );
     return wrap;
   };
 }
 
-/** Coloured Bootstrap badge for a status value. */
+export function thumbnail(shape: 'square' | 'round' = 'square') {
+  return (p: ICellRendererParams) => {
+    const img = document.createElement('img');
+    img.src = p.value ? assetUrl(String(p.value)) : '';
+    img.alt = '';
+    img.loading = 'lazy';
+    img.className = shape === 'round' ? 'grid-thumb rounded-circle' : 'grid-thumb';
+    return img;
+  };
+}
+
+// On phones a pinned column takes too much room, so only pin on wider screens.
+export function pinRightOnWideScreens(): 'right' | null {
+  return matchMedia('(min-width: 768px)').matches ? 'right' : null;
+}
+
 export function badge(colors: Record<string, string>) {
   return (p: ICellRendererParams) => {
     if (p.value === null || p.value === undefined || p.value === '') return '';
@@ -42,9 +65,19 @@ export function badge(colors: Record<string, string>) {
   };
 }
 
-/** 24 Oct 2026, 8:25 pm */
+// e.g. 24 Oct 2026, 8:25 pm
 export const formatDateTime = (iso: string | null | undefined): string =>
-  iso ? new Date(iso).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+  iso
+    ? new Date(iso).toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+      })
+    : '';
 
 export const formatDate = (iso: string | null | undefined): string =>
-  iso ? new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+  iso
+    ? new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+    : '';

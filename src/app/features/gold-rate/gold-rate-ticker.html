@@ -1,0 +1,30 @@
+<div class="container bar">
+  <a routerLink="/" fragment="gold-rate" class="rate" aria-label="Today's gold rate, see details">
+    <span class="dot" [class]="view().status" aria-hidden="true"></span>
+    <span class="label">Gold rate today</span>
+    @if (rate22(); as r22) {
+      <span>
+        22K
+        <strong>{{ r22 }}/g</strong>
+      </span>
+      <span class="sep" aria-hidden="true">|</span>
+      <span>
+        24K
+        <strong>{{ rate24() }}/g</strong>
+      </span>
+      @if (view().status === 'delayed') {
+        <span class="delayed">Delayed</span>
+      } @else if (view().updatedAt) {
+        <span class="time">· {{ view().updatedAt | date: 'd MMM, h:mm a' }}</span>
+      }
+    } @else {
+      <span>Not published yet</span>
+    }
+  </a>
+  @if (phone(); as p) {
+    <a class="contact" [href]="'tel:' + p">
+      <app-icon name="phone" [size]="14" />
+      {{ p }}
+    </a>
+  }
+</div>

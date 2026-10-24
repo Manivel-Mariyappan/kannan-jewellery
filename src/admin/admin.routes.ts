@@ -6,15 +6,12 @@ import { adminStylesGuard } from './core/admin-styles';
 import { AdminAlerts } from './core/alerts.service';
 import { DmyDateFormatter } from './core/date-formatter';
 
-/**
- * Admin portal (/admin). Lives in src/admin and is lazy-loaded, so none of its code,
- * Bootstrap styles, AG Grid or SweetAlert2 is downloaded by website visitors.
- */
+// Lazy-loaded from app.routes.ts, so website visitors never download any of this.
 export const ADMIN_ROUTES: Routes = [
   {
     path: '',
     canActivate: [adminStylesGuard],
-    // NgbOffcanvas is re-provided here so offcanvas panels (product form) can inject admin providers.
+    // NgbOffcanvas is provided again here so the offcanvas forms can inject AdminAlerts.
     providers: [
       provideSweetAlert2(),
       AdminAlerts,
@@ -22,7 +19,11 @@ export const ADMIN_ROUTES: Routes = [
       { provide: NgbDateParserFormatter, useClass: DmyDateFormatter },
     ],
     children: [
-      { path: 'login', loadComponent: () => import('./pages/login/login').then((m) => m.LoginPage), title: 'Admin login | Kannan Jewellery' },
+      {
+        path: 'login',
+        loadComponent: () => import('./pages/login/login').then((m) => m.LoginPage),
+        title: 'Admin login | Kannan Jewellery',
+      },
       {
         path: '',
         canActivate: [adminGuard],
@@ -31,19 +32,22 @@ export const ADMIN_ROUTES: Routes = [
           { path: '', pathMatch: 'full', redirectTo: 'products' },
           {
             path: 'products',
-            loadComponent: () => import('./pages/products/products-page').then((m) => m.ProductsPage),
+            loadComponent: () =>
+              import('./pages/products/products-page').then((m) => m.ProductsPage),
             title: 'Products | Admin',
             data: { heading: 'Products' },
           },
           {
             path: 'categories',
-            loadComponent: () => import('./pages/categories/categories-page').then((m) => m.CategoriesPage),
+            loadComponent: () =>
+              import('./pages/categories/categories-page').then((m) => m.CategoriesPage),
             title: 'Categories | Admin',
             data: { heading: 'Categories' },
           },
           {
             path: 'enquiries',
-            loadComponent: () => import('./pages/enquiries/enquiries-page').then((m) => m.EnquiriesPage),
+            loadComponent: () =>
+              import('./pages/enquiries/enquiries-page').then((m) => m.EnquiriesPage),
             title: 'Enquiries | Admin',
             data: { heading: 'Enquiries' },
           },
@@ -55,13 +59,15 @@ export const ADMIN_ROUTES: Routes = [
           },
           {
             path: 'gold-rate',
-            loadComponent: () => import('./pages/gold-rate/gold-rate-page').then((m) => m.GoldRatePage),
+            loadComponent: () =>
+              import('./pages/gold-rate/gold-rate-page').then((m) => m.GoldRatePage),
             title: 'Gold rate | Admin',
             data: { heading: 'Gold rate' },
           },
           {
             path: 'settings',
-            loadComponent: () => import('./pages/settings/settings-page').then((m) => m.SettingsPage),
+            loadComponent: () =>
+              import('./pages/settings/settings-page').then((m) => m.SettingsPage),
             title: 'Shop settings | Admin',
             data: { heading: 'Shop settings' },
           },

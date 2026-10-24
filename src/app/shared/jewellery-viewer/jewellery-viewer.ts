@@ -14,20 +14,14 @@ import {
 } from '@angular/core';
 import { Model3d } from '../../core/models';
 import { MotionService } from '../../core/services/motion.service';
-import { assetUrl } from '../../core/utils/download';
+import { assetUrl } from '../../core/utils/url';
 import type { ViewerEngine } from './viewer-engine';
 import { canRender3d } from './webgl-support';
 
 type ViewerState = 'idle' | 'loading' | 'ready' | 'fallback';
 
-/**
- * Interactive 3D jewellery viewer with a photographic fallback.
- *
- * - Three.js is only downloaded when the viewer approaches the viewport.
- * - Rendering pauses while the viewer is off-screen.
- * - Without WebGL, on save-data/low-memory devices, or if a model fails to load, the poster
- *   image stays in place with a short explanation.
- */
+// Three.js is only downloaded when the viewer gets close to the screen, and rendering pauses
+// while it's off-screen. If 3D can't run, the poster image stays with a short note.
 @Component({
   selector: 'app-jewellery-viewer',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,7 +39,6 @@ export class JewelleryViewer {
   readonly interactive = input(true);
   readonly autoRotate = input(true);
   readonly tone = input<'light' | 'dark'>('light');
-  /** Show the "demo model" caption for procedurally generated pieces. */
   readonly showModelNote = input(true);
 
   private readonly host = inject(ElementRef<HTMLElement>);
@@ -78,7 +71,8 @@ export class JewelleryViewer {
       io.observe(el);
       const ro = new ResizeObserver(() => this.engine?.resize());
       ro.observe(el);
-      const onVisibility = () => (document.hidden ? this.engine?.stop() : this.visible && this.engine?.start());
+      const onVisibility = () =>
+        document.hidden ? this.engine?.stop() : this.visible && this.engine?.start();
       document.addEventListener('visibilitychange', onVisibility);
 
       destroyRef.onDestroy(() => {
@@ -90,7 +84,7 @@ export class JewelleryViewer {
       });
     });
 
-    // Swap pieces when the model input changes (e.g. in the showroom carousel).
+    // Swap the piece when the model input changes (showroom next/previous).
     effect(() => {
       const model = this.model();
       untracked(() => {
@@ -122,7 +116,8 @@ export class JewelleryViewer {
           interactive: this.interactive(),
           autoRotate: this.autoRotate(),
           reducedMotion: this.motion.reduced(),
-          onContextLost: () => this.fail('The 3D view was interrupted, so we are showing a photograph.'),
+          onContextLost: () =>
+            this.fail('The 3D view was interrupted, so we are showing a photograph.'),
         });
         this.engine = engine;
         this.autoRotating.set(engine.autoRotating);
@@ -155,7 +150,6 @@ export class JewelleryViewer {
     this.state.set('fallback');
   }
 
-  // ---- controls ----
   zoomIn(): void {
     this.engine?.zoom(0.8);
   }

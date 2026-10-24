@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
-/** Shows and reads dates as dd-mm-yyyy (the usual format in India). */
+// Datepicker format: dd-mm-yyyy
 @Injectable()
 export class DmyDateFormatter extends NgbDateParserFormatter {
   parse(value: string): NgbDateStruct | null {

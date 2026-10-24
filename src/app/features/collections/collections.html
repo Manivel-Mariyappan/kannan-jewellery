@@ -1,8 +1,10 @@
 <div class="container page">
   <nav class="crumbs" aria-label="Breadcrumb">
-    <a routerLink="/">Home</a><span aria-hidden="true">›</span>
+    <a routerLink="/">Home</a>
+    <span aria-hidden="true">›</span>
     @if (current()) {
-      <a routerLink="/collections">Collections</a><span aria-hidden="true">›</span>
+      <a routerLink="/collections">Collections</a>
+      <span aria-hidden="true">›</span>
       <span aria-current="page">{{ title() }}</span>
     } @else {
       <span aria-current="page">Collections</span>
@@ -12,9 +14,19 @@
   <header class="head">
     <div>
       <h1>{{ title() }}</h1>
-      <p class="lead">{{ current()?.blurb ?? 'Necklaces, chains, bangles, rings, earrings and bridal sets, each with purity and weight.' }}</p>
+      <p class="lead">
+        {{
+          current()?.blurb ??
+            'Necklaces, chains, bangles, rings, earrings and bridal sets, each with purity and weight.'
+        }}
+      </p>
     </div>
-    <app-whatsapp-button [message]="enquiryMessage()" [label]="'Ask about ' + (current()?.name ?? 'our collections')" variant="outline" [small]="true" />
+    <app-whatsapp-button
+      [message]="enquiryMessage()"
+      [label]="'Ask about ' + (current()?.name ?? 'our collections')"
+      variant="outline"
+      [small]="true"
+    />
   </header>
 
   <div class="layout">
@@ -22,20 +34,40 @@
       <section>
         <h2>Category</h2>
         <nav class="cat-list">
-          <a routerLink="/collections" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [queryParams]="keepQuery()">
+          <a
+            routerLink="/collections"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            [queryParams]="keepQuery()"
+          >
             All Jewellery
           </a>
           @for (c of categories; track c.slug) {
-            <a [routerLink]="['/collections', c.slug]" routerLinkActive="active" [queryParams]="keepQuery()">{{ c.name }}</a>
+            <a
+              [routerLink]="['/collections', c.slug]"
+              routerLinkActive="active"
+              [queryParams]="keepQuery()"
+            >
+              {{ c.name }}
+            </a>
           }
         </nav>
       </section>
       <section>
         <h2>Purity</h2>
         <div class="chips">
-          <button type="button" [class.on]="!purity()" (click)="updateQuery({ purity: null })">All</button>
+          <button type="button" [class.on]="!purity()" (click)="updateQuery({ purity: null })">
+            All
+          </button>
           @for (p of purities; track p) {
-            <button type="button" [class.on]="purity() === p" [attr.aria-pressed]="purity() === p" (click)="updateQuery({ purity: p })">{{ p }}</button>
+            <button
+              type="button"
+              [class.on]="purity() === p"
+              [attr.aria-pressed]="purity() === p"
+              (click)="updateQuery({ purity: p })"
+            >
+              {{ p }}
+            </button>
           }
         </div>
       </section>
@@ -46,7 +78,13 @@
         <label class="search">
           <app-icon name="search" [size]="17" />
           <span class="visually-hidden">Search jewellery</span>
-          <input #search type="search" [value]="q() ?? ''" placeholder="Search by name, code or style" (input)="onSearch(search.value)" />
+          <input
+            #search
+            type="search"
+            [value]="q() ?? ''"
+            placeholder="Search by name, code or style"
+            (input)="onSearch(search.value)"
+          />
         </label>
         <label class="select mobile-only">
           <span class="visually-hidden">Purity</span>
@@ -61,16 +99,21 @@
           <span class="visually-hidden">Sort</span>
           <select (change)="updateQuery({ sort: $any($event.target).value })">
             @for (s of sorts; track s.key) {
-              <option [value]="s.key" [selected]="(sort() ?? 'newest') === s.key">{{ s.label }}</option>
+              <option [value]="s.key" [selected]="(sort() ?? 'newest') === s.key">
+                {{ s.label }}
+              </option>
             }
           </select>
         </label>
       </div>
 
       <p class="count" aria-live="polite">
-        Showing <strong>{{ results().length }}</strong> {{ results().length === 1 ? 'piece' : 'pieces' }}
+        Showing
+        <strong>{{ results().length }}</strong>
+        {{ results().length === 1 ? 'piece' : 'pieces' }}
         @if (hasFilters()) {
-          · <button type="button" class="clear" (click)="clearFilters()">Clear filters</button>
+          ·
+          <button type="button" class="clear" (click)="clearFilters()">Clear filters</button>
         }
       </p>
 
@@ -99,10 +142,15 @@
           } @else {
             <div class="state-box">
               <h3>No pieces match your search</h3>
-              <p>Try a different word or clear the filters. We have more designs at the showroom than we show online.</p>
+              <p>
+                Try a different word or clear the filters. We have more designs at the showroom than
+                we show online.
+              </p>
               <div class="state-actions">
                 @if (hasFilters()) {
-                  <button type="button" class="btn btn-outline" (click)="clearFilters()">Clear filters</button>
+                  <button type="button" class="btn btn-outline" (click)="clearFilters()">
+                    Clear filters
+                  </button>
                 }
                 <app-whatsapp-button [message]="enquiryMessage()" label="Ask us on WhatsApp" />
               </div>

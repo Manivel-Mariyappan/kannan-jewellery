@@ -23,7 +23,6 @@ export class Collections {
   private readonly productService = inject(ProductService);
   readonly store = inject(ContentStore);
 
-  /** Route param and query params, bound via withComponentInputBinding(). */
   readonly category = input<string>();
   readonly q = input<string>();
   readonly purity = input<string>();
@@ -31,8 +30,12 @@ export class Collections {
 
   readonly categories = CATEGORIES;
 
-  /** Keeps search, purity and sort when switching category. */
-  readonly keepQuery = computed(() => ({ q: this.q() || null, purity: this.purity() || null, sort: this.sort() || null }));
+  // keep the search and filters when switching category
+  readonly keepQuery = computed(() => ({
+    q: this.q() || null,
+    purity: this.purity() || null,
+    sort: this.sort() || null,
+  }));
   readonly purities: Purity[] = ['24K', '22K', '18K'];
   readonly sorts: { key: SortKey; label: string }[] = [
     { key: 'newest', label: 'Newest first' },
@@ -49,11 +52,13 @@ export class Collections {
       category: this.current()?.slug ?? null,
       search: this.q() ?? null,
       purity: this.purities.includes(this.purity() as Purity) ? (this.purity() as Purity) : null,
-      sort: (this.sort() as SortKey) ?? 'newest',
+      sort: (this.sort() as SortKey | undefined) ?? 'newest',
     }),
   );
 
-  readonly hasFilters = computed(() => !!(this.q() || this.purity() || (this.sort() && this.sort() !== 'newest')));
+  readonly hasFilters = computed(
+    () => !!(this.q() || this.purity() || (this.sort() && this.sort() !== 'newest')),
+  );
   readonly enquiryMessage = computed(() => enquiryMessages.collection(this.title()));
 
   constructor() {
@@ -71,7 +76,11 @@ export class Collections {
   }
 
   updateQuery(params: Record<string, string | null>): void {
-    void this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge', replaceUrl: true });
+    void this.router.navigate([], {
+      queryParams: params,
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   onSearch(value: string): void {

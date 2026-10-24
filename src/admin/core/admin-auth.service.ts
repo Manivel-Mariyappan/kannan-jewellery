@@ -3,33 +3,26 @@ import { APP_CONFIG } from '../../app/core/config/app-config';
 import { AdminDataService } from './admin-data.service';
 
 const SESSION_KEY = 'kj.admin.session';
-/** Older sessions only stored a flag; treat them as the default admin account. */
-const LEGACY_KEY = 'kj.admin.unlocked';
 
 async function sha256Hex(value: string): Promise<string> {
   const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
   return Array.from(new Uint8Array(bytes), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-/**
- * Username + password login for the browser-only admin portal.
- *
- * The username must be an active account on the Admin users screen. Until the ASP.NET Core
- * Auth API is connected, every account signs in with the admin password configured in
- * app-config.ts (stored there as a SHA-256 hash).
- *
- * This is NOT server-side security: anyone can read the site's JavaScript. It keeps casual
- * visitors out of the editing screens, which cannot change the live site by themselves.
- */
+// Usernames come from the Admin users screen. Until the Auth API exists, every account uses
+// the password whose hash is in app-config.ts. This only keeps casual visitors out; it is not
+// real security, since anyone can read the JavaScript.
 @Injectable({ providedIn: 'root' })
 export class AdminAuthService {
   private readonly data = inject(AdminDataService);
 
   readonly username = signal<string | null>(this.readSession());
   readonly unlocked = computed(() => this.username() !== null);
-  readonly currentUser = computed(() => this.data.users.all().find((u) => u.username === this.username()) ?? null);
+  readonly currentUser = computed(
+    () => this.data.users.all().find((u) => u.username === this.username()) ?? null,
+  );
 
-  /** Returns an error message, or null on success. */
+  // Returns an error message, or null when the login worked.
   async login(username: string, password: string): Promise<string | null> {
     const name = username.trim().toLowerCase();
     const user = this.data.users.all().find((u) => u.username.toLowerCase() === name);
@@ -50,7 +43,6 @@ export class AdminAuthService {
     this.username.set(null);
     try {
       sessionStorage.removeItem(SESSION_KEY);
-      sessionStorage.removeItem(LEGACY_KEY);
     } catch {
       /* ignore */
     }
@@ -58,7 +50,7 @@ export class AdminAuthService {
 
   private readSession(): string | null {
     try {
-      return sessionStorage.getItem(SESSION_KEY) ?? (sessionStorage.getItem(LEGACY_KEY) === '1' ? 'admin' : null);
+      return sessionStorage.getItem(SESSION_KEY);
     } catch {
       return null;
     }

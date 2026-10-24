@@ -1,7 +1,4 @@
-/* ==========================================================================
-   Kannan Jewellery — design system (v2: clean modern white)
-   White surfaces, warm-gold accent, dark readable text, compact layout.
-   ========================================================================== */
+// Global styles for the website. Colours and fonts are defined as CSS variables below.
 
 :root {
   --bg: #ffffff;
@@ -99,11 +96,11 @@ button {
 }
 
 /*
- * Website component styles. Switched off inside the admin portal (html.kj-admin), which uses
- * Bootstrap; several class names (.btn, .card, .container, .lead…) exist in both.
+ * Website styles. Turned off inside the admin (html.kj-admin), which uses Bootstrap and has
+ * classes with the same names (.btn, .card, .container...).
  */
 html:not(.kj-admin) {
-  /* ---------- Typography ---------- */
+  // Typography
 
   h1,
   h2,
@@ -167,7 +164,7 @@ html:not(.kj-admin) {
     color: var(--muted);
   }
 
-  /* ---------- Layout ---------- */
+  // Layout
 
   .container {
     width: 100%;
@@ -249,7 +246,7 @@ html:not(.kj-admin) {
     }
   }
 
-  /* ---------- Buttons ---------- */
+  // Buttons
 
   .btn {
     --btn-bg: var(--bg);
@@ -269,7 +266,12 @@ html:not(.kj-admin) {
     background: var(--btn-bg);
     border: 1px solid var(--btn-border);
     border-radius: var(--radius-sm);
-    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    transition:
+      background 0.2s,
+      color 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s,
+      transform 0.2s;
 
     svg {
       width: 1.1rem;
@@ -373,7 +375,7 @@ html:not(.kj-admin) {
     }
   }
 
-  /* ---------- Badges ---------- */
+  // Badges
 
   .tag {
     display: inline-flex;
@@ -395,7 +397,7 @@ html:not(.kj-admin) {
     border-color: var(--accent);
   }
 
-  /* ---------- Cards ---------- */
+  // Cards
 
   .card {
     background: #fff;
@@ -403,7 +405,7 @@ html:not(.kj-admin) {
     border-radius: var(--radius);
   }
 
-  /* ---------- Forms ---------- */
+  // Forms
 
   .field {
     display: grid;
@@ -425,7 +427,9 @@ html:not(.kj-admin) {
     background: #fff;
     border: 1px solid var(--line);
     border-radius: var(--radius-sm);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
 
     &:focus {
       outline: none;
@@ -439,7 +443,7 @@ html:not(.kj-admin) {
     resize: vertical;
   }
 
-  /* ---------- States ---------- */
+  // States
 
   .skeleton {
     border-radius: var(--radius);
@@ -474,7 +478,7 @@ html:not(.kj-admin) {
   }
 }
 
-/* ---------- Page transitions & motion ---------- */
+// Page transitions & motion
 
 @view-transition {
   navigation: auto;

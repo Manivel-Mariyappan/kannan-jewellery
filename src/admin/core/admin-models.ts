@@ -1,7 +1,4 @@
-/**
- * Admin-only entities from the planned backend (ASP.NET Core + MySQL): categories, admin users,
- * enquiries and gold-rate history. UI only for now; see LocalCollection.
- */
+// Records for the planned backend tables. Kept in localStorage for now (see LocalCollection).
 
 export interface AdminCategory {
   id: string;

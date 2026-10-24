@@ -1,0 +1,58 @@
+<div class="row g-3 mb-3">
+  @for (s of stats(); track s.label) {
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body py-3">
+          <div class="small text-body-secondary">{{ s.label }}</div>
+          <div class="fs-4 fw-bold">{{ s.value }}</div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white d-flex flex-wrap align-items-center gap-2 py-3">
+    <input
+      type="search"
+      class="form-control form-control-sm search"
+      placeholder="Search name, code, category…"
+      [value]="search()"
+      (input)="search.set($any($event.target).value)"
+    />
+    <div class="ms-auto d-flex gap-2">
+      @if (demoCount()) {
+        <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeDemo()">
+          Remove demo products
+        </button>
+      }
+      <button type="button" class="btn btn-sm btn-primary" (click)="openForm(null)">
+        + Add product
+      </button>
+    </div>
+  </div>
+  <ag-grid-angular
+    class="grid"
+    [theme]="theme"
+    [rowData]="store.products()"
+    [columnDefs]="columns"
+    [defaultColDef]="defaultColDef"
+    [getRowId]="getRowId"
+    [quickFilterText]="search()"
+    [pagination]="true"
+    [paginationPageSize]="20"
+    [paginationPageSizeSelector]="[10, 20, 50, 100]"
+    [rowHeight]="64"
+    [animateRows]="true"
+    (cellValueChanged)="onFlagChanged($event)"
+  />
+</div>
+<p class="small text-body-secondary mt-2">
+  Tick
+  <strong>Published</strong>
+  ,
+  <strong>New</strong>
+  or
+  <strong>Featured</strong>
+  directly in the table. Click a row's Edit button to change details.
+</p>

@@ -2,13 +2,11 @@ export type Purity = '24K' | '22K' | '18K' | '14K';
 
 export type GemTone = 'ruby' | 'emerald' | 'pearl';
 
-export type ProceduralShape = 'ring' | 'bangle' | 'chain' | 'necklace' | 'earring' | 'bridal' | 'antique';
+export type ProceduralShape =
+  'ring' | 'bangle' | 'chain' | 'necklace' | 'earring' | 'bridal' | 'antique';
 
-/**
- * A 3D presentation for a piece of jewellery.
- * - `gltf`: a real GLB/GLTF model file (place it under `public/models/`).
- * - `procedural`: demo geometry generated in Three.js — genuine 3D, but a stand-in for a scanned model.
- */
+// gltf: a model file in public/models/
+// procedural: demo shape built in code until real models are available
 export type Model3d =
   | { type: 'gltf'; url: string }
   | { type: 'procedural'; shape: ProceduralShape; gem?: GemTone; scale?: number };
@@ -20,30 +18,30 @@ export interface Product {
   name: string;
   description: string;
   categories: string[];
-  /** Net gold weight in grams (shown on the website as "Weight"). */
+  // net weight, shown on the website
   weightGrams: number | null;
   purity: Purity | null;
-  /** Admin-only details (optional so older products.json files stay valid). */
+  // Admin-only fields. Optional so older products.json files still load.
   grossWeightGrams?: number | null;
   stoneWeightGrams?: number | null;
   makingChargePercent?: number | null;
   wastagePercent?: number | null;
-  /** BIS hallmark unique ID (6 characters). */
+  // BIS hallmark ID, 6 characters
   huid?: string;
   stockStatus?: 'In stock' | 'Made to order' | 'Out of stock';
   quantity?: number | null;
-  /** Paths relative to the site root (e.g. `images/kj-nk-101-1.webp`) or full URLs. */
+  // e.g. images/kj-nk-101-1.webp, or a full URL
   images: string[];
   model3d: Model3d | null;
   isNew: boolean;
   isFeatured: boolean;
   published: boolean;
-  /** Sample content shipped with the template. Shown with a "Demo" label on the site. */
+  // sample product, shown with a "Demo" label
   demo: boolean;
   createdAt: string;
 }
 
-/** Per-gram rates in INR. `null` means the store has not published a rate. */
+// Per-gram rates in INR. null = not published yet.
 export interface GoldRateData {
   rate22k: number | null;
   rate24k: number | null;
@@ -67,15 +65,15 @@ export interface ShopSettings {
   state: string;
   postalCode: string;
   phone: string;
-  /** International format, digits only, e.g. 919876543210. */
+  // digits only, with country code, e.g. 919876543210
   whatsappNumber: string;
   email: string;
   openingHours: { days: string; hours: string }[];
   mapsQuery: string;
   directions: string;
-  /** Verified certification statement, e.g. hallmarking registration. Leave empty if not verified. */
+  // e.g. hallmarking registration; leave empty unless verified
   certification: string;
-  /** Only add genuine customer testimonials, shared with permission. */
+  // real customer quotes only, with their permission
   testimonials?: Testimonial[];
 }
 
@@ -84,6 +82,6 @@ export interface Category {
   name: string;
   blurb: string;
   image: string;
-  /** Virtual categories are computed from product flags instead of `categories`. */
+  // 'new' = built from the isNew flag instead of the categories list
   virtual?: 'new';
 }

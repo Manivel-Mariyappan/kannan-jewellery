@@ -7,14 +7,26 @@ const BRAND = {
   cancelButtonColor: '#6c757d',
 };
 
-/** SweetAlert2 dialogs and toasts for the admin portal (via ngx-sweetalert2's loader). */
 @Injectable()
 export class AdminAlerts {
   private readonly loader = inject(SweetAlert2LoaderService);
 
-  async confirm(title: string, text: string, confirmButtonText = 'Yes, update', icon: SweetAlertIcon = 'question'): Promise<boolean> {
+  async confirm(
+    title: string,
+    text: string,
+    confirmButtonText = 'Yes, update',
+    icon: SweetAlertIcon = 'question',
+  ): Promise<boolean> {
     const Swal = await this.loader.swal;
-    const result = await Swal.fire({ title, text, icon, showCancelButton: true, confirmButtonText, reverseButtons: true, ...BRAND });
+    const result = await Swal.fire({
+      title,
+      text,
+      icon,
+      showCancelButton: true,
+      confirmButtonText,
+      reverseButtons: true,
+      ...BRAND,
+    });
     return result.isConfirmed;
   }
 
@@ -40,7 +52,15 @@ export class AdminAlerts {
 
   async toast(title: string, icon: SweetAlertIcon = 'success'): Promise<void> {
     const Swal = await this.loader.swal;
-    await Swal.fire({ toast: true, position: 'top-end', icon, title, timer: 2200, showConfirmButton: false, timerProgressBar: true });
+    await Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon,
+      title,
+      timer: 2200,
+      showConfirmButton: false,
+      timerProgressBar: true,
+    });
   }
 
   async error(title: string, text: string): Promise<void> {

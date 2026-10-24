@@ -7,10 +7,7 @@ import { Icon } from '../icons';
 import { JewelleryViewer } from '../jewellery-viewer/jewellery-viewer';
 import { WhatsappButton } from '../whatsapp-button';
 
-/**
- * Immersive showroom: one large 3D stage with a list of pieces. Selecting a piece transitions
- * the model in place (a single WebGL context, so it stays light on mobile).
- */
+// One 3D viewer shared by all pieces (a single WebGL context is lighter on phones).
 @Component({
   selector: 'app-showroom',
   changeDetection: ChangeDetectionStrategy.OnPush,

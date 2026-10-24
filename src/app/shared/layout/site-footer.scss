@@ -1,0 +1,92 @@
+:host {
+  display: block;
+  margin-top: 2rem;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding-top: 3rem;
+  font-size: 0.88rem;
+  color: var(--text-2);
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+  gap: 2rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.mark {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gold-gradient);
+  color: #fff;
+  font-size: 0.95rem;
+}
+.about {
+  max-width: 22rem;
+}
+h2 {
+  font-family: var(--font-head);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+}
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+a {
+  text-decoration: none;
+}
+nav a:hover,
+address a:hover {
+  color: var(--accent-ink);
+}
+address {
+  font-style: normal;
+}
+address p {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+address app-icon {
+  margin-top: 0.2rem;
+  color: var(--accent);
+}
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  margin-top: 2.5rem;
+  padding-block: 1.25rem 5.5rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.legal p {
+  margin: 0;
+}
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

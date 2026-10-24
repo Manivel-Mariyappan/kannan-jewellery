@@ -4,5 +4,8 @@ import { AdminAuthService } from './admin-auth.service';
 
 export const adminGuard: CanActivateFn = (_route, state) => {
   const auth = inject(AdminAuthService);
-  return auth.unlocked() || inject(Router).createUrlTree(['/admin/login'], { queryParams: { next: state.url } });
+  return (
+    auth.unlocked() ||
+    inject(Router).createUrlTree(['/admin/login'], { queryParams: { next: state.url } })
+  );
 };

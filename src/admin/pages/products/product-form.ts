@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbActiveOffcanvas } from '@ng-bootstrap/ng-bootstrap';
@@ -6,7 +13,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { CATEGORIES } from '../../../app/core/config/categories';
 import { GemTone, Model3d, ProceduralShape, Product, Purity } from '../../../app/core/models';
 import { ContentStore } from '../../../app/core/services/content-store';
-import { assetUrl, slugify } from '../../../app/core/utils/download';
+import { assetUrl, slugify } from '../../../app/core/utils/url';
 import { JewelleryViewer } from '../../../app/shared/jewellery-viewer/jewellery-viewer';
 import { StockStatus } from '../../core/admin-models';
 import { AdminAlerts } from '../../core/alerts.service';
@@ -16,60 +23,25 @@ import { AdminCard } from '../../shared/admin-card';
 
 type ModelKind = 'none' | 'gltf' | 'procedural';
 
-/** Text from a numbers-only input (or a stored number) to a number; empty becomes null. */
+// Numbers-only inputs give us text; empty means "not entered".
 const toNumber = (v: string | number | null | undefined): number | null => {
   if (v === null || v === undefined || v === '') return null;
   const n = Number(v);
   return Number.isFinite(n) ? n : null;
 };
 
-/** Add / edit product form, opened inside a Bootstrap offcanvas from the products grid. */
 @Component({
   selector: 'app-product-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, NgSelectComponent, JewelleryViewer, NumbersOnlyDirective, AdminCard],
+  imports: [
+    ReactiveFormsModule,
+    NgSelectComponent,
+    JewelleryViewer,
+    NumbersOnlyDirective,
+    AdminCard,
+  ],
   templateUrl: './product-form.html',
-  styles: `
-    :host {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-    .offcanvas-body {
-      background: #f6f5f2; /* grey behind the white section cards */
-    }
-    .images {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
-      gap: 0.6rem;
-    }
-    .images figure {
-      margin: 0;
-      overflow: hidden;
-      border: 1px solid #e7e3dc;
-      border-radius: 0.5rem;
-      background: #fff;
-    }
-    .images img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      display: block;
-      background: #f7f5f1;
-    }
-    .images figcaption {
-      display: flex;
-      justify-content: space-between;
-    }
-    .images .main-badge {
-      font-size: 0.65rem;
-    }
-    .preview {
-      aspect-ratio: 1;
-      border-radius: 0.5rem;
-      overflow: hidden;
-    }
-  `,
+  styleUrl: './product-form.scss',
 })
 export class ProductForm implements OnInit {
   private readonly store = inject(ContentStore);
@@ -77,7 +49,7 @@ export class ProductForm implements OnInit {
   private readonly alerts = inject(AdminAlerts);
   readonly offcanvas = inject(NgbActiveOffcanvas);
 
-  /** Set by the opener before the first render; null for a new product. */
+  // null when adding a new product
   product: Product | null = null;
 
   readonly categories = CATEGORIES.filter((c) => !c.virtual);
@@ -133,17 +105,18 @@ export class ProductForm implements OnInit {
     gem: this.fb.nonNullable.control<GemTone>('ruby'),
   });
 
-  private readonly value = toSignal(this.form.valueChanges, { initialValue: this.form.getRawValue() });
+  private readonly value = toSignal(this.form.valueChanges, {
+    initialValue: this.form.getRawValue(),
+  });
   readonly modelKind = computed(() => this.value().modelKind);
 
-  /** Net weight should not exceed gross weight. */
   readonly weightMismatch = computed(() => {
     const gross = toNumber(this.value().grossWeightGrams);
     const net = toNumber(this.value().weightGrams);
     return gross !== null && net !== null && net > gross;
   });
 
-  /** Gross minus stone weight, offered as the net weight when it differs from the entered value. */
+  // Offer gross - stone as the net weight when it differs from what was typed.
   readonly suggestedNet = computed(() => {
     const gross = toNumber(this.value().grossWeightGrams);
     const stone = toNumber(this.value().stoneWeightGrams) ?? 0;
@@ -152,7 +125,7 @@ export class ProductForm implements OnInit {
     return net === toNumber(this.value().weightGrams) ? null : net;
   });
 
-  /** Live 3D preview; only changes when the model itself changes. */
+  // Compared by value so typing in other fields doesn't rebuild the 3D preview.
   readonly previewModel = computed<Model3d | null>(
     () => {
       const model = this.buildModel(this.value() as ReturnType<typeof this.form.getRawValue>);
@@ -190,7 +163,7 @@ export class ProductForm implements OnInit {
       });
       this.images.set([...p.images]);
     }
-    // Keep the URL slug in step with the name for new products until it is edited by hand.
+    // Fill the slug from the name until the user edits it.
     this.form.controls.name.valueChanges.subscribe((name) => {
       if (!p && !this.form.controls.slug.dirty) this.form.controls.slug.setValue(slugify(name));
     });
@@ -210,7 +183,10 @@ export class ProductForm implements OnInit {
       this.images.update((list) => [...list, ...urls]);
     } catch (err) {
       console.error(err);
-      void this.alerts.error('Image not added', 'Could not read one of the images. Try a JPG, PNG or WebP file.');
+      void this.alerts.error(
+        'Image not added',
+        'Could not read one of the images. Try a JPG, PNG or WebP file.',
+      );
     } finally {
       this.uploading.set(false);
       input.value = '';
@@ -236,7 +212,8 @@ export class ProductForm implements OnInit {
   }
 
   private buildModel(v: ReturnType<typeof this.form.getRawValue>): Model3d | null {
-    if (v.modelKind === 'gltf' && v.gltfUrl.trim()) return { type: 'gltf', url: v.gltfUrl.trim().replace(/^\/+/, '') };
+    if (v.modelKind === 'gltf' && v.gltfUrl.trim())
+      return { type: 'gltf', url: v.gltfUrl.trim().replace(/^\/+/, '') };
     if (v.modelKind === 'procedural') return { type: 'procedural', shape: v.shape, gem: v.gem };
     return null;
   }
@@ -245,22 +222,35 @@ export class ProductForm implements OnInit {
     this.submitted.set(true);
     this.form.markAllAsTouched();
     if (this.form.invalid) {
-      void this.alerts.error('Please check the form', 'Some required fields are missing or invalid.');
+      void this.alerts.error(
+        'Please check the form',
+        'Some required fields are missing or invalid.',
+      );
       return;
     }
     const v = this.form.getRawValue();
     const others = this.store.products().filter((p) => p.id !== this.product?.id);
     const code = v.code.trim().toUpperCase();
     if (others.some((p) => p.code.toUpperCase() === code)) {
-      void this.alerts.error('Duplicate product code', `${code} is already used by another product.`);
+      void this.alerts.error(
+        'Duplicate product code',
+        `${code} is already used by another product.`,
+      );
       return;
     }
     if (others.some((p) => p.slug === v.slug)) {
-      void this.alerts.error('Duplicate web address', `"${v.slug}" is already used. Change the URL slug.`);
+      void this.alerts.error(
+        'Duplicate web address',
+        `"${v.slug}" is already used. Change the URL slug.`,
+      );
       return;
     }
 
-    if (this.product && !(await this.alerts.confirm('Update this product?', `${v.name} (${code}) will be updated.`))) return;
+    if (
+      this.product &&
+      !(await this.alerts.confirm('Update this product?', `${v.name} (${code}) will be updated.`))
+    )
+      return;
 
     const product: Product = {
       id: this.product?.id ?? `${slugify(code)}-${Date.now().toString(36)}`,
@@ -296,6 +286,9 @@ export class ProductForm implements OnInit {
       return;
     }
     this.offcanvas.close(product);
-    void this.alerts.success(this.product ? 'Product updated' : 'Product added', `${product.name} (${product.code})`);
+    void this.alerts.success(
+      this.product ? 'Product updated' : 'Product added',
+      `${product.name} (${product.code})`,
+    );
   }
 }

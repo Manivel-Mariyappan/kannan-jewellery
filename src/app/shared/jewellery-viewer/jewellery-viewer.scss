@@ -97,7 +97,9 @@ canvas {
     border-radius: 50%;
     color: var(--text);
     backdrop-filter: blur(6px);
-    transition: background 0.2s, border-color 0.2s;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
 
     &:hover,
     &[aria-pressed='true'] {

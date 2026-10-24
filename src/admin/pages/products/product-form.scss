@@ -1,0 +1,39 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.offcanvas-body {
+  background: #f6f5f2; /* grey behind the white section cards */
+}
+.images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 0.6rem;
+}
+.images figure {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #e7e3dc;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+.images img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: #f7f5f1;
+}
+.images figcaption {
+  display: flex;
+  justify-content: space-between;
+}
+.images .main-badge {
+  font-size: 0.65rem;
+}
+.preview {
+  aspect-ratio: 1;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}

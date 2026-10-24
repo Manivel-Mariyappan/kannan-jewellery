@@ -1,10 +1,13 @@
 @if (product(); as p) {
   <div class="container">
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a routerLink="/">Home</a><span aria-hidden="true">›</span>
-      <a routerLink="/collections">Collections</a><span aria-hidden="true">›</span>
+      <a routerLink="/">Home</a>
+      <span aria-hidden="true">›</span>
+      <a routerLink="/collections">Collections</a>
+      <span aria-hidden="true">›</span>
       @if (categoryLinks()[0]; as c) {
-        <a [routerLink]="['/collections', c.slug]">{{ c.name }}</a><span aria-hidden="true">›</span>
+        <a [routerLink]="['/collections', c.slug]">{{ c.name }}</a>
+        <span aria-hidden="true">›</span>
       }
       <span aria-current="page">{{ p.name }}</span>
     </nav>
@@ -13,46 +16,91 @@
       <div class="media">
         <div class="thumbs" role="tablist" aria-label="Views">
           @if (p.model3d) {
-            <button type="button" role="tab" class="thumb model-thumb" [class.active]="view() === 'model'" [attr.aria-selected]="view() === 'model'" (click)="view.set('model')">
-              <app-icon name="cube" [size]="20" /><span>3D</span>
+            <button
+              type="button"
+              role="tab"
+              class="thumb model-thumb"
+              [class.active]="view() === 'model'"
+              [attr.aria-selected]="view() === 'model'"
+              (click)="view.set('model')"
+            >
+              <app-icon name="cube" [size]="20" />
+              <span>3D</span>
             </button>
           }
           @for (src of images(); track src; let i = $index) {
-            <button type="button" role="tab" class="thumb" [class.active]="view() === i" [attr.aria-selected]="view() === i" (click)="view.set(i)" [attr.aria-label]="'Photo ' + (i + 1)">
+            <button
+              type="button"
+              role="tab"
+              class="thumb"
+              [class.active]="view() === i"
+              [attr.aria-selected]="view() === i"
+              (click)="view.set(i)"
+              [attr.aria-label]="'Photo ' + (i + 1)"
+            >
               <img [src]="src" alt="" loading="lazy" width="120" height="120" />
             </button>
           }
         </div>
         <div class="stage">
           @if (view() === 'model' && p.model3d) {
-            <app-jewellery-viewer [model]="p.model3d" [poster]="p.images.at(0) ?? ''" [alt]="p.name" />
+            <app-jewellery-viewer
+              [model]="p.model3d"
+              [poster]="p.images.at(0) ?? ''"
+              [alt]="p.name"
+              [showModelNote]="false"
+            />
           } @else {
             @let i = $any(view());
-            <img [src]="images()[i]" [alt]="p.name + ' — photo ' + (i + 1)" width="1000" height="1000" fetchpriority="high" />
+            <img
+              [src]="images()[i]"
+              [alt]="p.name + ' — photo ' + (i + 1)"
+              width="1000"
+              height="1000"
+              fetchpriority="high"
+            />
           }
-          @if (p.isNew) { <span class="tag tag-gold new">New arrival</span> }
+          @if (p.isNew) {
+            <span class="tag tag-gold new">New arrival</span>
+          }
         </div>
       </div>
 
       <div class="info">
         <p class="cat">{{ categoryLinks()[0]?.name }}</p>
         <h1>{{ p.name }}</h1>
-        <p class="code">Product code: <strong>{{ p.code }}</strong></p>
+        <p class="code">
+          Product code:
+          <strong>{{ p.code }}</strong>
+        </p>
 
         <dl class="specs">
-          <div><dt>Purity</dt><dd>{{ p.purity ?? 'On request' }}</dd></div>
-          <div><dt>Weight</dt><dd>{{ p.weightGrams ? p.weightGrams + ' g' : 'On request' }}</dd></div>
-          <div><dt>Price</dt><dd>Ask us</dd></div>
+          <div>
+            <dt>Purity</dt>
+            <dd>{{ p.purity ?? 'On request' }}</dd>
+          </div>
+          <div>
+            <dt>Weight</dt>
+            <dd>{{ p.weightGrams ? p.weightGrams + ' g' : 'On request' }}</dd>
+          </div>
+          <div>
+            <dt>Price</dt>
+            <dd>Ask us</dd>
+          </div>
         </dl>
 
         <div class="cta">
           <app-whatsapp-button [message]="message()" />
           @if (phone()) {
-            <a class="btn btn-outline" [href]="'tel:' + phone()"><app-icon name="phone" [size]="18" />Call showroom</a>
+            <a class="btn btn-outline" [href]="'tel:' + phone()">
+              <app-icon name="phone" [size]="18" />
+              Call showroom
+            </a>
           }
         </div>
         <p class="price-note">
-          The price depends on today's gold rate, the weight, making charges and GST. Message us for an exact quote and availability.
+          The price depends on today's gold rate, the weight, making charges and GST. Message us for
+          an exact quote and availability.
         </p>
 
         <section class="desc">
@@ -64,7 +112,9 @@
             }
           </div>
           @if (p.demo) {
-            <p class="demo-note">Demo listing: images are 3D renders and will be replaced with real photographs.</p>
+            <p class="demo-note">
+              Demo listing: images are 3D renders and will be replaced with real photographs.
+            </p>
           }
         </section>
 

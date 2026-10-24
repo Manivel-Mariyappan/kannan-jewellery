@@ -1,10 +1,10 @@
 import { Injectable, signal } from '@angular/core';
 import AOS from 'aos';
 
-/** Tracks the visitor's reduced-motion preference and owns the AOS lifecycle. */
 @Injectable({ providedIn: 'root' })
 export class MotionService {
-  private readonly query = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
+  private readonly query =
+    typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
   readonly reduced = signal(this.query?.matches ?? false);
   private started = false;
 
@@ -18,12 +18,10 @@ export class MotionService {
     AOS.init({ duration: 900, easing: 'ease-out-cubic', once: true, offset: 60 });
   }
 
-  /** Re-scan the page after route changes so newly rendered sections animate in. */
   refresh(): void {
     if (!this.started) return;
     AOS.refreshHard();
-    // AOS only reveals elements from its scroll handler; nudge it so sections already
-    // in view on a freshly loaded page are never left hidden.
+    // AOS only reveals elements on scroll, so fire one to show what's already in view.
     requestAnimationFrame(() => window.dispatchEvent(new Event('scroll')));
   }
 }

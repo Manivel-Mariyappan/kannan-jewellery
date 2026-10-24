@@ -15,10 +15,14 @@ export interface GoldRateRow {
 
 export interface GoldRateView {
   status: GoldRateStatus;
-  /** Where the numbers came from: the optional live API or the store's published file. */
   source: 'api' | 'store';
   rows: GoldRateRow[];
   updatedAt: Date | null;
+}
+
+function rateRow(purity: '22K' | '24K', grams: 1 | 8, price: number): GoldRateRow {
+  const label = `${purity} Gold — ${grams} ${grams === 1 ? 'Gram' : 'Grams'}`;
+  return { label, purity, grams, price };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -26,13 +30,13 @@ export class GoldRateService {
   private readonly store = inject(ContentStore);
   private readonly http = inject(HttpClient);
 
-  /** Rate from the optional live endpoint; `null` when not configured or failing. */
+  // null when no live endpoint is configured or it failed
   private readonly apiRate = signal<GoldRateData | null>(null);
   private readonly now = signal(new Date());
 
   constructor() {
     if (APP_CONFIG.goldRateApiUrl) void this.refreshFromApi();
-    // Re-evaluate staleness periodically for visitors who keep the page open.
+    // Recheck every few minutes so a page left open still shows "Delayed" when it should.
     setInterval(() => this.now.set(new Date()), 5 * 60_000);
   }
 
@@ -40,15 +44,20 @@ export class GoldRateService {
     const api = this.apiRate();
     const data = api ?? this.store.goldRateFile();
     const status = goldRateStatus(data, this.now(), APP_CONFIG.goldRateStaleHours);
-    const rows: GoldRateRow[] =
-      status === 'unavailable'
-        ? []
-        : [
-            { label: '22K Gold — 1 Gram', purity: '22K', grams: 1, price: data.rate22k! },
-            { label: '22K Gold — 8 Grams', purity: '22K', grams: 8, price: eightGramRate(data.rate22k!) },
-            { label: '24K Gold — 1 Gram', purity: '24K', grams: 1, price: data.rate24k! },
-            { label: '24K Gold — 8 Grams', purity: '24K', grams: 8, price: eightGramRate(data.rate24k!) },
-          ];
+
+    let rows: GoldRateRow[] = [];
+    if (status !== 'unavailable') {
+      // Both rates are valid numbers here, otherwise the status would be 'unavailable'.
+      const rate22k = data.rate22k as number;
+      const rate24k = data.rate24k as number;
+      rows = [
+        rateRow('22K', 1, rate22k),
+        rateRow('22K', 8, eightGramRate(rate22k)),
+        rateRow('24K', 1, rate24k),
+        rateRow('24K', 8, eightGramRate(rate24k)),
+      ];
+    }
+
     return {
       status,
       source: api ? 'api' : 'store',
@@ -62,7 +71,7 @@ export class GoldRateService {
       const data = await firstValueFrom(this.http.get<GoldRateData>(APP_CONFIG.goldRateApiUrl));
       if (isValidRate(data.rate22k) && isValidRate(data.rate24k)) this.apiRate.set(data);
     } catch (err) {
-      // Fall back to the store's published rate; its own timestamp decides how it is labelled.
+      // Fall back to gold-rate.json.
       console.warn('[gold-rate] live endpoint failed, using published rate', err);
     }
   }

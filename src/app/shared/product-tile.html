@@ -1,0 +1,63 @@
+<a
+  class="media"
+  [routerLink]="['/jewellery', product().slug]"
+  [attr.aria-label]="product().name + ', view details'"
+>
+  <img
+    [src]="image()"
+    [alt]="product().name"
+    loading="lazy"
+    decoding="async"
+    width="1000"
+    height="1000"
+  />
+  @if (hoverImage(); as hover) {
+    <img
+      class="alt"
+      [src]="hover"
+      alt=""
+      loading="lazy"
+      decoding="async"
+      width="1000"
+      height="1000"
+    />
+  }
+  <span class="flags">
+    @if (product().isNew) {
+      <span class="tag tag-gold">New</span>
+    }
+    @if (product().model3d) {
+      <span class="tag">
+        <app-icon name="cube" [size]="11" />
+        3D
+      </span>
+    }
+  </span>
+  @if (product().demo) {
+    <span class="demo">Demo</span>
+  }
+</a>
+<div class="body">
+  <p class="cat">{{ category() }}</p>
+  <h3>
+    <a [routerLink]="['/jewellery', product().slug]">{{ product().name }}</a>
+  </h3>
+  <p class="specs">
+    <span class="code">{{ product().code }}</span>
+    @if (product().purity) {
+      <span class="pill">{{ product().purity }}</span>
+    }
+    @if (product().weightGrams) {
+      <span class="pill">{{ product().weightGrams }} g</span>
+    }
+  </p>
+  <div class="cta">
+    <app-whatsapp-button
+      [message]="message()"
+      label="Enquire"
+      [ariaLabel]="'Enquire about ' + product().name + ' on WhatsApp'"
+      variant="outline"
+      [small]="true"
+    />
+  </div>
+</div>

@@ -18,7 +18,7 @@ export class ProductService {
 
   readonly state = this.store.state;
 
-  /** Published products, newest first. */
+  // newest first
   readonly published = computed(() =>
     this.store
       .products()
@@ -47,7 +47,9 @@ export class ProductService {
     const term = search?.trim().toLowerCase();
     if (term) {
       items = items.filter((p) =>
-        [p.name, p.code, p.description, ...p.categories].some((field) => field.toLowerCase().includes(term)),
+        [p.name, p.code, p.description, ...p.categories].some((field) =>
+          field.toLowerCase().includes(term),
+        ),
       );
     }
     const sorted = [...items];
@@ -65,10 +67,11 @@ export class ProductService {
     return sorted;
   }
 
-  /** Pieces sharing a category with `product`, excluding itself. */
   related(product: Product, limit = 4): Product[] {
     return this.published()
-      .filter((p) => p.id !== product.id && p.categories.some((c) => product.categories.includes(c)))
+      .filter(
+        (p) => p.id !== product.id && p.categories.some((c) => product.categories.includes(c)),
+      )
       .slice(0, limit);
   }
 }

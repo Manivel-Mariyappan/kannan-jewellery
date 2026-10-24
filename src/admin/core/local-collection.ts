@@ -1,10 +1,6 @@
 import { Signal, signal } from '@angular/core';
 
-/**
- * A list of records kept in this browser's localStorage. Stands in for an API endpoint until
- * the ASP.NET Core backend exists: swap the methods for HttpClient calls and the pages that use
- * it keep working.
- */
+// Stand-in for an API endpoint: a list of records saved in localStorage.
 export class LocalCollection<T extends { id: string }> {
   private readonly items = signal<T[]>([]);
   readonly all: Signal<T[]> = this.items.asReadonly();
@@ -21,7 +17,11 @@ export class LocalCollection<T extends { id: string }> {
   }
 
   upsert(item: T): void {
-    this.items.update((list) => (list.some((x) => x.id === item.id) ? list.map((x) => (x.id === item.id ? item : x)) : [item, ...list]));
+    this.items.update((list) =>
+      list.some((x) => x.id === item.id)
+        ? list.map((x) => (x.id === item.id ? item : x))
+        : [item, ...list],
+    );
     this.write();
   }
 
@@ -48,4 +48,5 @@ export class LocalCollection<T extends { id: string }> {
   }
 }
 
-export const newId = (prefix: string): string => `${prefix}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+export const newId = (prefix: string): string =>
+  `${prefix}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;

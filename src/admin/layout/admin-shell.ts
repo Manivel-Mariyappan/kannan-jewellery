@@ -2,14 +2,20 @@ import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, TemplateRef, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Meta } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { filter, map } from 'rxjs';
 import { ContentStore } from '../../app/core/services/content-store';
 import { AdminAuthService } from '../core/admin-auth.service';
 import { AdminAlerts } from '../core/alerts.service';
 
-/** Admin layout: fixed left sidebar (offcanvas on small screens) and a top bar. */
 @Component({
   selector: 'app-admin-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,20 +32,25 @@ export class AdminShell {
   readonly store = inject(ContentStore);
 
   readonly nav = [
-    { group: 'Catalogue', items: [
-      { path: 'products', label: 'Products', icon: '◆' },
-      { path: 'categories', label: 'Categories', icon: '▦' },
-      { path: 'gold-rate', label: 'Gold rate', icon: '₹' },
-    ] },
+    {
+      group: 'Catalogue',
+      items: [
+        { path: 'products', label: 'Products', icon: '◆' },
+        { path: 'categories', label: 'Categories', icon: '▦' },
+        { path: 'gold-rate', label: 'Gold rate', icon: '₹' },
+      ],
+    },
     { group: 'Customers', items: [{ path: 'enquiries', label: 'Enquiries', icon: '✉' }] },
-    { group: 'Settings', items: [
-      { path: 'settings', label: 'Shop settings', icon: '⚙' },
-      { path: 'users', label: 'Admin users', icon: '☺' },
-      { path: 'publish', label: 'Publish', icon: '⇪' },
-    ] },
+    {
+      group: 'Settings',
+      items: [
+        { path: 'settings', label: 'Shop settings', icon: '⚙' },
+        { path: 'users', label: 'Admin users', icon: '☺' },
+        { path: 'publish', label: 'Publish', icon: '⇪' },
+      ],
+    },
   ];
 
-  /** Heading of the active page, from the child route's `data.heading`. */
   readonly heading = toSignal(
     this.router.events.pipe(
       filter((e) => e instanceof NavigationEnd),
@@ -64,7 +75,14 @@ export class AdminShell {
 
   async lock(): Promise<void> {
     this.offcanvas.dismiss();
-    if (!(await this.alerts.confirm('Lock the admin portal?', 'You will need the passcode to come back in.', 'Lock'))) return;
+    if (
+      !(await this.alerts.confirm(
+        'Lock the admin portal?',
+        'You will need the passcode to come back in.',
+        'Lock',
+      ))
+    )
+      return;
     this.auth.lock();
     void this.router.navigateByUrl('/admin/login');
   }

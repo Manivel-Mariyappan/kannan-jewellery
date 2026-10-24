@@ -2,16 +2,12 @@ import { DOCUMENT } from '@angular/common';
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 
-/** The website shell (src/app/app.ts) removes this link and class when leaving /admin. */
 const LINK_ID = 'kj-admin-css';
-/** Built from the `admin` style bundle in angular.json (Bootstrap + ng-select + admin theme). */
+// "admin" style bundle in angular.json
 const HREF = 'admin.css';
 
-/**
- * The admin portal shares the app with the public website but must not share its styling.
- * Bootstrap is loaded only when entering /admin, and `html.kj-admin` switches off the
- * website's own component classes (see src/styles.scss).
- */
+// Bootstrap is only loaded while the admin is open, so it never touches the website.
+// app.ts removes the stylesheet and the kj-admin class again when leaving /admin.
 export const adminStylesGuard: CanActivateFn = () => {
   const doc = inject(DOCUMENT);
   doc.documentElement.classList.add('kj-admin');
@@ -22,7 +18,7 @@ export const adminStylesGuard: CanActivateFn = () => {
   link.rel = 'stylesheet';
   link.href = HREF;
   doc.head.appendChild(link);
-  // Wait for the stylesheet so the admin never flashes unstyled; continue anyway on error.
+  // Wait for the CSS so the page doesn't flash unstyled.
   return new Promise<boolean>((resolve) => {
     link.onload = () => resolve(true);
     link.onerror = () => {
@@ -33,4 +29,3 @@ export const adminStylesGuard: CanActivateFn = () => {
     };
   });
 };
-

@@ -7,7 +7,7 @@ import { ShopSettings } from '../models';
 export interface PageMeta {
   title: string;
   description: string;
-  /** Path such as `/collections/bangles`. Defaults to the current path. */
+  // defaults to the current path
   path?: string;
   image?: string;
   type?: 'website' | 'product';
@@ -29,7 +29,9 @@ export class SeoService {
   }
 
   set(page: PageMeta): void {
-    const fullTitle = page.title.includes('Kannan') ? page.title : `${page.title} | Kannan Jewellery`;
+    const fullTitle = page.title.includes('Kannan')
+      ? page.title
+      : `${page.title} | Kannan Jewellery`;
     const url = this.absolute(page.path ?? this.doc.location.pathname);
     const image = this.absolute(page.image ?? 'demo/shots/maharani-bridal-haram-1.webp');
 
@@ -53,7 +55,6 @@ export class SeoService {
     this.setJsonLd('page', page.jsonLd ?? null);
   }
 
-  /** Business-level structured data, kept for every page. */
   setBusiness(settings: ShopSettings): void {
     this.setJsonLd('business', {
       '@context': 'https://schema.org',

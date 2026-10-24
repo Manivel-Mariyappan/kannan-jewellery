@@ -13,6 +13,12 @@ const DRAFT_KEYS = {
 } as const;
 export type DraftKind = keyof typeof DRAFT_KEYS;
 
+interface DraftValues {
+  products: Product[];
+  goldRate: GoldRateData;
+  settings: ShopSettings;
+}
+
 function readDraft<T>(kind: DraftKind): T | null {
   try {
     const raw = localStorage.getItem(DRAFT_KEYS[kind]);
@@ -22,13 +28,9 @@ function readDraft<T>(kind: DraftKind): T | null {
   }
 }
 
-/**
- * Single source of truth for site content, loaded from the JSON files in `public/data/`.
- *
- * Admin edits are saved as *drafts* in this browser's localStorage so the owner can preview
- * them on the real pages. Drafts are never visible to other visitors: publishing means
- * downloading the JSON from the admin portal and replacing the files in `public/data/`.
- */
+// Loads the site content from public/data/*.json.
+// Admin edits are saved as drafts in localStorage, so only that browser sees them until the
+// downloaded JSON files are deployed.
 @Injectable({ providedIn: 'root' })
 export class ContentStore {
   private readonly http = inject(HttpClient);
@@ -36,7 +38,11 @@ export class ContentStore {
   readonly state = signal<LoadState>('loading');
 
   private readonly publishedProducts = signal<Product[]>([]);
-  private readonly publishedGoldRate = signal<GoldRateData>({ rate22k: null, rate24k: null, updatedAt: null });
+  private readonly publishedGoldRate = signal<GoldRateData>({
+    rate22k: null,
+    rate24k: null,
+    updatedAt: null,
+  });
   private readonly publishedSettings = signal<ShopSettings | null>(null);
 
   private readonly drafts = signal({
@@ -69,7 +75,7 @@ export class ContentStore {
     this.state.set('loading');
     try {
       const { products, goldRate, settings } = APP_CONFIG.dataUrls;
-      // Bypass HTTP caches so a freshly deployed rate shows up immediately.
+      // Skip the cache so a newly deployed gold rate shows up straight away.
       const bust = `?v=${Date.now()}`;
       const [p, g, s] = await Promise.all([
         firstValueFrom(this.http.get<Product[]>(products + bust)),
@@ -86,14 +92,15 @@ export class ContentStore {
     }
   }
 
-  // ---- Draft management (admin portal) ----
-
-  saveDraft<K extends DraftKind>(kind: K, value: K extends 'products' ? Product[] : K extends 'goldRate' ? GoldRateData : ShopSettings): void {
+  saveDraft<K extends DraftKind>(kind: K, value: DraftValues[K]): void {
     try {
       localStorage.setItem(DRAFT_KEYS[kind], JSON.stringify(value));
     } catch (err) {
-      // Usually QuotaExceededError from large uploaded images.
-      throw new Error('This browser could not store the draft. Uploaded photos may be too large — use image paths instead.', { cause: err });
+      // Usually the storage quota, when too many photos are uploaded.
+      throw new Error(
+        'This browser could not store the draft. Uploaded photos may be too large, so add them by path instead.',
+        { cause: err },
+      );
     }
     this.drafts.update((d) => ({ ...d, [kind]: value }));
   }

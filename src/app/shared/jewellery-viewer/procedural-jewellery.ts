@@ -1,11 +1,7 @@
 import * as THREE from 'three';
 import { GemTone, ProceduralShape } from '../../core/models';
 
-/**
- * Demo jewellery built from real 3D geometry (beads, interlocking links, lathed bells, faceted
- * gems). These are stand-ins until scanned or modelled GLB files are available. They are
- * genuine meshes that can be rotated and inspected, not rotating photographs.
- */
+// Demo pieces built from simple 3D shapes, used until real GLB models are available.
 
 export interface JewelleryMaterials {
   gold: THREE.MeshPhysicalMaterial;
@@ -15,7 +11,7 @@ export interface JewelleryMaterials {
 }
 
 export function createMaterials(): JewelleryMaterials {
-  // Linear-space reflectance of polished yellow gold, warmed slightly for 22K.
+  // Gold colour in linear space, a little warmer for 22K.
   const gold = new THREE.MeshPhysicalMaterial({
     color: new THREE.Color().setRGB(1.0, 0.64, 0.24),
     metalness: 1,
@@ -54,9 +50,9 @@ export function createMaterials(): JewelleryMaterials {
   return { gold, antiqueGold, pearl, gems: { ruby: gem(0x9b0f24), emerald: gem(0x0c7a46), pearl } };
 }
 
-// ---------- geometry helpers ----------
+// Helpers
 
-/** A round brilliant-style cut: lathed profile with few segments so the facets show. */
+// Few segments on purpose, so the facets are visible.
 function gemGeometry(radius: number): THREE.BufferGeometry {
   const r = radius;
   const profile = [
@@ -71,21 +67,26 @@ function gemGeometry(radius: number): THREE.BufferGeometry {
   return g;
 }
 
-/** Hanging strand: lower arc of an ellipse in the XY plane, with gentle depth. */
+// Lower half of an ellipse, like a necklace hanging from the neck.
 function strandCurve(rx: number, ry: number, top = 0, depth = 0.25): THREE.CatmullRomCurve3 {
   const pts: THREE.Vector3[] = [];
   for (let i = 0; i <= 40; i++) {
     const t = Math.PI * (0.06 + 0.88 * (i / 40));
     const x = -rx * Math.cos(t);
     const y = top - ry * Math.sin(t);
+    // Small curve in depth so the strand isn't perfectly flat.
     const z = -depth * Math.sin(t) * 0.5 + depth * 0.5 * Math.cos(t) ** 2;
     pts.push(new THREE.Vector3(x, y, z));
   }
   return new THREE.CatmullRomCurve3(pts);
 }
 
-/** Instanced spheres spaced evenly along a curve. */
-function beadStrand(curve: THREE.Curve<THREE.Vector3>, radius: number, gap: number, mat: THREE.Material): THREE.InstancedMesh {
+function beadStrand(
+  curve: THREE.Curve<THREE.Vector3>,
+  radius: number,
+  gap: number,
+  mat: THREE.Material,
+): THREE.InstancedMesh {
   const count = Math.max(2, Math.floor(curve.getLength() / (radius * 2 + gap)));
   const mesh = new THREE.InstancedMesh(new THREE.SphereGeometry(radius, 24, 16), mat, count);
   const m = new THREE.Matrix4();
@@ -97,8 +98,13 @@ function beadStrand(curve: THREE.Curve<THREE.Vector3>, radius: number, gap: numb
   return mesh;
 }
 
-/** Interlocking oval links following a curve, alternating 90° like a real cable chain. */
-function linkChain(curve: THREE.Curve<THREE.Vector3>, linkLength: number, wire: number, mat: THREE.Material): THREE.InstancedMesh {
+// Each link is turned 90 degrees from the previous one, like a real cable chain.
+function linkChain(
+  curve: THREE.Curve<THREE.Vector3>,
+  linkLength: number,
+  wire: number,
+  mat: THREE.Material,
+): THREE.InstancedMesh {
   const geo = new THREE.TorusGeometry(linkLength / 2, wire, 10, 28);
   geo.scale(1, 0.62, 1);
   const pitch = linkLength * 0.78;
@@ -120,7 +126,6 @@ function linkChain(curve: THREE.Curve<THREE.Vector3>, linkLength: number, wire: 
   return mesh;
 }
 
-/** Eight-petal gold flower with a faceted centre stone, facing +Z. */
 function flower(radius: number, gold: THREE.Material, gem: THREE.Material): THREE.Group {
   const g = new THREE.Group();
   const petal = new THREE.SphereGeometry(1, 24, 16);
@@ -133,7 +138,10 @@ function flower(radius: number, gold: THREE.Material, gem: THREE.Material): THRE
     m.castShadow = true;
     g.add(m);
   }
-  const bezel = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.42, radius * 0.46, radius * 0.2, 40), gold);
+  const bezel = new THREE.Mesh(
+    new THREE.CylinderGeometry(radius * 0.42, radius * 0.46, radius * 0.2, 40),
+    gold,
+  );
   bezel.rotation.x = Math.PI / 2;
   g.add(bezel);
   const stone = new THREE.Mesh(gemGeometry(radius * 0.36), gem);
@@ -142,8 +150,12 @@ function flower(radius: number, gold: THREE.Material, gem: THREE.Material): THRE
   return g;
 }
 
-/** Teardrop pendant: gold frame, inset stone and a pearl drop. */
-function teardrop(size: number, gold: THREE.Material, gem: THREE.Material, pearl: THREE.Material): THREE.Group {
+function teardrop(
+  size: number,
+  gold: THREE.Material,
+  gem: THREE.Material,
+  pearl: THREE.Material,
+): THREE.Group {
   const g = new THREE.Group();
   const outline = (s: number) => {
     const shape = new THREE.Shape();
@@ -153,14 +165,28 @@ function teardrop(size: number, gold: THREE.Material, gem: THREE.Material, pearl
     return shape;
   };
   const frame = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(outline(size), { depth: size * 0.18, bevelEnabled: true, bevelSize: size * 0.06, bevelThickness: size * 0.06, bevelSegments: 4, curveSegments: 32 }),
+    new THREE.ExtrudeGeometry(outline(size), {
+      depth: size * 0.18,
+      bevelEnabled: true,
+      bevelSize: size * 0.06,
+      bevelThickness: size * 0.06,
+      bevelSegments: 4,
+      curveSegments: 32,
+    }),
     gold,
   );
   frame.position.z = -size * 0.09;
   frame.castShadow = true;
   g.add(frame);
   const inset = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(outline(size * 0.62), { depth: size * 0.12, bevelEnabled: true, bevelSize: size * 0.04, bevelThickness: size * 0.05, bevelSegments: 2, curveSegments: 24 }),
+    new THREE.ExtrudeGeometry(outline(size * 0.62), {
+      depth: size * 0.12,
+      bevelEnabled: true,
+      bevelSize: size * 0.04,
+      bevelThickness: size * 0.05,
+      bevelSegments: 2,
+      curveSegments: 24,
+    }),
     gem,
   );
   inset.position.set(0, -size * 0.38, size * 0.08);
@@ -171,7 +197,7 @@ function teardrop(size: number, gold: THREE.Material, gem: THREE.Material, pearl
   return g;
 }
 
-// ---------- pieces ----------
+// Pieces
 
 function ring(m: JewelleryMaterials, gem: GemTone): THREE.Group {
   const g = new THREE.Group();
@@ -199,7 +225,7 @@ function bangle(m: JewelleryMaterials, gem?: GemTone): THREE.Group {
     rim.position.z = z;
     g.add(rim);
   }
-  // Studded band of stones (or polished gold domes) around the outer face.
+  // Stones (or gold studs) around the outside.
   const count = 28;
   const studGeo = gem ? gemGeometry(0.11) : new THREE.SphereGeometry(0.08, 20, 14);
   const studs = new THREE.InstancedMesh(studGeo, gem ? m.gems[gem] : m.gold, count);
@@ -221,7 +247,7 @@ function chain(m: JewelleryMaterials, scale = 1): THREE.Group {
   const g = new THREE.Group();
   g.add(linkChain(strandCurve(1.5, 2.2, 1.1, 0.4), 0.28 * scale, 0.045 * scale, m.gold));
   if (scale < 1) {
-    // Small diamond-shaped pendant for the fine daily chain.
+    // small pendant for the daily-wear chain
     const pendant = new THREE.Mesh(new THREE.OctahedronGeometry(0.22), m.gold);
     pendant.scale.z = 0.4;
     pendant.position.set(0, -1.38, 0.2);
@@ -300,7 +326,7 @@ function jhumka(m: JewelleryMaterials, gem: GemTone): THREE.Group {
   const link = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.025, 10, 24), m.gold);
   link.position.y = 0.17;
   g.add(link);
-  // Bell: a lathed dome flaring out to the rim.
+  // bell shape
   const profile: THREE.Vector2[] = [];
   for (let i = 0; i <= 24; i++) {
     const t = i / 24;
@@ -338,13 +364,18 @@ function earrings(m: JewelleryMaterials, gem: GemTone): THREE.Group {
   return g;
 }
 
-export function buildProcedural(shape: ProceduralShape, materials: JewelleryMaterials, gemTone?: GemTone, scale = 1): THREE.Group {
+export function buildProcedural(
+  shape: ProceduralShape,
+  materials: JewelleryMaterials,
+  gemTone?: GemTone,
+  scale = 1,
+): THREE.Group {
   const gem = gemTone ?? 'ruby';
   switch (shape) {
     case 'ring':
       return ring(materials, gem);
     case 'bangle':
-      // Without a stone the kada gets polished gold studs.
+      // no stone = plain gold studs
       return bangle(materials, gemTone === 'pearl' ? undefined : gemTone);
     case 'chain':
       return chain(materials, scale);

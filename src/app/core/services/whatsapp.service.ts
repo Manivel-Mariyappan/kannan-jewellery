@@ -2,12 +2,12 @@ import { Injectable, computed, inject } from '@angular/core';
 import { Product } from '../models';
 import { ContentStore } from './content-store';
 
-/** Strips spaces, '+', dashes and brackets: "+91 98765-43210" → "919876543210". */
+// "+91 98765-43210" becomes "919876543210"
 export function normaliseWhatsappNumber(raw: string | null | undefined): string {
   return (raw ?? '').replace(/\D/g, '');
 }
 
-/** Click-to-chat URL. Returns null when no valid number is configured. */
+// Returns null when no WhatsApp number is set up yet.
 export function whatsappUrl(number: string | null | undefined, message: string): string | null {
   const digits = normaliseWhatsappNumber(number);
   if (digits.length < 8) return null;
@@ -48,6 +48,8 @@ export class WhatsappService {
   }
 
   generalLink(): string | null {
-    return this.link(enquiryMessages.general(this.store.settings()?.shopName ?? 'Kannan Jewellery'));
+    return this.link(
+      enquiryMessages.general(this.store.settings()?.shopName ?? 'Kannan Jewellery'),
+    );
   }
 }

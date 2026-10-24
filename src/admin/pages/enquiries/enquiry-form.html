@@ -1,0 +1,196 @@
+<div class="offcanvas-header border-bottom bg-white">
+  <h2 class="offcanvas-title h5 mb-0" id="enquiry-form-title">
+    {{ enquiry ? 'Edit enquiry' : 'Add enquiry' }}
+  </h2>
+  <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+</div>
+
+<form
+  class="offcanvas-body bg-body-tertiary"
+  [formGroup]="form"
+  (ngSubmit)="save()"
+  id="enquiry-form"
+  novalidate
+>
+  <admin-card heading="Customer" subtitle="Who enquired" icon="☺" [required]="true">
+    @if (whatsappHref(); as href) {
+      <a card-actions class="btn btn-sm btn-success" [href]="href" target="_blank" rel="noopener">
+        Reply on WhatsApp
+      </a>
+    }
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label" for="e-name">
+          Customer name
+          <span class="text-danger">*</span>
+        </label>
+        <input
+          id="e-name"
+          class="form-control"
+          formControlName="customerName"
+          [class.is-invalid]="invalid('customerName')"
+        />
+        <div class="invalid-feedback">Customer name is required.</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="e-mobile">
+          Mobile
+          <span class="text-danger">*</span>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">+91</span>
+          <input
+            id="e-mobile"
+            class="form-control"
+            type="text"
+            maxlength="10"
+            formControlName="mobile"
+            appNumbersOnly
+            [decimals]="0"
+            [class.is-invalid]="invalid('mobile')"
+          />
+        </div>
+        @if (invalid('mobile')) {
+          <div class="invalid-feedback d-block">Enter a 10-digit mobile number.</div>
+        }
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="e-email">Email</label>
+        <input
+          id="e-email"
+          class="form-control"
+          type="email"
+          formControlName="email"
+          [class.is-invalid]="invalid('email')"
+        />
+      </div>
+    </div>
+  </admin-card>
+
+  <admin-card heading="Enquiry" subtitle="Product, source and message" icon="✉" [required]="true">
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label" for="e-product">Product</label>
+        <ng-select
+          labelForId="e-product"
+          formControlName="productCode"
+          [items]="products()"
+          bindLabel="label"
+          bindValue="code"
+          placeholder="Search by name or product code"
+          (change)="onProduct($event)"
+        />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="e-date">
+          Enquiry date
+          <span class="text-danger">*</span>
+        </label>
+        <div class="input-group">
+          <input
+            id="e-date"
+            class="form-control"
+            formControlName="date"
+            ngbDatepicker
+            #d1="ngbDatepicker"
+            placeholder="dd-mm-yyyy"
+            readonly
+            (click)="d1.toggle()"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="d1.toggle()"
+            aria-label="Open calendar"
+          >
+            📅
+          </button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="e-source">Source</label>
+        <ng-select
+          labelForId="e-source"
+          formControlName="source"
+          [items]="sources"
+          [clearable]="false"
+          [searchable]="false"
+        />
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="e-msg">Customer message</label>
+        <textarea id="e-msg" class="form-control" rows="3" formControlName="message"></textarea>
+      </div>
+    </div>
+  </admin-card>
+
+  <admin-card heading="Follow-up" subtitle="Status and next action" icon="◷">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label" for="e-status">Status</label>
+        <ng-select
+          labelForId="e-status"
+          formControlName="status"
+          [items]="statuses"
+          [clearable]="false"
+          [searchable]="false"
+        />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="e-fu">Follow-up date</label>
+        <div class="input-group">
+          <input
+            id="e-fu"
+            class="form-control"
+            formControlName="followUpDate"
+            ngbDatepicker
+            #d2="ngbDatepicker"
+            placeholder="dd-mm-yyyy"
+            readonly
+            (click)="d2.toggle()"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="d2.toggle()"
+            aria-label="Open calendar"
+          >
+            📅
+          </button>
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="form.controls.followUpDate.setValue(null)"
+            aria-label="Clear date"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="e-assign">Assigned to</label>
+        <ng-select
+          labelForId="e-assign"
+          formControlName="assignedTo"
+          [items]="users()"
+          bindLabel="fullName"
+          bindValue="username"
+          placeholder="Unassigned"
+        />
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="e-notes">Internal notes</label>
+        <textarea id="e-notes" class="form-control" rows="2" formControlName="notes"></textarea>
+      </div>
+    </div>
+  </admin-card>
+</form>
+
+<div class="border-top bg-white p-3 d-flex justify-content-end gap-2">
+  <button type="button" class="btn btn-outline-secondary" (click)="offcanvas.dismiss()">
+    Cancel
+  </button>
+  <button type="submit" form="enquiry-form" class="btn btn-primary px-4">
+    {{ enquiry ? 'Update enquiry' : 'Add enquiry' }}
+  </button>
+</div>

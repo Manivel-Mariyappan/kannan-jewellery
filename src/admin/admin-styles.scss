@@ -1,4 +1,4 @@
-/* Admin theme on top of Bootstrap 5 and ng-select. Loaded only on /admin (see core/admin-styles.ts). */
+// Admin theme on top of Bootstrap and ng-select. Only loaded on /admin.
 
 html.kj-admin {
   --bs-primary: #a8741f;
@@ -95,7 +95,11 @@ html.kj-admin {
     padding-inline: 0.15rem;
   }
 
-  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left {
+  .ng-select.ng-select-multiple
+    .ng-select-container
+    .ng-value-container
+    .ng-value
+    .ng-value-icon.left {
     border-right-color: #ecd9b0;
   }
 
@@ -108,6 +112,16 @@ html.kj-admin {
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
     background: #f3e3bf;
     color: #1c1917;
+  }
+
+  /* Picture column in the AG Grid tables (see shared/grid.ts) */
+  .grid-thumb {
+    width: 44px;
+    height: 44px;
+    margin-top: 8px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f7f5f1;
   }
 
   /* ng-bootstrap datepicker / timepicker */

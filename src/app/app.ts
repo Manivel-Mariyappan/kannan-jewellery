@@ -1,5 +1,12 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, afterNextRender, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  afterNextRender,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
@@ -21,7 +28,7 @@ import { WhatsappFab } from './shared/layout/whatsapp-fab';
 export class App {
   readonly store = inject(ContentStore);
   private readonly motion = inject(MotionService);
-  /** The admin portal is a separate area: no website header, footer or WhatsApp button. */
+  // The admin has its own layout, so hide the website header/footer there.
   readonly isAdmin = signal(location.pathname.startsWith('/admin'));
 
   constructor() {
@@ -36,7 +43,7 @@ export class App {
       )
       .subscribe((e) => {
         this.isAdmin.set(e.urlAfterRedirects.startsWith('/admin'));
-        // Leaving the admin portal: drop its Bootstrap stylesheet (added by src/admin/core/admin-styles.ts).
+        // Remove the admin's Bootstrap CSS (see admin/core/admin-styles.ts).
         if (!this.isAdmin()) {
           doc.documentElement.classList.remove('kj-admin');
           doc.getElementById('kj-admin-css')?.remove();

@@ -71,7 +71,9 @@
   border: 1px solid transparent;
   border-radius: 999px;
   color: var(--muted);
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 
   &:focus-within {
     background: #fff;
@@ -155,7 +157,9 @@
     text-decoration: none;
     color: var(--text-2);
     border-radius: 999px;
-    transition: background 0.2s, color 0.2s;
+    transition:
+      background 0.2s,
+      color 0.2s;
 
     &:hover {
       background: var(--surface);
@@ -182,7 +186,10 @@
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px);
-  transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+  transition:
+    opacity 0.25s,
+    transform 0.25s,
+    visibility 0.25s;
 
   nav {
     display: flex;
