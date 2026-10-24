@@ -16,7 +16,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.brand-mark')?.textContent).toContain('Kannan');
+    expect(el.querySelector('.brand .name')?.textContent).toContain('Kannan');
     TestBed.inject(HttpTestingController).match(() => true);
   });
 });

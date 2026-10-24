@@ -2,8 +2,7 @@
   position: relative;
   display: block;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 38%, #fffdf7 0%, #f3e9d6 62%, #e6d6b8 100%);
+  background: radial-gradient(ellipse at 50% 40%, #ffffff 0%, #f7f5f0 55%, #efe9df 100%);
   color: var(--brown);
 }
 
@@ -56,7 +55,9 @@ canvas {
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  background: color-mix(in srgb, var(--ivory) 85%, transparent);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  white-space: nowrap;
   color: var(--brown);
 }
 
@@ -91,8 +92,10 @@ canvas {
     place-items: center;
     font-size: 1.1rem;
     color: inherit;
-    background: color-mix(in srgb, currentColor 8%, transparent);
-    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--text);
     backdrop-filter: blur(6px);
     transition: background 0.2s, border-color 0.2s;
 

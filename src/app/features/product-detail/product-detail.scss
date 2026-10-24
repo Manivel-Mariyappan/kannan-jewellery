@@ -1,73 +1,55 @@
 .crumbs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  padding-block: 1.5rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  gap: 0.45rem;
+  padding-block: 1rem;
+  font-size: 0.8rem;
   color: var(--muted);
 
   a {
     text-decoration: none;
 
     &:hover {
-      color: var(--gold-deep);
+      color: var(--accent-ink);
     }
   }
 
   [aria-current] {
-    color: var(--brown);
+    color: var(--text);
+    font-weight: 500;
   }
 }
 
 .product {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 5rem);
-  padding-bottom: clamp(4rem, 8vw, 6rem);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
   align-items: start;
 }
 
 .media {
   position: sticky;
-  top: calc(var(--header-h) + 1rem);
-}
-
-.stage {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  max-height: 80vh;
-  width: 100%;
-  background: var(--cream);
-  overflow: hidden;
-
-  app-jewellery-viewer,
-  img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  top: calc(var(--header-h) + 60px);
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 0.75rem;
 }
 
 .thumbs {
   display: flex;
-  gap: 0.6rem;
-  margin-top: 0.75rem;
-  overflow-x: auto;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .thumb {
-  flex: none;
-  width: 4.5rem;
-  aspect-ratio: 4 / 5;
+  width: 72px;
+  aspect-ratio: 1;
   padding: 0;
-  border: 1px solid var(--line);
-  background: var(--cream);
-  opacity: 0.65;
-  transition: opacity 0.2s, border-color 0.2s;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s;
 
   img {
     width: 100%;
@@ -78,8 +60,7 @@
 
   &:hover,
   &.active {
-    opacity: 1;
-    border-color: var(--gold);
+    border-color: var(--accent);
   }
 }
 
@@ -87,113 +68,144 @@
   display: grid;
   place-content: center;
   justify-items: center;
-  gap: 0.25rem;
-  color: var(--brown);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  gap: 0.15rem;
+  color: var(--accent-ink);
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
-.demo-note {
-  margin-top: 0.75rem;
-  font-size: 0.78rem;
-  color: var(--muted);
-}
+.stage {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
 
-.info {
-  h1 {
-    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-    margin-bottom: 0.75rem;
+  app-jewellery-viewer,
+  > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .new {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
   }
 }
 
+.cat {
+  margin: 0 0 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+.info h1 {
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  margin-bottom: 0.35rem;
+}
+
 .code {
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 0.88rem;
   color: var(--muted);
 
   strong {
-    color: var(--brown);
+    color: var(--text);
   }
 }
 
 .specs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin: 2rem 0;
-  border-block: 1px solid var(--line);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin: 1.25rem 0;
 
   div {
-    padding: 1.1rem 0;
-
-    & + div {
-      padding-left: 1.25rem;
-      border-left: 1px solid var(--line);
-    }
+    padding: 0.8rem 0.9rem;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
   }
 
   dt {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 0.75rem;
     color: var(--muted);
   }
 
   dd {
-    margin: 0.25rem 0 0;
-    font-family: var(--font-display);
-    font-size: 1.55rem;
-    color: var(--brown);
+    margin: 0.1rem 0 0;
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    font-weight: 700;
   }
-}
-
-.desc {
-  font-size: 1.05rem;
-  color: var(--charcoal);
 }
 
 .cta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.9rem;
-  margin: 2rem 0 1rem;
+  gap: 0.6rem;
+
+  /* The WhatsApp button component renders its <a> directly into this row (display: contents). */
+  .btn,
+  ::ng-deep .btn {
+    flex: 1 1 200px;
+    min-height: 3.1rem;
+  }
 }
 
 .price-note {
-  font-size: 0.85rem;
+  margin: 0.75rem 0 1.5rem;
+  font-size: 0.82rem;
   color: var(--muted);
+}
+
+.desc {
+  padding: 1.25rem 0;
+  margin-bottom: 1.25rem;
+  border-block: 1px solid var(--line);
+
+  h2 {
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  p {
+    color: var(--text-2);
+  }
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1.5rem 0 2.5rem;
+  gap: 0.4rem;
 
   .tag {
     text-decoration: none;
 
     &:hover {
-      border-color: var(--gold);
+      border-color: var(--accent);
+      color: var(--accent-ink);
     }
   }
 }
 
-.rate {
-  padding: 1.75rem;
-  background: var(--cream);
+.demo-note {
+  margin: 0.85rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted) !important;
 }
 
 .related {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1rem, 2vw, 2rem);
+  gap: 1rem;
 }
 
 .missing {
-  padding-block: 4rem;
+  padding-block: 2rem 4rem;
 }
 
 @media (max-width: 960px) {
@@ -203,19 +215,22 @@
 
   .media {
     position: static;
+    grid-template-columns: 1fr;
+  }
+
+  .thumbs {
+    order: 2;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .thumb {
+    flex: none;
+    width: 64px;
   }
 
   .related {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .specs dd {
-    font-size: 1.25rem;
-  }
-
-  .cta > * {
-    flex: 1 1 100%;
+    gap: 0.6rem;
   }
 }

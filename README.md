@@ -33,7 +33,7 @@ npm run build        # production build → dist/KANNAN_JEWELLERY/browser
 2. **Full address.** `settings.json` currently has `102, Salem Main Road, Tamil Nadu`. Add the town and PIN code, and check the Google Maps search text.
 3. **Gold rate.** `public/data/gold-rate.json` ships with `null` values, so the site shows "Rate unavailable". No prices are invented.
 4. **Admin passcode.** Change the default (`kannan@admin`) in `src/app/core/config/app-config.ts`. The command to generate a new hash is in that file.
-5. **Replace demo products.** All 16 sample products are flagged `"demo": true`, labelled "Demo" on the site, and use generated illustrations. Admin → Products → *Remove demo products*.
+5. **Replace demo products.** All 16 sample products are flagged `"demo": true`, labelled "Demo" on the site, and use product shots rendered from the demo 3D models (`public/demo/shots/`). Admin → Products → *Remove demo products*.
 6. **Site URL.** Set `siteUrl` in `app-config.ts` (e.g. `https://www.kannanjewellery.in`) so canonical URLs and social previews are correct.
 
 ## Content files (`public/data/`)
@@ -105,12 +105,12 @@ src/app/
   features/    home, collections, product-detail, bridal, about, contact, gold-rate, admin, not-found
 public/
   data/        products.json, gold-rate.json, settings.json
-  demo/        generated demo illustrations (replace with real photos)
+  demo/shots/  demo product shots rendered from the 3D models (replace with real photos)
 ```
 
 ## Things that need external services or assets
 
-- **Real jewellery photographs and licensed 3D models.** The demo illustrations and procedural models are placeholders.
+- **Real jewellery photographs and licensed 3D models.** The demo renders and procedural models are placeholders.
 - **Live market gold rates.** These need a rate provider and a server-side proxy. Until then, the owner enters rates manually.
 - **Google Maps** uses the keyless embed. For a custom-styled map, use the Maps Embed API with an API key.
-- **Fonts** (Cormorant Garamond, Manrope) load from Google Fonts.
+- **Fonts** (Plus Jakarta Sans, Inter) load from Google Fonts.

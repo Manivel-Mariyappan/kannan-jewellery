@@ -17,7 +17,7 @@ export interface JewelleryMaterials {
 export function createMaterials(): JewelleryMaterials {
   // Linear-space reflectance of polished yellow gold, warmed slightly for 22K.
   const gold = new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color().setRGB(1.0, 0.71, 0.31),
+    color: new THREE.Color().setRGB(1.0, 0.64, 0.24),
     metalness: 1,
     roughness: 0.16,
     clearcoat: 0.35,

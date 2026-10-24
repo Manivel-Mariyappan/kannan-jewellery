@@ -169,6 +169,27 @@ export class ViewerEngine {
     this.renderOnce();
   }
 
+  /**
+   * Renders the current piece from an orbit angle onto a solid background and returns it as an
+   * image data URL. Used to produce product shots from the 3D models.
+   */
+  snapshot(azimuth: number, elevation: number, background: string, distance = 0.95, type = 'image/webp', quality = 0.9): string {
+    this.transition = 1;
+    this.applyTransition();
+    this.controls.target.set(0, 0, 0);
+    this.camera.position.setFromSphericalCoords(this.homeDistance * distance, Math.PI / 2 - elevation, azimuth);
+    this.camera.lookAt(0, 0, 0);
+    this.renderer.render(this.scene, this.camera);
+    const out = document.createElement('canvas');
+    out.width = this.canvas.width;
+    out.height = this.canvas.height;
+    const ctx = out.getContext('2d')!;
+    ctx.fillStyle = background;
+    ctx.fillRect(0, 0, out.width, out.height);
+    ctx.drawImage(this.canvas, 0, 0);
+    return out.toDataURL(type, quality);
+  }
+
   setAutoRotate(on: boolean): void {
     this.controls.autoRotate = on && !this.opts.reducedMotion;
   }

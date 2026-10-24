@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { SeoService } from '../../core/services/seo.service';
 import { enquiryMessages } from '../../core/services/whatsapp.service';
@@ -12,7 +11,7 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
 @Component({
   selector: 'app-bridal',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, ProductTile, RevealDirective, Showroom, WhatsappButton],
+  imports: [ProductTile, RevealDirective, Showroom, WhatsappButton],
   templateUrl: './bridal.html',
   styleUrl: './bridal.scss',
 })
@@ -42,7 +41,7 @@ export class Bridal {
       description:
         'Traditional and contemporary bridal gold jewellery at Kannan Jewellery: harams, layered necklaces, kadas and jhumkas. Book a bridal consultation on WhatsApp.',
       path: '/bridal',
-      image: 'demo/bridal-1.svg',
+      image: 'demo/shots/maharani-bridal-haram-1.webp',
     });
   }
 }

@@ -1,17 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { IsActiveMatchOptions, NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
+import { CATEGORIES } from '../../core/config/categories';
 import { WhatsappService } from '../../core/services/whatsapp.service';
 import { Icon } from '../icons';
-
-/** Exact path match; the fragment decides between Home and Gold Rate. */
-const exactWith = (fragment: 'exact' | 'ignored'): IsActiveMatchOptions => ({
-  paths: 'exact',
-  queryParams: 'ignored',
-  matrixParams: 'ignored',
-  fragment,
-});
 
 @Component({
   selector: 'app-site-header',
@@ -28,24 +21,27 @@ const exactWith = (fragment: 'exact' | 'ignored'): IsActiveMatchOptions => ({
 })
 export class SiteHeader {
   private readonly whatsapp = inject(WhatsappService);
+  private readonly router = inject(Router);
 
   readonly menuOpen = signal(false);
   readonly scrolled = signal(false);
   readonly enquireHref = computed(() => this.whatsapp.generalLink());
 
-  readonly links: { path: string; label: string; fragment?: string; match: IsActiveMatchOptions | { exact: boolean } }[] = [
-    { path: '/', label: 'Home', match: exactWith('ignored') },
-    { path: '/', label: 'Gold Rate', fragment: 'gold-rate', match: exactWith('exact') },
-    { path: '/collections', label: 'Collections', match: { exact: false } },
-    { path: '/bridal', label: 'Bridal', match: { exact: false } },
-    { path: '/about', label: 'About', match: { exact: false } },
-    { path: '/contact', label: 'Contact', match: { exact: false } },
+  /** Category row under the main bar. */
+  readonly categories = CATEGORIES.filter((c) => c.slug !== 'traditional');
+
+  /** Main links (right side on desktop, top of the mobile menu). */
+  readonly links = [
+    { path: '/', label: 'Gold Rate', fragment: 'gold-rate' },
+    { path: '/bridal', label: 'Bridal' },
+    { path: '/about', label: 'About' },
+    { path: '/contact', label: 'Contact' },
   ];
 
   constructor() {
     // Close the mobile menu after navigating.
-    inject(Router)
-      .events.pipe(
+    this.router.events
+      .pipe(
         filter((e) => e instanceof NavigationEnd),
         takeUntilDestroyed(),
       )
@@ -53,10 +49,15 @@ export class SiteHeader {
   }
 
   onScroll(): void {
-    this.scrolled.set(window.scrollY > 24);
+    this.scrolled.set(window.scrollY > 8);
   }
 
   toggle(): void {
     this.menuOpen.update((v) => !v);
+  }
+
+  search(term: string): void {
+    const q = term.trim();
+    void this.router.navigate(['/collections'], { queryParams: q ? { q } : {} });
   }
 }

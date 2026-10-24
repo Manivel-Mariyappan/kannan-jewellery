@@ -12,7 +12,7 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Icon, RevealDirective, WhatsappButton],
   template: `
-    <header class="section head">
+    <header class="head">
       <div class="container">
         <p class="eyebrow" appReveal>Contact Us</p>
         <h1 class="display" appReveal [revealDelay]="80">Visit the <em class="serif-accent">showroom</em></h1>
@@ -102,44 +102,53 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
   `,
   styles: `
     .head {
-      padding-bottom: 3rem;
-      background: linear-gradient(180deg, var(--ivory), var(--cream));
+      padding-block: 1.5rem 0.5rem;
+    }
+    .head .container {
+      padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+      padding-block: clamp(1.5rem, 4vw, 2.5rem);
+      background: linear-gradient(120deg, #fff8ea, #f7f5f0);
+      border-radius: calc(var(--radius) + 6px);
+    }
+    .head .display {
+      font-size: clamp(1.8rem, 3.6vw, 2.6rem);
     }
     .grid {
       display: grid;
       grid-template-columns: 1fr 1.3fr;
       gap: clamp(2rem, 5vw, 5rem);
-      padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
+      padding-block: 1.5rem 3rem;
     }
     .item {
       display: grid;
       grid-template-columns: auto 1fr;
       gap: 1.25rem;
-      padding: 1.5rem 0;
+      padding: 1.1rem 0;
       border-bottom: 1px solid var(--line);
     }
     .item:first-child {
       padding-top: 0;
     }
     .item > app-icon {
-      color: var(--gold);
-      margin-top: 0.3rem;
+      width: 2.4rem;
+      height: 2.4rem;
+      display: grid !important;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent-ink);
     }
     .item h2 {
-      font-family: var(--font-body);
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.25rem;
     }
     .item p {
-      font-family: var(--font-display);
-      font-size: 1.45rem;
-      color: var(--brown);
-      line-height: 1.3;
-      margin-bottom: 0.75rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.6rem;
     }
     .item p a {
       text-decoration: none;
@@ -165,7 +174,9 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
     .map {
       position: relative;
       min-height: 420px;
-      background: var(--cream);
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
     }
     iframe {
       position: absolute;
@@ -173,7 +184,6 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
       width: 100%;
       height: 100%;
       border: 0;
-      filter: sepia(0.25) saturate(0.85);
     }
     @media (max-width: 900px) {
       .grid {

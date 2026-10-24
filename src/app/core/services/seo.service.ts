@@ -31,7 +31,7 @@ export class SeoService {
   set(page: PageMeta): void {
     const fullTitle = page.title.includes('Kannan') ? page.title : `${page.title} | Kannan Jewellery`;
     const url = this.absolute(page.path ?? this.doc.location.pathname);
-    const image = this.absolute(page.image ?? 'demo/bridal-1.svg');
+    const image = this.absolute(page.image ?? 'demo/shots/maharani-bridal-haram-1.webp');
 
     this.title.setTitle(fullTitle);
     this.meta.updateTag({ name: 'description', content: page.description });
@@ -60,7 +60,7 @@ export class SeoService {
       '@type': 'JewelryStore',
       name: settings.shopName,
       url: this.origin,
-      image: this.absolute('demo/bridal-1.svg'),
+      image: this.absolute('demo/shots/maharani-bridal-haram-1.webp'),
       telephone: settings.phone || undefined,
       email: settings.email || undefined,
       address: {

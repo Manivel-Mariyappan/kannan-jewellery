@@ -1,88 +1,90 @@
 @if (product(); as p) {
-  <nav class="container crumbs" aria-label="Breadcrumb">
-    <a routerLink="/">Home</a><span aria-hidden="true">/</span>
-    <a routerLink="/collections">Collections</a><span aria-hidden="true">/</span>
-    @if (categoryLinks()[0]; as c) {
-      <a [routerLink]="['/collections', c.slug]">{{ c.name }}</a><span aria-hidden="true">/</span>
-    }
-    <span aria-current="page">{{ p.name }}</span>
-  </nav>
-
-  <article class="container product">
-    <div class="media">
-      <div class="stage">
-        @if (view() === 'model' && p.model3d) {
-          <app-jewellery-viewer [model]="p.model3d" [poster]="p.images.at(0) ?? ''" [alt]="p.name" />
-        } @else {
-          @let i = $any(view());
-          <img [src]="images()[i]" [alt]="p.name + ' — photo ' + (i + 1)" width="1200" height="1500" fetchpriority="high" />
-        }
-      </div>
-
-      <div class="thumbs" role="tablist" aria-label="Views">
-        @if (p.model3d) {
-          <button type="button" role="tab" class="thumb model-thumb" [class.active]="view() === 'model'" [attr.aria-selected]="view() === 'model'" (click)="view.set('model')">
-            <app-icon name="cube" [size]="22" /><span>3D</span>
-          </button>
-        }
-        @for (src of images(); track src; let i = $index) {
-          <button type="button" role="tab" class="thumb" [class.active]="view() === i" [attr.aria-selected]="view() === i" (click)="view.set(i)" [attr.aria-label]="'Photo ' + (i + 1)">
-            <img [src]="src" alt="" loading="lazy" width="120" height="150" />
-          </button>
-        }
-      </div>
-      @if (p.demo) {
-        <p class="demo-note">Demo listing: illustrations and 3D model are placeholders until real photographs are added.</p>
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a routerLink="/">Home</a><span aria-hidden="true">›</span>
+      <a routerLink="/collections">Collections</a><span aria-hidden="true">›</span>
+      @if (categoryLinks()[0]; as c) {
+        <a [routerLink]="['/collections', c.slug]">{{ c.name }}</a><span aria-hidden="true">›</span>
       }
-    </div>
+      <span aria-current="page">{{ p.name }}</span>
+    </nav>
 
-    <div class="info">
-      <p class="eyebrow">{{ categoryLinks()[0]?.name }}</p>
-      <h1>{{ p.name }}</h1>
-      <p class="code">Product code <strong>{{ p.code }}</strong></p>
-
-      <dl class="specs">
-        <div><dt>Purity</dt><dd>{{ p.purity ?? 'On request' }}</dd></div>
-        <div><dt>Weight</dt><dd>{{ p.weightGrams ? p.weightGrams + ' g' : 'On request' }}</dd></div>
-        <div><dt>Availability</dt><dd>Ask us</dd></div>
-      </dl>
-
-      <p class="desc">{{ p.description }}</p>
-
-      <div class="cta">
-        <app-whatsapp-button [message]="message()" />
-        @if (phone()) {
-          <a class="btn btn-outline" [href]="'tel:' + phone()"><app-icon name="phone" [size]="18" />Call the showroom</a>
-        }
-      </div>
-      <p class="price-note">
-        Prices depend on today's gold rate, the weight of the piece, making charges and GST. Message us for an exact quote.
-      </p>
-
-      <div class="tags">
-        @for (c of categoryLinks(); track c.slug) {
-          <a class="tag" [routerLink]="['/collections', c.slug]">{{ c.name }}</a>
-        }
-      </div>
-
-      <app-gold-rate-panel [compact]="true" class="rate" />
-    </div>
-  </article>
-
-  @if (related().length) {
-    <section class="section bg-cream">
-      <div class="container">
-        <div class="section-head">
-          <div appReveal>
-            <p class="eyebrow">You may also like</p>
-            <h2>From the same collection</h2>
-          </div>
-        </div>
-        <div class="related">
-          @for (r of related(); track r.id; let i = $index) {
-            <app-product-tile [product]="r" appReveal="fade-up" [revealDelay]="i * 80" />
+    <article class="product">
+      <div class="media">
+        <div class="thumbs" role="tablist" aria-label="Views">
+          @if (p.model3d) {
+            <button type="button" role="tab" class="thumb model-thumb" [class.active]="view() === 'model'" [attr.aria-selected]="view() === 'model'" (click)="view.set('model')">
+              <app-icon name="cube" [size]="20" /><span>3D</span>
+            </button>
+          }
+          @for (src of images(); track src; let i = $index) {
+            <button type="button" role="tab" class="thumb" [class.active]="view() === i" [attr.aria-selected]="view() === i" (click)="view.set(i)" [attr.aria-label]="'Photo ' + (i + 1)">
+              <img [src]="src" alt="" loading="lazy" width="120" height="120" />
+            </button>
           }
         </div>
+        <div class="stage">
+          @if (view() === 'model' && p.model3d) {
+            <app-jewellery-viewer [model]="p.model3d" [poster]="p.images.at(0) ?? ''" [alt]="p.name" />
+          } @else {
+            @let i = $any(view());
+            <img [src]="images()[i]" [alt]="p.name + ' — photo ' + (i + 1)" width="1000" height="1000" fetchpriority="high" />
+          }
+          @if (p.isNew) { <span class="tag tag-gold new">New arrival</span> }
+        </div>
+      </div>
+
+      <div class="info">
+        <p class="cat">{{ categoryLinks()[0]?.name }}</p>
+        <h1>{{ p.name }}</h1>
+        <p class="code">Product code: <strong>{{ p.code }}</strong></p>
+
+        <dl class="specs">
+          <div><dt>Purity</dt><dd>{{ p.purity ?? 'On request' }}</dd></div>
+          <div><dt>Weight</dt><dd>{{ p.weightGrams ? p.weightGrams + ' g' : 'On request' }}</dd></div>
+          <div><dt>Price</dt><dd>Ask us</dd></div>
+        </dl>
+
+        <div class="cta">
+          <app-whatsapp-button [message]="message()" />
+          @if (phone()) {
+            <a class="btn btn-outline" [href]="'tel:' + phone()"><app-icon name="phone" [size]="18" />Call showroom</a>
+          }
+        </div>
+        <p class="price-note">
+          The price depends on today's gold rate, the weight, making charges and GST. Message us for an exact quote and availability.
+        </p>
+
+        <section class="desc">
+          <h2>About this piece</h2>
+          <p>{{ p.description }}</p>
+          <div class="tags">
+            @for (c of categoryLinks(); track c.slug) {
+              <a class="tag" [routerLink]="['/collections', c.slug]">{{ c.name }}</a>
+            }
+          </div>
+          @if (p.demo) {
+            <p class="demo-note">Demo listing: images are 3D renders and will be replaced with real photographs.</p>
+          }
+        </section>
+
+        <app-gold-rate-panel [compact]="true" />
+      </div>
+    </article>
+  </div>
+
+  @if (related().length) {
+    <section class="container section">
+      <div class="section-head">
+        <h2>You may also like</h2>
+        @if (categoryLinks()[0]; as c) {
+          <a class="link-arrow" [routerLink]="['/collections', c.slug]">More {{ c.name }}</a>
+        }
+      </div>
+      <div class="related">
+        @for (r of related(); track r.id; let i = $index) {
+          <app-product-tile [product]="r" appReveal="fade-up" [revealDelay]="i * 60" />
+        }
       </div>
     </section>
   }
@@ -90,9 +92,9 @@
   <div class="container missing">
     @if (store.state() === 'loading') {
       <div class="product">
-        <div class="skeleton" style="aspect-ratio: 4 / 5"></div>
+        <div class="skeleton" style="aspect-ratio: 1"></div>
         <div>
-          <div class="skeleton" style="height: 3rem; width: 70%; margin-bottom: 1rem"></div>
+          <div class="skeleton" style="height: 2.5rem; width: 70%; margin-bottom: 1rem"></div>
           <div class="skeleton" style="height: 1rem; width: 40%"></div>
         </div>
       </div>

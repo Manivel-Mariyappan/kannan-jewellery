@@ -28,7 +28,7 @@ import { AdminAuthService } from '../../core/services/admin-auth.service';
   `,
   styles: `
     .wrap {
-      min-height: calc(100vh - var(--header-h));
+      min-height: 100vh;
       display: grid;
       place-items: center;
       padding: 2rem var(--gutter);

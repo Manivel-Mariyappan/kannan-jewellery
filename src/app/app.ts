@@ -20,7 +20,8 @@ import { WhatsappFab } from './shared/layout/whatsapp-fab';
 export class App {
   readonly store = inject(ContentStore);
   private readonly motion = inject(MotionService);
-  readonly isAdmin = signal(false);
+  /** The admin portal is a separate area: no website header, footer or WhatsApp button. */
+  readonly isAdmin = signal(location.pathname.startsWith('/admin'));
 
   constructor() {
     const router = inject(Router);

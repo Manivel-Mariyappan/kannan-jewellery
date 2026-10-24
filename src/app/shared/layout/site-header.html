@@ -1,31 +1,51 @@
-<div class="bar container">
+<div class="main container">
   <a routerLink="/" class="brand" aria-label="Kannan Jewellery — home">
-    <span class="brand-mark">Kannan</span>
-    <span class="brand-sub">Jewellery</span>
+    <span class="mark" aria-hidden="true">K</span>
+    <span class="name">Kannan <span>Jewellery</span></span>
   </a>
 
-  <nav class="nav" aria-label="Main">
+  <form class="search" role="search" (submit)="$event.preventDefault(); search(q.value)">
+    <app-icon name="search" [size]="18" />
+    <label class="visually-hidden" for="site-search">Search jewellery</label>
+    <input #q id="site-search" type="search" placeholder="Search necklaces, bangles, product code…" />
+  </form>
+
+  <nav class="links" aria-label="Main">
     @for (link of links; track link.label) {
-      <a [routerLink]="link.path" [fragment]="link.fragment" routerLinkActive="active" [routerLinkActiveOptions]="link.match" ariaCurrentWhenActive="page">{{ link.label }}</a>
+      <a [routerLink]="link.path" [fragment]="link.fragment" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: !!link.fragment }">{{ link.label }}</a>
     }
   </nav>
 
   <div class="actions">
     @if (enquireHref(); as href) {
-      <a class="btn btn-whatsapp btn-sm enquire" [href]="href" target="_blank" rel="noopener"><app-icon name="whatsapp" [size]="16" />Enquire</a>
-    } @else {
-      <a class="btn btn-outline btn-sm enquire" routerLink="/contact">Visit us</a>
+      <a class="btn btn-whatsapp btn-sm enquire" [href]="href" target="_blank" rel="noopener"><app-icon name="whatsapp" [size]="16" /><span>Enquire</span></a>
     }
     <button type="button" class="menu-toggle" (click)="toggle()" [attr.aria-expanded]="menuOpen()" aria-controls="mobile-menu" [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'">
-      <app-icon [name]="menuOpen() ? 'close' : 'menu'" [size]="26" />
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" [size]="24" />
     </button>
   </div>
 </div>
 
+<nav class="cats" aria-label="Jewellery categories">
+  <div class="container cats-row">
+    <a routerLink="/collections" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">All Jewellery</a>
+    @for (c of categories; track c.slug) {
+      <a [routerLink]="['/collections', c.slug]" routerLinkActive="active">{{ c.name.replace('Gold ', '').replace(' Jewellery', '') }}</a>
+    }
+  </div>
+</nav>
+
 <div id="mobile-menu" class="mobile-menu" [attr.inert]="menuOpen() ? null : ''">
+  <form class="search m-search" role="search" (submit)="$event.preventDefault(); search(mq.value)">
+    <app-icon name="search" [size]="18" />
+    <label class="visually-hidden" for="mobile-search">Search jewellery</label>
+    <input #mq id="mobile-search" type="search" placeholder="Search jewellery or product code" />
+  </form>
   <nav aria-label="Mobile">
-    @for (link of links; track link.label; let i = $index) {
-      <a [routerLink]="link.path" [fragment]="link.fragment" routerLinkActive="active" [routerLinkActiveOptions]="link.match" [style.transition-delay.ms]="menuOpen() ? 80 + i * 50 : 0">{{ link.label }}</a>
+    <a routerLink="/">Home</a>
+    <a routerLink="/collections">All Jewellery</a>
+    @for (link of links; track link.label) {
+      <a [routerLink]="link.path" [fragment]="link.fragment">{{ link.label }}</a>
     }
   </nav>
   @if (enquireHref(); as href) {

@@ -30,6 +30,9 @@ export class Collections {
   readonly sort = input<string>();
 
   readonly categories = CATEGORIES;
+
+  /** Keeps search, purity and sort when switching category. */
+  readonly keepQuery = computed(() => ({ q: this.q() || null, purity: this.purity() || null, sort: this.sort() || null }));
   readonly purities: Purity[] = ['24K', '22K', '18K'];
   readonly sorts: { key: SortKey; label: string }[] = [
     { key: 'newest', label: 'Newest first' },
@@ -65,12 +68,6 @@ export class Collections {
         path: c ? `/collections/${c.slug}` : '/collections',
       });
     });
-  }
-
-  /** Index-based rhythm for the editorial layout: every 7th piece is shown large. */
-  span(i: number): string {
-    const pos = i % 7;
-    return pos === 0 ? 'feature' : pos === 4 ? 'wide' : '';
   }
 
   updateQuery(params: Record<string, string | null>): void {

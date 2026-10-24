@@ -1,103 +1,77 @@
-<section class="cover">
-  <img [src]="assetUrl('demo/bridal-1.svg')" alt="" fetchpriority="high" width="1200" height="1500" />
-  <div class="cover-copy container">
-    <p class="eyebrow" appReveal>The Bridal Collection</p>
-    <h1 class="display" appReveal [revealDelay]="100">Adorned for <em class="serif-accent">forever</em></h1>
-    <p class="lead" appReveal [revealDelay]="180">
-      Heirloom harams, layered necklaces, kadas and jhumkas, crafted in 22K gold for the most important day of your life.
-    </p>
-    <div class="cta" appReveal [revealDelay]="260">
-      <app-whatsapp-button [message]="consultMessage" label="Book a bridal consultation" variant="gold" />
-      <a class="btn btn-light" href="#traditional">View the collection</a>
+<section class="container banner-wrap">
+  <div class="banner">
+    <div class="copy">
+      <span class="badge" appReveal>Bridal Collection</span>
+      <h1 class="display" appReveal [revealDelay]="80">Adorned for <span class="accent">forever</span></h1>
+      <p class="lead" appReveal [revealDelay]="140">
+        Harams, layered necklaces, kadas and jhumkas in 22K gold, in traditional and contemporary styles, for the most important day of your life.
+      </p>
+      <div class="cta" appReveal [revealDelay]="200">
+        <app-whatsapp-button [message]="consultMessage" label="Book a bridal consultation" />
+        <a class="btn btn-light" href="#traditional">View the collection</a>
+      </div>
     </div>
+    <img [src]="assetUrl('demo/shots/maharani-bridal-haram-1.webp')" alt="Layered gold bridal haram" fetchpriority="high" width="1000" height="1000" />
   </div>
 </section>
 
-@if (highlight(); as h) {
-  <section class="section">
-    <div class="container feature">
-      <div class="feature-media" appReveal="fade-right">
-        <img [src]="assetUrl(h.images.at(1) ?? h.images.at(0) ?? '')" [alt]="h.name" loading="lazy" width="1200" height="1500" />
-      </div>
-      <div class="feature-copy" appReveal="fade-left">
-        <p class="eyebrow">Wedding highlight</p>
-        <h2>{{ h.name }}</h2>
-        <p class="lead">{{ h.description }}</p>
-        <p class="meta">{{ h.code }} · {{ h.purity }} · {{ h.weightGrams }} g</p>
-        <div class="cta">
-          <a class="btn btn-outline" [routerLink]="['/jewellery', h.slug]">View the piece</a>
-        </div>
-      </div>
-    </div>
-  </section>
-}
-
 @if (traditional().length) {
-  <section class="section bg-cream" id="traditional">
-    <div class="container">
-      <div class="section-head">
-        <div appReveal>
-          <p class="eyebrow">Traditional Bridal</p>
-          <h2>Temple work and heritage gold</h2>
-        </div>
-        <p class="lead" appReveal [revealDelay]="100">Antique finishes, lakshmi motifs and pearl fringes: the classic South Indian bridal look.</p>
-      </div>
-      <div class="grid">
-        @for (p of traditional(); track p.id; let i = $index) {
-          <app-product-tile [product]="p" appReveal="fade-up" [revealDelay]="(i % 3) * 90" />
-        }
+  <section class="container section" id="traditional">
+    <div class="section-head">
+      <div>
+        <h2>Traditional Bridal</h2>
+        <p class="lead">Temple work, antique finishes and pearl fringes: the classic South Indian bridal look</p>
       </div>
     </div>
-  </section>
-}
-
-@if (with3d().length) {
-  <section class="section bg-dark">
-    <div class="container">
-      <div class="section-head">
-        <div appReveal>
-          <p class="eyebrow">See it in 3D</p>
-          <h2>Inspect every strand</h2>
-        </div>
-        <p class="lead" appReveal [revealDelay]="100">Rotate and zoom selected bridal pieces before you visit.</p>
-      </div>
-      <app-showroom [products]="with3d()" />
+    <div class="grid">
+      @for (p of traditional(); track p.id; let i = $index) {
+        <app-product-tile [product]="p" appReveal="fade-up" [revealDelay]="(i % 4) * 60" />
+      }
     </div>
   </section>
 }
 
 @if (contemporary().length) {
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <div appReveal>
-          <p class="eyebrow">Contemporary Bridal</p>
-          <h2>Modern layers, lighter lines</h2>
-        </div>
-        <p class="lead" appReveal [revealDelay]="100">For brides who want a cleaner silhouette without losing the glow of gold.</p>
+  <section class="container section">
+    <div class="section-head">
+      <div>
+        <h2>Contemporary Bridal</h2>
+        <p class="lead">Modern layers and lighter lines</p>
       </div>
-      <div class="grid">
-        @for (p of contemporary(); track p.id; let i = $index) {
-          <app-product-tile [product]="p" appReveal="fade-up" [revealDelay]="(i % 3) * 90" />
-        }
-      </div>
+    </div>
+    <div class="grid">
+      @for (p of contemporary(); track p.id; let i = $index) {
+        <app-product-tile [product]="p" appReveal="fade-up" [revealDelay]="(i % 4) * 60" />
+      }
     </div>
   </section>
 }
 
-<section class="section bg-cream consult">
+@if (with3d().length) {
+  <section class="container section">
+    <div class="section-head">
+      <div>
+        <h2>See bridal pieces in 3D</h2>
+        <p class="lead">Rotate and zoom before you visit</p>
+      </div>
+    </div>
+    <app-showroom [products]="with3d()" tone="light" />
+  </section>
+}
+
+<section class="section bg-surface">
   <div class="container">
     <div class="section-head">
-      <div appReveal>
-        <p class="eyebrow">Bridal Consultation</p>
-        <h2>Your set, planned together</h2>
+      <div>
+        <h2>Book a bridal consultation</h2>
+        <p class="lead">Plan your complete set with us in three simple steps</p>
       </div>
-      <app-whatsapp-button [message]="consultMessage" label="Book on WhatsApp" appReveal />
+      <app-whatsapp-button [message]="consultMessage" label="Book on WhatsApp" />
     </div>
     <ol class="steps">
       @for (s of steps; track s.title; let i = $index) {
-        <li appReveal="fade-up" [revealDelay]="i * 120">
-          <span class="num gold-text">0{{ i + 1 }}</span>
+        <li appReveal="fade-up" [revealDelay]="i * 80">
+          <span class="num">{{ i + 1 }}</span>
           <h3>{{ s.title }}</h3>
           <p>{{ s.text }}</p>
         </li>

@@ -1,146 +1,429 @@
 [
   {
-    "id": "kj-nk-101", "slug": "lakshmi-ruby-bead-necklace", "code": "KJ-NK-101",
+    "id": "kj-nk-101",
+    "slug": "lakshmi-ruby-bead-necklace",
+    "code": "KJ-NK-101",
     "name": "Lakshmi Ruby Bead Necklace",
     "description": "Hand-strung gold beads with a pearl-drop ruby pendant. A graceful piece for festivals and family occasions.",
-    "categories": ["necklaces", "traditional"], "weightGrams": 32.4, "purity": "22K",
-    "images": ["demo/necklace-1.svg", "demo/necklace-2.svg"],
-    "model3d": { "type": "procedural", "shape": "necklace", "gem": "ruby" },
-    "isNew": true, "isFeatured": true, "published": true, "demo": true, "createdAt": "2026-10-20"
+    "categories": [
+      "necklaces",
+      "traditional"
+    ],
+    "weightGrams": 32.4,
+    "purity": "22K",
+    "images": [
+      "demo/shots/lakshmi-ruby-bead-necklace-1.webp",
+      "demo/shots/lakshmi-ruby-bead-necklace-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "necklace",
+      "gem": "ruby"
+    },
+    "isNew": true,
+    "isFeatured": true,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-10-20"
   },
   {
-    "id": "kj-nk-102", "slug": "emerald-drop-necklace", "code": "KJ-NK-102",
+    "id": "kj-nk-102",
+    "slug": "emerald-drop-necklace",
+    "code": "KJ-NK-102",
     "name": "Emerald Drop Necklace",
     "description": "A sleek gold bead strand finished with an emerald-toned teardrop pendant.",
-    "categories": ["necklaces"], "weightGrams": 24.8, "purity": "22K",
-    "images": ["demo/necklace-2.svg", "demo/necklace-1.svg"],
-    "model3d": { "type": "procedural", "shape": "necklace", "gem": "emerald" },
-    "isNew": false, "isFeatured": false, "published": true, "demo": true, "createdAt": "2026-09-12"
+    "categories": [
+      "necklaces"
+    ],
+    "weightGrams": 24.8,
+    "purity": "22K",
+    "images": [
+      "demo/shots/emerald-drop-necklace-1.webp",
+      "demo/shots/emerald-drop-necklace-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "necklace",
+      "gem": "emerald"
+    },
+    "isNew": false,
+    "isFeatured": false,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-09-12"
   },
   {
-    "id": "kj-ch-201", "slug": "classic-link-chain", "code": "KJ-CH-201",
+    "id": "kj-ch-201",
+    "slug": "classic-link-chain",
+    "code": "KJ-CH-201",
     "name": "Classic Link Chain",
     "description": "Interlocking polished links with a confident weight, made for everyday wear or for pairing with a pendant.",
-    "categories": ["chains", "daily-wear"], "weightGrams": 16.0, "purity": "22K",
-    "images": ["demo/chain-1.svg", "demo/chain-2.svg"],
-    "model3d": { "type": "procedural", "shape": "chain" },
-    "isNew": true, "isFeatured": true, "published": true, "demo": true, "createdAt": "2026-10-18"
+    "categories": [
+      "chains",
+      "daily-wear"
+    ],
+    "weightGrams": 16,
+    "purity": "22K",
+    "images": [
+      "demo/shots/classic-link-chain-1.webp",
+      "demo/shots/classic-link-chain-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "chain"
+    },
+    "isNew": true,
+    "isFeatured": true,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-10-18"
   },
   {
-    "id": "kj-ch-202", "slug": "heritage-heavy-chain", "code": "KJ-CH-202",
+    "id": "kj-ch-202",
+    "slug": "heritage-heavy-chain",
+    "code": "KJ-CH-202",
     "name": "Heritage Heavy Chain",
     "description": "A bold link chain with a rich mirror finish, crafted for grooms and statement styling.",
-    "categories": ["chains", "bridal"], "weightGrams": 40.2, "purity": "22K",
-    "images": ["demo/chain-2.svg", "demo/chain-1.svg"],
-    "model3d": { "type": "procedural", "shape": "chain", "scale": 1.25 },
-    "isNew": false, "isFeatured": false, "published": true, "demo": true, "createdAt": "2026-08-30"
+    "categories": [
+      "chains",
+      "bridal"
+    ],
+    "weightGrams": 40.2,
+    "purity": "22K",
+    "images": [
+      "demo/shots/heritage-heavy-chain-1.webp",
+      "demo/shots/heritage-heavy-chain-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "chain",
+      "scale": 1.25
+    },
+    "isNew": false,
+    "isFeatured": false,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-08-30"
   },
   {
-    "id": "kj-bg-301", "slug": "ruby-studded-kada", "code": "KJ-BG-301",
+    "id": "kj-bg-301",
+    "slug": "ruby-studded-kada",
+    "code": "KJ-BG-301",
     "name": "Ruby Studded Kada",
     "description": "A broad gold kada with a band of ruby-toned stones, sold as a pair.",
-    "categories": ["bangles", "bridal", "traditional"], "weightGrams": 38.6, "purity": "22K",
-    "images": ["demo/bangle-1.svg", "demo/bangle-2.svg"],
-    "model3d": { "type": "procedural", "shape": "bangle", "gem": "ruby" },
-    "isNew": true, "isFeatured": true, "published": true, "demo": true, "createdAt": "2026-10-15"
+    "categories": [
+      "bangles",
+      "bridal",
+      "traditional"
+    ],
+    "weightGrams": 38.6,
+    "purity": "22K",
+    "images": [
+      "demo/shots/ruby-studded-kada-1.webp",
+      "demo/shots/ruby-studded-kada-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "bangle",
+      "gem": "ruby"
+    },
+    "isNew": true,
+    "isFeatured": true,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-10-15"
   },
   {
-    "id": "kj-bg-302", "slug": "slim-daily-bangles", "code": "KJ-BG-302",
+    "id": "kj-bg-302",
+    "slug": "slim-daily-bangles",
+    "code": "KJ-BG-302",
     "name": "Slim Daily Bangles",
     "description": "Light, polished bangles that are comfortable all day, sold as a set of four.",
-    "categories": ["bangles", "daily-wear"], "weightGrams": 20.0, "purity": "22K",
-    "images": ["demo/bangle-2.svg", "demo/bangle-1.svg"],
-    "model3d": { "type": "procedural", "shape": "bangle" },
-    "isNew": false, "isFeatured": false, "published": true, "demo": true, "createdAt": "2026-07-22"
+    "categories": [
+      "bangles",
+      "daily-wear"
+    ],
+    "weightGrams": 20,
+    "purity": "22K",
+    "images": [
+      "demo/shots/slim-daily-bangles-1.webp",
+      "demo/shots/slim-daily-bangles-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "bangle"
+    },
+    "isNew": false,
+    "isFeatured": false,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-07-22"
   },
   {
-    "id": "kj-rg-401", "slug": "mallika-flower-ring", "code": "KJ-RG-401",
+    "id": "kj-rg-401",
+    "slug": "mallika-flower-ring",
+    "code": "KJ-RG-401",
     "name": "Mallika Flower Ring",
     "description": "An eight-petal gold flower set with a ruby-toned centre on a comfort-fit band.",
-    "categories": ["rings", "daily-wear"], "weightGrams": 4.2, "purity": "22K",
-    "images": ["demo/ring-1.svg", "demo/ring-2.svg"],
-    "model3d": { "type": "procedural", "shape": "ring", "gem": "ruby" },
-    "isNew": true, "isFeatured": false, "published": true, "demo": true, "createdAt": "2026-10-21"
+    "categories": [
+      "rings",
+      "daily-wear"
+    ],
+    "weightGrams": 4.2,
+    "purity": "22K",
+    "images": [
+      "demo/shots/mallika-flower-ring-1.webp",
+      "demo/shots/mallika-flower-ring-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "ring",
+      "gem": "ruby"
+    },
+    "isNew": true,
+    "isFeatured": false,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-10-21"
   },
   {
-    "id": "kj-rg-402", "slug": "emerald-crown-ring", "code": "KJ-RG-402",
+    "id": "kj-rg-402",
+    "slug": "emerald-crown-ring",
+    "code": "KJ-RG-402",
     "name": "Emerald Crown Ring",
     "description": "A raised crown setting with an emerald-toned stone, crafted in 18K gold for durability.",
-    "categories": ["rings"], "weightGrams": 5.1, "purity": "18K",
-    "images": ["demo/ring-2.svg", "demo/ring-1.svg"],
-    "model3d": { "type": "procedural", "shape": "ring", "gem": "emerald" },
-    "isNew": false, "isFeatured": true, "published": true, "demo": true, "createdAt": "2026-09-02"
+    "categories": [
+      "rings"
+    ],
+    "weightGrams": 5.1,
+    "purity": "18K",
+    "images": [
+      "demo/shots/emerald-crown-ring-1.webp",
+      "demo/shots/emerald-crown-ring-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "ring",
+      "gem": "emerald"
+    },
+    "isNew": false,
+    "isFeatured": true,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-09-02"
   },
   {
-    "id": "kj-er-501", "slug": "pearl-fringe-jhumkas", "code": "KJ-ER-501",
+    "id": "kj-er-501",
+    "slug": "pearl-fringe-jhumkas",
+    "code": "KJ-ER-501",
     "name": "Pearl Fringe Jhumkas",
     "description": "Bell-shaped jhumkas with a flower stud and a fringe of pearls that sway with every movement.",
-    "categories": ["earrings", "traditional"], "weightGrams": 12.6, "purity": "22K",
-    "images": ["demo/earring-1.svg", "demo/earring-2.svg"],
-    "model3d": { "type": "procedural", "shape": "earring", "gem": "ruby" },
-    "isNew": true, "isFeatured": true, "published": true, "demo": true, "createdAt": "2026-10-19"
+    "categories": [
+      "earrings",
+      "traditional"
+    ],
+    "weightGrams": 12.6,
+    "purity": "22K",
+    "images": [
+      "demo/shots/pearl-fringe-jhumkas-1.webp",
+      "demo/shots/pearl-fringe-jhumkas-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "earring",
+      "gem": "ruby"
+    },
+    "isNew": true,
+    "isFeatured": true,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-10-19"
   },
   {
-    "id": "kj-er-502", "slug": "emerald-stud-jhumkas", "code": "KJ-ER-502",
+    "id": "kj-er-502",
+    "slug": "emerald-stud-jhumkas",
+    "code": "KJ-ER-502",
     "name": "Emerald Stud Jhumkas",
     "description": "Compact jhumkas with emerald-toned flower studs, light enough for daily wear.",
-    "categories": ["earrings", "daily-wear"], "weightGrams": 8.4, "purity": "22K",
-    "images": ["demo/earring-2.svg", "demo/earring-1.svg"],
-    "model3d": { "type": "procedural", "shape": "earring", "gem": "emerald" },
-    "isNew": false, "isFeatured": false, "published": true, "demo": true, "createdAt": "2026-08-11"
+    "categories": [
+      "earrings",
+      "daily-wear"
+    ],
+    "weightGrams": 8.4,
+    "purity": "22K",
+    "images": [
+      "demo/shots/emerald-stud-jhumkas-1.webp",
+      "demo/shots/emerald-stud-jhumkas-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "earring",
+      "gem": "emerald"
+    },
+    "isNew": false,
+    "isFeatured": false,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-08-11"
   },
   {
-    "id": "kj-br-601", "slug": "maharani-bridal-haram", "code": "KJ-BR-601",
+    "id": "kj-br-601",
+    "slug": "maharani-bridal-haram",
+    "code": "KJ-BR-601",
     "name": "Maharani Bridal Haram",
     "description": "Three graduated strands of gold and pearl beads with a ruby pendant. Made to be the centrepiece of the bridal set.",
-    "categories": ["bridal", "necklaces", "traditional"], "weightGrams": 86.5, "purity": "22K",
-    "images": ["demo/bridal-1.svg", "demo/bridal-2.svg"],
-    "model3d": { "type": "procedural", "shape": "bridal", "gem": "ruby" },
-    "isNew": true, "isFeatured": true, "published": true, "demo": true, "createdAt": "2026-10-22"
+    "categories": [
+      "bridal",
+      "necklaces",
+      "traditional"
+    ],
+    "weightGrams": 86.5,
+    "purity": "22K",
+    "images": [
+      "demo/shots/maharani-bridal-haram-1.webp",
+      "demo/shots/maharani-bridal-haram-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "bridal",
+      "gem": "ruby"
+    },
+    "isNew": true,
+    "isFeatured": true,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-10-22"
   },
   {
-    "id": "kj-br-602", "slug": "kalyani-layered-necklace", "code": "KJ-BR-602",
+    "id": "kj-br-602",
+    "slug": "kalyani-layered-necklace",
+    "code": "KJ-BR-602",
     "name": "Kalyani Layered Necklace",
     "description": "A contemporary bridal layering of gold and pearl strands with an emerald-toned flower motif.",
-    "categories": ["bridal", "necklaces"], "weightGrams": 64.0, "purity": "22K",
-    "images": ["demo/bridal-2.svg", "demo/bridal-1.svg"],
-    "model3d": { "type": "procedural", "shape": "bridal", "gem": "emerald" },
-    "isNew": false, "isFeatured": true, "published": true, "demo": true, "createdAt": "2026-09-25"
+    "categories": [
+      "bridal",
+      "necklaces"
+    ],
+    "weightGrams": 64,
+    "purity": "22K",
+    "images": [
+      "demo/shots/kalyani-layered-necklace-1.webp",
+      "demo/shots/kalyani-layered-necklace-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "bridal",
+      "gem": "emerald"
+    },
+    "isNew": false,
+    "isFeatured": true,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-09-25"
   },
   {
-    "id": "kj-an-701", "slug": "temple-pendant-necklace", "code": "KJ-AN-701",
+    "id": "kj-an-701",
+    "slug": "temple-pendant-necklace",
+    "code": "KJ-AN-701",
     "name": "Temple Pendant Necklace",
     "description": "Antique-finish temple work with a flower medallion, a beaded halo and a pearl fringe.",
-    "categories": ["antique", "traditional", "bridal"], "weightGrams": 54.3, "purity": "22K",
-    "images": ["demo/antique-1.svg", "demo/antique-2.svg"],
-    "model3d": { "type": "procedural", "shape": "antique", "gem": "ruby" },
-    "isNew": false, "isFeatured": true, "published": true, "demo": true, "createdAt": "2026-09-08"
+    "categories": [
+      "antique",
+      "traditional",
+      "bridal"
+    ],
+    "weightGrams": 54.3,
+    "purity": "22K",
+    "images": [
+      "demo/shots/temple-pendant-necklace-1.webp",
+      "demo/shots/temple-pendant-necklace-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "antique",
+      "gem": "ruby"
+    },
+    "isNew": false,
+    "isFeatured": true,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-09-08"
   },
   {
-    "id": "kj-an-702", "slug": "antique-emerald-medallion", "code": "KJ-AN-702",
+    "id": "kj-an-702",
+    "slug": "antique-emerald-medallion",
+    "code": "KJ-AN-702",
     "name": "Antique Emerald Medallion",
     "description": "A matte, antique-toned gold medallion necklace with emerald-toned accents.",
-    "categories": ["antique", "necklaces"], "weightGrams": 41.7, "purity": "22K",
-    "images": ["demo/antique-2.svg", "demo/antique-1.svg"],
-    "model3d": { "type": "procedural", "shape": "antique", "gem": "emerald" },
-    "isNew": true, "isFeatured": false, "published": true, "demo": true, "createdAt": "2026-10-10"
+    "categories": [
+      "antique",
+      "necklaces"
+    ],
+    "weightGrams": 41.7,
+    "purity": "22K",
+    "images": [
+      "demo/shots/antique-emerald-medallion-1.webp",
+      "demo/shots/antique-emerald-medallion-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "antique",
+      "gem": "emerald"
+    },
+    "isNew": true,
+    "isFeatured": false,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-10-10"
   },
   {
-    "id": "kj-dw-801", "slug": "petite-pendant-chain", "code": "KJ-DW-801",
+    "id": "kj-dw-801",
+    "slug": "petite-pendant-chain",
+    "code": "KJ-DW-801",
     "name": "Petite Pendant Chain",
     "description": "A fine link chain with a small diamond-shaped pendant. Easy to wear to work every day.",
-    "categories": ["daily-wear", "chains"], "weightGrams": 6.2, "purity": "18K",
-    "images": ["demo/daily-1.svg", "demo/daily-2.svg"],
-    "model3d": { "type": "procedural", "shape": "chain", "scale": 0.8 },
-    "isNew": true, "isFeatured": false, "published": true, "demo": true, "createdAt": "2026-10-17"
+    "categories": [
+      "daily-wear",
+      "chains"
+    ],
+    "weightGrams": 6.2,
+    "purity": "18K",
+    "images": [
+      "demo/shots/petite-pendant-chain-1.webp",
+      "demo/shots/petite-pendant-chain-2.webp"
+    ],
+    "model3d": {
+      "type": "procedural",
+      "shape": "chain",
+      "scale": 0.8
+    },
+    "isNew": true,
+    "isFeatured": false,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-10-17"
   },
   {
-    "id": "kj-dw-802", "slug": "everyday-fine-chain", "code": "KJ-DW-802",
+    "id": "kj-dw-802",
+    "slug": "everyday-fine-chain",
+    "code": "KJ-DW-802",
     "name": "Everyday Fine Chain",
     "description": "A delicate chain for light layering or for wearing alone.",
-    "categories": ["daily-wear", "chains"], "weightGrams": 4.0, "purity": "22K",
-    "images": ["demo/daily-2.svg", "demo/daily-1.svg"],
+    "categories": [
+      "daily-wear",
+      "chains"
+    ],
+    "weightGrams": 4,
+    "purity": "22K",
+    "images": [
+      "demo/shots/everyday-fine-chain-1.webp",
+      "demo/shots/everyday-fine-chain-2.webp"
+    ],
     "model3d": null,
-    "isNew": false, "isFeatured": false, "published": true, "demo": true, "createdAt": "2026-06-14"
+    "isNew": false,
+    "isFeatured": false,
+    "published": true,
+    "demo": true,
+    "createdAt": "2026-06-14"
   }
 ]

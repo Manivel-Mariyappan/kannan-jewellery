@@ -3,13 +3,12 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { GoldRateService } from '../../core/services/gold-rate.service';
 import { WhatsappService } from '../../core/services/whatsapp.service';
 import { formatInr } from '../../core/utils/gold-math';
-import { RevealDirective } from '../../shared/reveal.directive';
 
 /** Today's gold rate: 22K and 24K, per gram and per 8 grams (one sovereign). */
 @Component({
   selector: 'app-gold-rate-panel',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePipe, RevealDirective],
+  imports: [DatePipe],
   templateUrl: './gold-rate-panel.html',
   styleUrl: './gold-rate-panel.scss',
   host: { '[class.compact]': 'compact()' },
@@ -28,9 +27,9 @@ export class GoldRatePanel {
   readonly statusLabel = computed(() => {
     switch (this.view().status) {
       case 'current':
-        return this.view().source === 'api' ? 'Live rate' : "Today's rate";
+        return this.view().source === 'api' ? 'Live rate' : 'Current rate';
       case 'delayed':
-        return 'Delayed — please confirm with us';
+        return 'Delayed: please confirm';
       default:
         return 'Rate unavailable';
     }

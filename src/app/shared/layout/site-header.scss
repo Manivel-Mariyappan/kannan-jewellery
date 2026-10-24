@@ -3,90 +3,110 @@
   top: 0;
   z-index: 50;
   display: block;
-  background: color-mix(in srgb, var(--ivory) 82%, transparent);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.4s, background 0.4s;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  transition: box-shadow 0.3s;
 }
 
 :host(.scrolled) {
-  border-bottom-color: var(--line);
-  background: color-mix(in srgb, var(--ivory) 94%, transparent);
+  box-shadow: 0 6px 20px -14px rgba(28, 25, 23, 0.35);
 }
 
-.bar {
+.main {
   height: var(--header-h);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+  gap: clamp(1rem, 2.5vw, 2rem);
 }
 
 .brand {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 0.6rem;
   text-decoration: none;
-  line-height: 1;
+  flex: none;
 }
 
-.brand-mark {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.mark {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
   background: var(--gold-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #fff;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.15rem;
 }
 
-.brand-sub {
-  margin-top: 0.2rem;
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.6em;
-  text-transform: uppercase;
-  color: var(--brown);
-  padding-left: 0.6em;
-}
-
-.nav {
+.name {
   display: flex;
-  gap: clamp(1.25rem, 3vw, 2.75rem);
+  flex-direction: column;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--text);
+
+  span {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+}
+
+.search {
+  flex: 1;
+  max-width: 460px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.6rem;
+  padding: 0 0.9rem;
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: border-color 0.2s, background 0.2s;
+
+  &:focus-within {
+    background: #fff;
+    border-color: var(--accent);
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font-size: 0.9rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.links {
+  display: flex;
+  gap: 1.4rem;
+  margin-left: auto;
 
   a {
-    position: relative;
-    padding: 0.5rem 0;
-    font-size: 0.74rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 500;
     text-decoration: none;
-    color: var(--brown);
+    color: var(--text-2);
+    white-space: nowrap;
 
-    &::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 1px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform 0.45s var(--ease);
-    }
-
-    &:hover::after,
-    &.active::after {
-      transform: scaleX(1);
-      transform-origin: left;
-    }
-
+    &:hover,
     &.active {
-      color: var(--gold-deep);
+      color: var(--accent-ink);
     }
   }
 }
@@ -94,17 +114,60 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .menu-toggle {
   display: none;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.6rem;
+  height: 2.6rem;
   place-items: center;
   border: 0;
+  border-radius: 50%;
   background: none;
-  color: var(--brown);
+  color: var(--text);
+
+  &:hover {
+    background: var(--surface);
+  }
+}
+
+.cats {
+  border-top: 1px solid var(--line);
+}
+
+.cats-row {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-block: 0.45rem;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  a {
+    flex: none;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--text-2);
+    border-radius: 999px;
+    transition: background 0.2s, color 0.2s;
+
+    &:hover {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    &.active {
+      background: var(--accent-soft);
+      color: var(--accent-ink);
+      font-weight: 600;
+    }
+  }
 }
 
 .mobile-menu {
@@ -112,13 +175,14 @@
   inset: var(--header-h) 0 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 2rem;
-  padding: 2.5rem var(--gutter) 2rem;
-  background: var(--ivory);
+  gap: 1.25rem;
+  padding: 1.25rem var(--gutter) 2rem;
+  background: #fff;
+  overflow-y: auto;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.4s var(--ease), visibility 0.4s;
+  transform: translateY(-8px);
+  transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
 
   nav {
     display: flex;
@@ -126,35 +190,33 @@
   }
 
   nav a {
-    padding: 0.9rem 0;
-    font-family: var(--font-display);
-    font-size: 2.3rem;
-    color: var(--brown);
+    padding: 0.85rem 0;
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    font-weight: 600;
     text-decoration: none;
     border-bottom: 1px solid var(--line);
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
-
-    &.active {
-      color: var(--gold-deep);
-    }
   }
+}
+
+.m-search {
+  max-width: none;
+  flex: none;
 }
 
 :host(.menu-open) .mobile-menu {
   opacity: 1;
   visibility: visible;
-
-  nav a {
-    opacity: 1;
-    transform: none;
-  }
+  transform: none;
 }
 
-@media (max-width: 900px) {
-  .nav {
+@media (max-width: 1020px) {
+  .links {
     display: none;
+  }
+
+  .actions {
+    margin-left: auto;
   }
 
   .menu-toggle {
@@ -162,12 +224,20 @@
   }
 }
 
-@media (max-width: 480px) {
-  .enquire {
+@media (max-width: 720px) {
+  :host {
+    --header-h: 60px;
+  }
+
+  .main > .search {
     display: none;
   }
 
-  .brand-mark {
-    font-size: 1.5rem;
+  .enquire span {
+    display: none;
+  }
+
+  .enquire {
+    padding-inline: 0.65rem;
   }
 }

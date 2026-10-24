@@ -1,31 +1,49 @@
 /* ==========================================================================
-   Kannan Jewellery — design system
-   Ivory & cream grounds, metallic gold accent, deep brown and charcoal text.
+   Kannan Jewellery — design system (v2: clean modern white)
+   White surfaces, warm-gold accent, dark readable text, compact layout.
    ========================================================================== */
 
 :root {
-  --ivory: #fbf8f1;
-  --cream: #f4ecdd;
-  --champagne: #e8d5a9;
-  --gold: #b8893b;
-  --gold-bright: #d4af37;
-  --gold-deep: #8a6420; /* gold that passes contrast for small text on ivory */
-  --brown: #3b2a1e;
-  --brown-deep: #23180f;
-  --charcoal: #2b2b2b;
-  --muted: #6b5d4f;
-  --line: rgba(59, 42, 30, 0.14);
+  --bg: #ffffff;
+  --surface: #f7f5f1;
+  --surface-2: #efe9df;
+  --text: #1c1917;
+  --text-2: #44403c;
+  --muted: #78716c;
+  --line: #e7e3dc;
+  --accent: #a8741f; /* gold fill */
+  --accent-ink: #8a5d14; /* gold text on white (AA) */
+  --accent-soft: #fbf3e2;
+  --dark: #1c1917;
   --whatsapp: #1f8f4e;
+  --danger: #b42318;
 
-  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-head: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --gutter: clamp(1rem, 4vw, 3rem);
-  --max: 1320px;
-  --header-h: 76px;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(28, 25, 23, 0.05), 0 8px 24px -12px rgba(28, 25, 23, 0.18);
+  --shadow-hover: 0 2px 4px rgba(28, 25, 23, 0.06), 0 18px 40px -16px rgba(28, 25, 23, 0.28);
+
+  --gutter: clamp(1rem, 3vw, 2rem);
+  --max: 1280px;
+  --header-h: 72px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --gold-gradient: linear-gradient(110deg, #8a6420 0%, #c99a3d 28%, #f3dc9a 48%, #c08f34 66%, #7a5418 100%);
+  --gold-gradient: linear-gradient(135deg, #b8862f 0%, #e3c27a 50%, #a8741f 100%);
+
+  /* Aliases used by the admin portal and 3D viewer. */
+  --ivory: var(--bg);
+  --cream: var(--surface);
+  --champagne: #f1dfb8;
+  --gold: var(--accent);
+  --gold-bright: #d4a648;
+  --gold-deep: var(--accent-ink);
+  --brown: var(--text);
+  --brown-deep: var(--dark);
+  --charcoal: var(--text);
+  --font-display: var(--font-head);
 }
 
 *,
@@ -41,13 +59,12 @@ html {
 
 body {
   margin: 0;
-  background: var(--ivory);
-  color: var(--charcoal);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.65;
+  font-size: 15px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 img,
@@ -72,18 +89,13 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
-}
-
-::selection {
-  background: var(--champagne);
-  color: var(--brown-deep);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* Keep anchored sections (e.g. #gold-rate) clear of the sticky header. */
 [id] {
-  scroll-margin-top: var(--header-h);
+  scroll-margin-top: calc(var(--header-h) + 56px);
 }
 
 /* ---------- Typography ---------- */
@@ -92,28 +104,30 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  color: var(--brown);
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  font-family: var(--font-head);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin: 0 0 0.5em;
 }
 
 .display {
-  font-size: clamp(2.8rem, 7vw, 6rem);
-  font-weight: 400;
-  line-height: 0.98;
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 h2,
 .h2 {
-  font-size: clamp(2.1rem, 4.4vw, 3.6rem);
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
 }
 
 h3,
 .h3 {
-  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 p {
@@ -121,47 +135,30 @@ p {
 }
 
 .lead {
-  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
-  color: var(--muted);
-  max-width: 38rem;
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+  color: var(--text-2);
+  max-width: 40rem;
 }
 
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-body);
-  font-size: 0.72rem;
+  display: inline-block;
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--gold-deep);
-  margin-bottom: 1.25rem;
-
-  &::before {
-    content: '';
-    width: 2.5rem;
-    height: 1px;
-    background: currentColor;
-  }
+  color: var(--accent-ink);
+  margin-bottom: 0.5rem;
 }
 
 .gold-text {
-  background: var(--gold-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--accent-ink);
 }
 
 em.serif-accent {
-  font-style: italic;
-  color: var(--gold-deep);
+  font-style: normal;
+  color: var(--accent-ink);
 }
 
 .meta {
-  font-size: 0.75rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: 0.8rem;
   color: var(--muted);
 }
 
@@ -175,7 +172,7 @@ em.serif-accent {
 }
 
 .section {
-  padding-block: clamp(4.5rem, 10vw, 9rem);
+  padding-block: clamp(2.25rem, 5vw, 3.75rem);
 }
 
 .section-head {
@@ -183,58 +180,43 @@ em.serif-accent {
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 1.5rem 3rem;
-  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  gap: 0.75rem 2rem;
+  margin-bottom: 1.5rem;
 
   h2 {
     margin: 0;
-    max-width: 18ch;
   }
 
   .lead {
-    margin: 0;
-    max-width: 30rem;
+    margin: 0.35rem 0 0;
+    font-size: 0.95rem;
+    color: var(--muted);
   }
 }
 
-.bg-cream {
-  background: var(--cream);
+.bg-cream,
+.bg-surface {
+  background: var(--surface);
 }
 
 .bg-dark {
-  background: var(--brown-deep);
-  color: #e9dfcf;
+  background: var(--dark);
+  color: #e7e5e4;
 
   h1,
   h2,
   h3,
   h4 {
-    color: #f6ecd9;
+    color: #fff;
   }
 
   .lead,
   .meta {
-    color: #c9b9a0;
+    color: #a8a29e;
   }
 
   .eyebrow {
-    color: var(--champagne);
-  }
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: var(--gold);
-  margin: 2rem 0;
-
-  &::before,
-  &::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    color: #e3c27a;
   }
 }
 
@@ -253,8 +235,9 @@ em.serif-accent {
   top: -4rem;
   z-index: 100;
   padding: 0.75rem 1.25rem;
-  background: var(--brown);
-  color: var(--ivory);
+  background: var(--dark);
+  color: #fff;
+  border-radius: var(--radius-sm);
 
   &:focus {
     top: 1rem;
@@ -264,67 +247,77 @@ em.serif-accent {
 /* ---------- Buttons ---------- */
 
 .btn {
-  --btn-bg: transparent;
-  --btn-fg: var(--brown);
-  --btn-border: var(--brown);
-  position: relative;
+  --btn-bg: var(--bg);
+  --btn-fg: var(--text);
+  --btn-border: var(--line);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
-  min-height: 3.25rem;
-  padding: 0.85rem 1.9rem;
-  font-size: 0.78rem;
+  gap: 0.5rem;
+  min-height: 2.9rem;
+  padding: 0.7rem 1.35rem;
+  font-size: 0.92rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
   text-decoration: none;
+  white-space: nowrap;
   color: var(--btn-fg);
   background: var(--btn-bg);
   border: 1px solid var(--btn-border);
-  overflow: hidden;
-  isolation: isolate;
-  transition: color 0.35s var(--ease), border-color 0.35s var(--ease), background 0.35s var(--ease);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 
   svg {
-    width: 1.15rem;
-    height: 1.15rem;
+    width: 1.1rem;
+    height: 1.1rem;
     flex: none;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
   }
 }
 
 .btn-gold {
-  --btn-fg: var(--brown-deep);
-  --btn-border: transparent;
-  background: var(--gold-gradient);
-  background-size: 200% 100%;
-  background-position: 0% 0;
-  transition: background-position 0.8s var(--ease), box-shadow 0.35s var(--ease);
+  --btn-bg: var(--accent);
+  --btn-fg: #fff;
+  --btn-border: var(--accent);
 
   &:hover {
-    background-position: 100% 0;
-    box-shadow: 0 10px 30px -12px rgba(138, 100, 32, 0.6);
+    --btn-bg: var(--accent-ink);
+    --btn-border: var(--accent-ink);
+    box-shadow: 0 8px 20px -10px rgba(138, 93, 20, 0.6);
+  }
+}
+
+.btn-dark {
+  --btn-bg: var(--dark);
+  --btn-fg: #fff;
+  --btn-border: var(--dark);
+
+  &:hover {
+    --btn-bg: #000;
   }
 }
 
 .btn-outline:hover {
-  --btn-bg: var(--brown);
-  --btn-fg: var(--ivory);
+  --btn-border: var(--text);
 }
 
 .btn-light {
-  --btn-fg: #f6ecd9;
-  --btn-border: rgba(232, 213, 169, 0.6);
+  --btn-bg: transparent;
+  --btn-fg: #fff;
+  --btn-border: rgba(255, 255, 255, 0.45);
 
   &:hover {
-    --btn-bg: var(--champagne);
-    --btn-fg: var(--brown-deep);
-    --btn-border: var(--champagne);
+    --btn-bg: #fff;
+    --btn-fg: var(--text);
+    --btn-border: #fff;
   }
 }
 
@@ -340,83 +333,99 @@ em.serif-accent {
 }
 
 .btn-sm {
-  min-height: 2.5rem;
-  padding: 0.55rem 1.1rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.16em;
+  min-height: 2.3rem;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.82rem;
+}
+
+.btn-danger {
+  --btn-fg: var(--danger);
+  --btn-border: #f1c6c1;
+
+  &:hover {
+    --btn-bg: var(--danger);
+    --btn-fg: #fff;
+    --btn-border: var(--danger);
+  }
 }
 
 .link-arrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.75rem;
+  gap: 0.35rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
   text-decoration: none;
-  color: var(--gold-deep);
+  color: var(--accent-ink);
 
   &::after {
     content: '→';
-    transition: transform 0.35s var(--ease);
+    transition: transform 0.25s var(--ease);
   }
 
   &:hover::after {
-    transform: translateX(6px);
+    transform: translateX(4px);
   }
 }
 
 /* ---------- Badges ---------- */
 
 .tag {
-  display: inline-block;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.62rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  background: var(--ivory);
-  color: var(--brown);
+  line-height: 1.4;
+  background: #fff;
+  color: var(--text-2);
   border: 1px solid var(--line);
+  border-radius: 999px;
 }
 
 .tag-gold {
-  background: var(--brown-deep);
-  color: var(--champagne);
-  border-color: transparent;
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* ---------- Cards ---------- */
+
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 
 /* ---------- Forms ---------- */
 
 .field {
   display: grid;
-  gap: 0.4rem;
+  gap: 0.35rem;
 
   > span,
   label {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
+    color: var(--text-2);
   }
 }
 
 .input {
   width: 100%;
-  min-height: 2.9rem;
-  padding: 0.65rem 0.9rem;
-  color: var(--charcoal);
+  min-height: 2.75rem;
+  padding: 0.6rem 0.85rem;
+  color: var(--text);
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   transition: border-color 0.2s, box-shadow 0.2s;
 
   &:focus {
     outline: none;
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(184, 137, 59, 0.15);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(168, 116, 31, 0.15);
   }
 }
 
@@ -428,7 +437,8 @@ textarea.input {
 /* ---------- States ---------- */
 
 .skeleton {
-  background: linear-gradient(100deg, var(--cream) 30%, #fbf5ea 50%, var(--cream) 70%);
+  border-radius: var(--radius);
+  background: linear-gradient(100deg, var(--surface) 30%, #fbfaf7 50%, var(--surface) 70%);
   background-size: 300% 100%;
   animation: shimmer 1.6s ease-in-out infinite;
 }
@@ -443,11 +453,13 @@ textarea.input {
 }
 
 .state-box {
-  padding: clamp(3rem, 8vw, 6rem) var(--gutter);
+  padding: clamp(2.5rem, 6vw, 4rem) var(--gutter);
   text-align: center;
-  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: var(--radius);
 
   h3 {
+    font-size: 1.25rem;
     margin-bottom: 0.4rem;
   }
 
@@ -464,8 +476,7 @@ textarea.input {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.45s;
-  animation-timing-function: var(--ease);
+  animation-duration: 0.3s;
 }
 
 @media (prefers-reduced-motion: reduce) {

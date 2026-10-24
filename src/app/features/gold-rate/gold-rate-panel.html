@@ -1,10 +1,8 @@
 @let v = view();
 <div class="head">
   <div>
-    <p class="eyebrow">Today's Gold Rate</p>
-    @if (!compact()) {
-      <h2>The price of gold, <em class="serif-accent">today</em></h2>
-    }
+    <h2>Today's Gold Rate</h2>
+    <p class="sub">Indian rupees (INR) · 8-gram rate = 8 × the per-gram rate</p>
   </div>
   <div class="stamp" [class]="v.status">
     <span class="dot" aria-hidden="true"></span>
@@ -19,11 +17,10 @@
 
 @if (v.rows.length) {
   <div class="rates" role="table" aria-label="Gold rates in Indian rupees">
-    @for (row of v.rows; track row.label; let i = $index) {
-      <div class="rate" role="row" appReveal="fade-up" [revealDelay]="i * 90">
-        <span class="purity" role="cell">{{ row.purity }}</span>
-        <span class="label" role="rowheader">{{ row.grams === 1 ? '1 Gram' : '8 Grams' }}</span>
-        <span class="price gold-text" role="cell">{{ format(row.price) }}</span>
+    @for (row of v.rows; track row.label) {
+      <div class="rate" role="row" [class.k24]="row.purity === '24K'">
+        <span class="purity" role="rowheader">{{ row.purity }} Gold <small>{{ row.grams === 1 ? '1 gram' : '8 grams' }}</small></span>
+        <span class="price" role="cell">{{ format(row.price) }}</span>
       </div>
     }
   </div>
@@ -31,12 +28,11 @@
   <div class="unavailable">
     <p>Today's rate has not been published yet. Please contact the showroom for the current rate.</p>
     @if (rateEnquiry(); as href) {
-      <a class="btn btn-light btn-sm" [href]="href" target="_blank" rel="noopener">Ask on WhatsApp</a>
+      <a class="btn btn-whatsapp btn-sm" [href]="href" target="_blank" rel="noopener">Ask on WhatsApp</a>
     }
   </div>
 }
 
 <p class="disclaimer">
-  Rates are in Indian rupees (INR) and are indicative only. 8-gram rates are calculated as 8 × the per-gram rate.
-  The final price of jewellery includes making charges, wastage, GST and other applicable charges.
+  Rates are indicative. The final price of jewellery includes making charges, wastage, GST and other applicable charges.
 </p>

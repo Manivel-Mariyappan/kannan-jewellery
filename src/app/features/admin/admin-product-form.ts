@@ -25,7 +25,7 @@ type ModelKind = 'none' | 'gltf' | 'procedural';
     }
     .preview {
       position: sticky;
-      top: calc(var(--header-h) + 1rem);
+      top: 1rem;
     }
     .preview app-jewellery-viewer {
       aspect-ratio: 4 / 5;

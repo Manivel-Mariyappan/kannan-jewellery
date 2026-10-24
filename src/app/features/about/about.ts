@@ -12,7 +12,7 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RevealDirective, WhatsappButton],
   template: `
-    <header class="section head">
+    <header class="head">
       <div class="container intro">
         <div>
           <p class="eyebrow" appReveal>Our Story</p>
@@ -27,7 +27,7 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
 
     <section class="container story">
       <div class="story-media" appReveal="fade-right">
-        <img [src]="assetUrl('demo/antique-1.svg')" alt="Antique temple gold necklace" loading="lazy" width="1200" height="1500" />
+        <img [src]="assetUrl('demo/shots/temple-pendant-necklace-1.webp')" alt="Antique temple gold necklace" loading="lazy" width="1000" height="1000" />
       </div>
       <div class="story-copy" appReveal="fade-left">
         <h2>Craftsmanship you can feel</h2>
@@ -98,10 +98,19 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
   `,
   styles: `
     .head {
-      background: linear-gradient(180deg, var(--ivory), var(--cream));
+      padding-block: 1.5rem 0;
+    }
+    .head .container {
+      padding-block: clamp(1.5rem, 4vw, 2.5rem);
+      background: linear-gradient(120deg, #fff8ea, #f7f5f0);
+      border-radius: calc(var(--radius) + 6px);
+    }
+    .head .display {
+      font-size: clamp(1.8rem, 3.6vw, 2.6rem);
     }
     .intro {
       display: grid;
+      padding-inline: clamp(1.25rem, 4vw, 2.5rem) !important;
       grid-template-columns: 1.2fr 1fr;
       gap: 3rem;
       align-items: end;
@@ -112,13 +121,15 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
     .story {
       display: grid;
       grid-template-columns: 1fr 1.1fr;
-      gap: clamp(2rem, 6vw, 6rem);
+      gap: clamp(1.5rem, 4vw, 3rem);
       align-items: center;
-      padding-block: clamp(3rem, 6vw, 6rem);
+      padding-block: clamp(2rem, 4vw, 3rem);
     }
     .story-media {
-      aspect-ratio: 4 / 5;
+      aspect-ratio: 1;
       overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--surface);
     }
     .story-media img {
       width: 100%;
@@ -126,8 +137,7 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
       object-fit: cover;
     }
     .story-copy p {
-      color: var(--muted);
-      font-size: 1.05rem;
+      color: var(--text-2);
     }
     .values {
       list-style: none;
@@ -135,19 +145,27 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
       padding: 0;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 2.5rem;
+      gap: 1rem;
     }
     .values li {
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--line);
+      padding: 1.25rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
     }
     .values .num {
-      font-family: var(--font-display);
-      font-size: 2.4rem;
+      display: grid;
+      place-items: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent-ink);
+      font-weight: 700;
+      font-size: 0.85rem;
     }
     .values h3 {
-      margin: 0.5rem 0;
-      font-size: 1.5rem;
+      margin: 0.75rem 0 0.3rem;
     }
     .values p {
       color: var(--muted);
@@ -173,20 +191,19 @@ import { WhatsappButton } from '../../shared/whatsapp-button';
       grid-template-columns: 12rem 1fr;
       gap: 1rem;
       padding: 1.25rem 0;
-      border-bottom: 1px solid rgba(232, 213, 169, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
     .formula li + li strong::before {
       content: '+ ';
       color: var(--gold-bright);
     }
     .formula strong {
-      font-family: var(--font-display);
-      font-size: 1.35rem;
-      font-weight: 500;
-      color: #f6ecd9;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
     }
     .formula span {
-      color: #c9b9a0;
+      color: #a8a29e;
     }
     .visit {
       display: flex;

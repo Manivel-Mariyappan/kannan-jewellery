@@ -12,11 +12,10 @@ import { Icon } from '../icons';
   template: `
     <div class="container grid">
       <div class="brand-col">
-        <p class="brand">Kannan</p>
-        <p class="brand-sub">Jewellery</p>
-        <p class="about">{{ settings()?.tagline }} Fine gold jewellery, made to be worn and treasured for generations.</p>
+        <p class="brand"><span class="mark" aria-hidden="true">K</span>{{ settings()?.shopName ?? 'Kannan Jewellery' }}</p>
+        <p class="about">{{ settings()?.tagline }} Fine 22K and 18K gold jewellery for every day and every celebration.</p>
         @if (whatsappHref(); as href) {
-          <a class="btn btn-light btn-sm" [href]="href" target="_blank" rel="noopener"><app-icon name="whatsapp" [size]="16" />Chat with us</a>
+          <a class="btn btn-whatsapp btn-sm" [href]="href" target="_blank" rel="noopener"><app-icon name="whatsapp" [size]="16" />Chat on WhatsApp</a>
         }
       </div>
 
@@ -29,14 +28,15 @@ import { Icon } from '../icons';
 
       <nav aria-label="Explore">
         <h2>Explore</h2>
+        <a routerLink="/" fragment="gold-rate">Today's Gold Rate</a>
         <a routerLink="/bridal">Bridal Collection</a>
-        <a routerLink="/about">Our Story</a>
-        <a routerLink="/contact">Visit the Showroom</a>
+        <a routerLink="/about">About Us</a>
+        <a routerLink="/contact">Contact & Directions</a>
       </nav>
 
       @if (settings(); as s) {
         <address>
-          <h2>Showroom</h2>
+          <h2>Visit the showroom</h2>
           <p><app-icon name="pin" [size]="16" />{{ fullAddress() }}</p>
           @if (s.phone) {
             <p><app-icon name="phone" [size]="16" /><a [href]="'tel:' + s.phone">{{ s.phone }}</a></p>
@@ -53,89 +53,88 @@ import { Icon } from '../icons';
 
     <div class="container legal">
       <p>© {{ year }} {{ settings()?.shopName ?? 'Kannan Jewellery' }}. All rights reserved.</p>
-      <p>Gold rates shown are indicative. Final prices include making charges, applicable taxes and other charges.</p>
+      <p>Gold rates are indicative. Final prices include making charges, GST and other applicable charges.</p>
     </div>
   `,
   styles: `
     :host {
       display: block;
-      background: var(--brown-deep);
-      color: #cbbba3;
-      padding-top: clamp(4rem, 8vw, 6rem);
-      font-size: 0.9rem;
+      margin-top: 2rem;
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      padding-top: 3rem;
+      font-size: 0.88rem;
+      color: var(--text-2);
     }
     .grid {
       display: grid;
       grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
-      gap: 3rem;
+      gap: 2rem;
     }
     .brand {
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: 2.2rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      background: var(--gold-gradient);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 0 0 0.75rem;
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text);
     }
-    .brand-sub {
-      margin: 0.3rem 0 1.5rem;
-      font-size: 0.6rem;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      color: var(--champagne);
+    .mark {
+      width: 2rem;
+      height: 2rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--gold-gradient);
+      color: #fff;
+      font-size: 0.95rem;
     }
     .about {
       max-width: 22rem;
-      margin-bottom: 1.75rem;
     }
     h2 {
-      font-family: var(--font-body);
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      color: var(--champagne);
-      margin-bottom: 1.25rem;
+      font-family: var(--font-head);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
     }
     nav {
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.4rem;
     }
     a {
       text-decoration: none;
-      transition: color 0.2s;
     }
-    a:hover {
-      color: var(--champagne);
+    nav a:hover,
+    address a:hover {
+      color: var(--accent-ink);
     }
     address {
       font-style: normal;
     }
     address p {
       display: flex;
-      gap: 0.7rem;
+      gap: 0.55rem;
       align-items: flex-start;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.5rem;
     }
     address app-icon {
-      margin-top: 0.3rem;
-      color: var(--gold);
+      margin-top: 0.2rem;
+      color: var(--accent);
     }
     .legal {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 0.5rem 2rem;
-      margin-top: 4rem;
-      padding-block: 1.75rem 6rem;
-      border-top: 1px solid rgba(232, 213, 169, 0.14);
+      margin-top: 2.5rem;
+      padding-block: 1.25rem 5.5rem;
+      border-top: 1px solid var(--line);
       font-size: 0.78rem;
-      color: #9c8c75;
+      color: var(--muted);
     }
     .legal p {
       margin: 0;
@@ -148,7 +147,6 @@ import { Icon } from '../icons';
     @media (max-width: 560px) {
       .grid {
         grid-template-columns: 1fr;
-        gap: 2.5rem;
       }
     }
   `,
