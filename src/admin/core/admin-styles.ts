@@ -25,7 +25,12 @@ export const adminStylesGuard: CanActivateFn = () => {
   // Wait for the stylesheet so the admin never flashes unstyled; continue anyway on error.
   return new Promise<boolean>((resolve) => {
     link.onload = () => resolve(true);
-    link.onerror = () => resolve(true);
+    link.onerror = () => {
+      console.error(
+        `[admin] Could not load ${HREF}. If you are running "ng serve", restart it after changes to angular.json.`,
+      );
+      resolve(true);
+    };
   });
 };
 
