@@ -30,6 +30,9 @@ export interface Product {
   huid?: string;
   stockStatus?: 'In stock' | 'Made to order' | 'Out of stock';
   quantity?: number | null;
+  // Deleted products stay in the file so they can be restored from the admin.
+  deleted?: boolean;
+  deletedAt?: string | null;
   // e.g. images/kj-nk-101-1.webp, or a full URL
   images: string[];
   model3d: Model3d | null;

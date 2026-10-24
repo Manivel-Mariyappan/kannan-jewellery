@@ -1,6 +1,6 @@
 <div class="row g-3 mb-3">
   @for (s of stats(); track s.label) {
-    <div class="col-6 col-md-3">
+    <div class="col">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body py-3">
           <div class="small text-body-secondary">{{ s.label }}</div>
@@ -11,19 +11,110 @@
   }
 </div>
 
+<div class="card border-0 shadow-sm mb-3">
+  <div class="card-body">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-6 col-xl-3">
+        <label class="form-label small" for="f-name">Product name</label>
+        <input
+          id="f-name"
+          type="search"
+          class="form-control"
+          placeholder="e.g. Haram"
+          [ngModel]="name()"
+          (ngModelChange)="name.set($event)"
+        />
+      </div>
+      <div class="col-md-6 col-xl-2">
+        <label class="form-label small" for="f-code">Product code</label>
+        <input
+          id="f-code"
+          type="search"
+          class="form-control"
+          placeholder="e.g. KJ-NK"
+          [ngModel]="code()"
+          (ngModelChange)="code.set($event)"
+        />
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <label class="form-label small" for="f-category">Category</label>
+        <ng-select
+          labelForId="f-category"
+          [items]="categories"
+          bindLabel="name"
+          bindValue="slug"
+          placeholder="All categories"
+          [ngModel]="category()"
+          (ngModelChange)="category.set($event)"
+        />
+      </div>
+      <div class="col-md-6 col-xl-4">
+        <span class="form-label small d-block">Show only</span>
+        <div class="d-flex flex-wrap gap-3 pt-1">
+          <div class="form-check">
+            <input
+              id="f-published"
+              class="form-check-input"
+              type="checkbox"
+              [ngModel]="onlyPublished()"
+              (ngModelChange)="onlyPublished.set($event)"
+            />
+            <label class="form-check-label" for="f-published">Published</label>
+          </div>
+          <div class="form-check">
+            <input
+              id="f-new"
+              class="form-check-input"
+              type="checkbox"
+              [ngModel]="onlyNew()"
+              (ngModelChange)="onlyNew.set($event)"
+            />
+            <label class="form-check-label" for="f-new">New arrival</label>
+          </div>
+          <div class="form-check">
+            <input
+              id="f-featured"
+              class="form-check-input"
+              type="checkbox"
+              [ngModel]="onlyFeatured()"
+              (ngModelChange)="onlyFeatured.set($event)"
+            />
+            <label class="form-check-label" for="f-featured">Featured</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="card border-0 shadow-sm">
-  <div class="card-header bg-white d-flex flex-wrap align-items-center gap-2 py-3">
-    <input
-      type="search"
-      class="form-control form-control-sm search"
-      placeholder="Search name, code, category…"
-      [value]="search()"
-      (input)="search.set($any($event.target).value)"
-    />
+  <div class="card-header bg-white d-flex flex-wrap align-items-center gap-3 py-3">
+    <div class="form-check form-switch mb-0">
+      <input
+        id="f-deleted"
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        [ngModel]="showDeleted()"
+        (ngModelChange)="showDeleted.set($event)"
+      />
+      <label class="form-check-label" for="f-deleted">
+        Show deleted products
+        @if (deletedCount()) {
+          <span class="badge rounded-pill text-bg-secondary">{{ deletedCount() }}</span>
+        }
+      </label>
+    </div>
+    <span class="small text-body-secondary">Showing {{ rows().length }}</span>
+    @if (hasFilters()) {
+      <button type="button" class="btn btn-sm btn-link p-0" (click)="clearFilters()">
+        Clear filters
+      </button>
+    }
     <div class="ms-auto d-flex gap-2">
       @if (demoCount()) {
         <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeDemo()">
-          Remove demo products
+          Delete demo products
         </button>
       }
       <button type="button" class="btn btn-sm btn-primary" (click)="openForm(null)">
@@ -34,25 +125,21 @@
   <ag-grid-angular
     class="grid"
     [theme]="theme"
-    [rowData]="store.products()"
+    [rowData]="rows()"
     [columnDefs]="columns"
     [defaultColDef]="defaultColDef"
     [getRowId]="getRowId"
-    [quickFilterText]="search()"
+    [rowClassRules]="rowClassRules"
     [pagination]="true"
     [paginationPageSize]="20"
     [paginationPageSizeSelector]="[10, 20, 50, 100]"
     [rowHeight]="64"
     [animateRows]="true"
+    overlayNoRowsTemplate="No products match these filters"
     (cellValueChanged)="onFlagChanged($event)"
   />
 </div>
 <p class="small text-body-secondary mt-2">
-  Tick
-  <strong>Published</strong>
-  ,
-  <strong>New</strong>
-  or
-  <strong>Featured</strong>
-  directly in the table. Click a row's Edit button to change details.
+  Tick Published, New or Featured directly in the table. Deleted products are hidden from the
+  website and can be restored.
 </p>

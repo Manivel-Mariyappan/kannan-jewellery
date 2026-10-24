@@ -200,10 +200,7 @@
         <figure class="card">
           <blockquote>“{{ t.quote }}”</blockquote>
           <figcaption>
-            {{ t.name }}
-            @if (t.place) {
-              , {{ t.place }}
-            }
+            {{ t.place ? t.name + ', ' + t.place : t.name }}
           </figcaption>
         </figure>
       }

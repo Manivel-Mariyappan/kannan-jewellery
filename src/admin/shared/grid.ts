@@ -16,27 +16,44 @@ export const adminGridTheme = themeQuartz.withParams({
   borderColor: '#ece8e1',
   wrapperBorder: false,
   wrapperBorderRadius: 0,
+  // match the form checkboxes in admin-styles.scss
+  checkboxBorderRadius: 5,
+  checkboxCheckedBackgroundColor: '#a8741f',
+  checkboxCheckedBorderColor: '#a8741f',
+  checkboxUncheckedBorderColor: '#cfc7ba',
 });
 
-// Edit / Delete buttons for the actions column.
-export function actionButtons<T>(onEdit: (row: T) => void, onDelete: (row: T) => void) {
+export interface RowButton<T> {
+  label: string;
+  className: string;
+  onClick: (row: T) => void;
+}
+
+// Buttons for the actions column. `buttonsFor` can return different buttons per row.
+export function rowButtons<T>(buttonsFor: (row: T) => RowButton<T>[]) {
   return (p: ICellRendererParams<T>) => {
     const wrap = document.createElement('div');
     wrap.className = 'd-flex gap-1 align-items-center h-100';
-    const make = (label: string, cls: string, fn: (row: T) => void) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = `btn btn-sm ${cls}`;
-      b.textContent = label;
-      b.onclick = () => p.data && fn(p.data);
-      return b;
-    };
-    wrap.append(
-      make('Edit', 'btn-outline-primary', onEdit),
-      make('Delete', 'btn-outline-danger', onDelete),
-    );
+    if (!p.data) return wrap;
+    const row = p.data;
+
+    for (const button of buttonsFor(row)) {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = `btn btn-sm ${button.className}`;
+      el.textContent = button.label;
+      el.onclick = () => button.onClick(row);
+      wrap.append(el);
+    }
     return wrap;
   };
+}
+
+export function actionButtons<T>(onEdit: (row: T) => void, onDelete: (row: T) => void) {
+  return rowButtons<T>(() => [
+    { label: 'Edit', className: 'btn-outline-primary', onClick: onEdit },
+    { label: 'Delete', className: 'btn-outline-danger', onClick: onDelete },
+  ]);
 }
 
 export function thumbnail(shape: 'square' | 'round' = 'square') {

@@ -22,7 +22,7 @@ export class ProductService {
   readonly published = computed(() =>
     this.store
       .products()
-      .filter((p) => p.published)
+      .filter((p) => p.published && !p.deleted)
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
   );
 
