@@ -8,12 +8,20 @@ import { GemTone, Model3d, ProceduralShape, Product, Purity } from '../../../app
 import { ContentStore } from '../../../app/core/services/content-store';
 import { assetUrl, slugify } from '../../../app/core/utils/download';
 import { JewelleryViewer } from '../../../app/shared/jewellery-viewer/jewellery-viewer';
+import { StockStatus } from '../../core/admin-models';
 import { AdminAlerts } from '../../core/alerts.service';
 import { resizeToWebp } from '../../core/image-resize';
 import { NumbersOnlyDirective } from '../../core/numbers-only.directive';
 import { AdminCard } from '../../shared/admin-card';
 
 type ModelKind = 'none' | 'gltf' | 'procedural';
+
+/** Text from a numbers-only input (or a stored number) to a number; empty becomes null. */
+const toNumber = (v: string | number | null | undefined): number | null => {
+  if (v === null || v === undefined || v === '') return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+};
 
 /** Add / edit product form, opened inside a Bootstrap offcanvas from the products grid. */
 @Component({
@@ -93,6 +101,7 @@ export class ProductForm implements OnInit {
     { value: 'emerald', label: 'Emerald' },
     { value: 'pearl', label: 'Pearl' },
   ];
+  readonly stockStatuses: StockStatus[] = ['In stock', 'Made to order', 'Out of stock'];
   readonly assetUrl = assetUrl;
 
   readonly images = signal<string[]>([]);
@@ -107,6 +116,13 @@ export class ProductForm implements OnInit {
     categories: this.fb.nonNullable.control<string[]>([], Validators.required),
     purity: this.fb.control<Purity | null>('22K'),
     weightGrams: this.fb.control<string | number | null>(null),
+    grossWeightGrams: this.fb.control<string | number | null>(null),
+    stoneWeightGrams: this.fb.control<string | number | null>(null),
+    makingChargePercent: this.fb.control<string | number | null>(null),
+    wastagePercent: this.fb.control<string | number | null>(null),
+    huid: ['', Validators.pattern(/^[A-Za-z0-9]{6}$/)],
+    stockStatus: this.fb.nonNullable.control<StockStatus>('In stock'),
+    quantity: this.fb.control<string | number | null>(1),
     isNew: [true],
     isFeatured: [false],
     published: [true],
@@ -119,6 +135,22 @@ export class ProductForm implements OnInit {
 
   private readonly value = toSignal(this.form.valueChanges, { initialValue: this.form.getRawValue() });
   readonly modelKind = computed(() => this.value().modelKind);
+
+  /** Net weight should not exceed gross weight. */
+  readonly weightMismatch = computed(() => {
+    const gross = toNumber(this.value().grossWeightGrams);
+    const net = toNumber(this.value().weightGrams);
+    return gross !== null && net !== null && net > gross;
+  });
+
+  /** Gross minus stone weight, offered as the net weight when it differs from the entered value. */
+  readonly suggestedNet = computed(() => {
+    const gross = toNumber(this.value().grossWeightGrams);
+    const stone = toNumber(this.value().stoneWeightGrams) ?? 0;
+    if (gross === null || stone > gross) return null;
+    const net = Math.round((gross - stone) * 1000) / 1000;
+    return net === toNumber(this.value().weightGrams) ? null : net;
+  });
 
   /** Live 3D preview; only changes when the model itself changes. */
   readonly previewModel = computed<Model3d | null>(
@@ -140,6 +172,13 @@ export class ProductForm implements OnInit {
         categories: [...p.categories],
         purity: p.purity,
         weightGrams: p.weightGrams,
+        grossWeightGrams: p.grossWeightGrams ?? null,
+        stoneWeightGrams: p.stoneWeightGrams ?? null,
+        makingChargePercent: p.makingChargePercent ?? null,
+        wastagePercent: p.wastagePercent ?? null,
+        huid: p.huid ?? '',
+        stockStatus: p.stockStatus ?? 'In stock',
+        quantity: p.quantity ?? null,
         isNew: p.isNew,
         isFeatured: p.isFeatured,
         published: p.published,
@@ -220,7 +259,6 @@ export class ProductForm implements OnInit {
       void this.alerts.error('Duplicate web address', `"${v.slug}" is already used. Change the URL slug.`);
       return;
     }
-    const weight = v.weightGrams === null || v.weightGrams === '' ? null : Number(v.weightGrams);
 
     if (this.product && !(await this.alerts.confirm('Update this product?', `${v.name} (${code}) will be updated.`))) return;
 
@@ -231,7 +269,14 @@ export class ProductForm implements OnInit {
       name: v.name.trim(),
       description: v.description.trim(),
       categories: v.categories,
-      weightGrams: weight !== null && Number.isFinite(weight) ? weight : null,
+      weightGrams: toNumber(v.weightGrams),
+      grossWeightGrams: toNumber(v.grossWeightGrams),
+      stoneWeightGrams: toNumber(v.stoneWeightGrams),
+      makingChargePercent: toNumber(v.makingChargePercent),
+      wastagePercent: toNumber(v.wastagePercent),
+      huid: v.huid.trim().toUpperCase(),
+      stockStatus: v.stockStatus,
+      quantity: toNumber(v.quantity),
       purity: v.purity ?? null,
       images: this.images(),
       model3d: this.buildModel(v),

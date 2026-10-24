@@ -37,7 +37,7 @@
       </admin-card>
 
       <!-- Specifications -->
-      <admin-card heading="Specifications" subtitle="Category, purity and weight" icon="⚖" [required]="true">
+      <admin-card heading="Specifications" subtitle="Category and purity" icon="◇" [required]="true">
         <div class="row g-3">
           <div class="col-12">
             <label class="form-label" for="pf-cats">Categories <span class="text-danger">*</span></label>
@@ -61,14 +61,74 @@
             <ng-select labelForId="pf-purity" formControlName="purity" [items]="purities" placeholder="Not specified" />
           </div>
           <div class="col-sm-6">
-            <label class="form-label" for="pf-weight">Weight</label>
-            <div class="input-group">
-              <input id="pf-weight" class="form-control" type="text" formControlName="weightGrams" appNumbersOnly [decimals]="3" placeholder="0.000" />
-              <span class="input-group-text">grams</span>
-            </div>
+            <label class="form-label" for="pf-huid">HUID / hallmark number</label>
+            <input id="pf-huid" class="form-control text-uppercase" formControlName="huid" maxlength="6" placeholder="AB12CD" [class.is-invalid]="invalid('huid')" />
+            <div class="invalid-feedback">HUID is 6 letters or numbers.</div>
           </div>
         </div>
         <div card-footer>The first category is shown as the main category. "Latest Arrivals" is automatic for products marked New.</div>
+      </admin-card>
+
+      <!-- Weight & charges -->
+      <admin-card heading="Weight & charges" subtitle="Used to work out the price on enquiry" icon="⚖">
+        <div class="row g-3">
+          <div class="col-sm-4">
+            <label class="form-label" for="pf-gross">Gross weight</label>
+            <div class="input-group">
+              <input id="pf-gross" class="form-control" type="text" formControlName="grossWeightGrams" appNumbersOnly [decimals]="3" placeholder="0.000" />
+              <span class="input-group-text">g</span>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label" for="pf-stone">Stone weight</label>
+            <div class="input-group">
+              <input id="pf-stone" class="form-control" type="text" formControlName="stoneWeightGrams" appNumbersOnly [decimals]="3" placeholder="0.000" />
+              <span class="input-group-text">g</span>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label" for="pf-weight">Net weight</label>
+            <div class="input-group">
+              <input id="pf-weight" class="form-control" type="text" formControlName="weightGrams" appNumbersOnly [decimals]="3" placeholder="0.000" [class.is-invalid]="weightMismatch()" />
+              <span class="input-group-text">g</span>
+            </div>
+            @if (suggestedNet(); as net) {
+              <button type="button" class="btn btn-link btn-sm p-0 mt-1" (click)="form.controls.weightGrams.setValue(net)">Use gross − stone = {{ net }} g</button>
+            }
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="pf-making">Making charges</label>
+            <div class="input-group">
+              <input id="pf-making" class="form-control" type="text" formControlName="makingChargePercent" appNumbersOnly [decimals]="2" placeholder="0" />
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="pf-wastage">Wastage (VA)</label>
+            <div class="input-group">
+              <input id="pf-wastage" class="form-control" type="text" formControlName="wastagePercent" appNumbersOnly [decimals]="2" placeholder="0" />
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+        </div>
+        @if (weightMismatch()) {
+          <div class="alert alert-warning py-2 mt-3 mb-0">Net weight is more than the gross weight. Please check.</div>
+        }
+        <div card-footer>Net weight is shown on the website. Gross weight, stone weight and charges are for the shop only.</div>
+      </admin-card>
+
+      <!-- Stock -->
+      <admin-card heading="Stock" subtitle="Availability at the showroom" icon="▤">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <label class="form-label" for="pf-stock">Stock status</label>
+            <ng-select labelForId="pf-stock" formControlName="stockStatus" [items]="stockStatuses" [clearable]="false" [searchable]="false" />
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="pf-qty">Quantity</label>
+            <input id="pf-qty" class="form-control" type="text" formControlName="quantity" appNumbersOnly [decimals]="0" placeholder="0" />
+          </div>
+        </div>
       </admin-card>
 
       <!-- Photographs -->

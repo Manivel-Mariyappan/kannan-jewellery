@@ -3,18 +3,27 @@
     <span class="mark">K</span>
     <span>Kannan <small>Admin</small></span>
   </div>
-  <nav class="nav flex-column gap-1" aria-label="Admin">
-    @for (item of nav; track item.path) {
-      <a class="nav-link" [routerLink]="item.path" routerLinkActive="active" (click)="close?.()">
-        <span class="icon" aria-hidden="true">{{ item.icon }}</span>
-        <span class="flex-grow-1">{{ item.label }}</span>
-        @if (item.path === 'publish' && store.hasDrafts()) {
-          <span class="badge rounded-pill text-bg-warning">{{ store.draftKinds().length }}</span>
-        }
-      </a>
+  <nav class="nav flex-column" aria-label="Admin">
+    @for (section of nav; track section.group) {
+      <p class="group">{{ section.group }}</p>
+      @for (item of section.items; track item.path) {
+        <a class="nav-link" [routerLink]="item.path" routerLinkActive="active" (click)="close?.()">
+          <span class="icon" aria-hidden="true">{{ item.icon }}</span>
+          <span class="flex-grow-1">{{ item.label }}</span>
+          @if (item.path === 'publish' && store.hasDrafts()) {
+            <span class="badge rounded-pill text-bg-warning">{{ store.draftKinds().length }}</span>
+          }
+        </a>
+      }
     }
   </nav>
   <div class="side-foot">
+    @if (auth.currentUser(); as u) {
+      <div class="me">
+        <span class="avatar">{{ u.fullName.charAt(0) }}</span>
+        <span><strong>{{ u.fullName }}</strong><small>{{ u.role }}</small></span>
+      </div>
+    }
     <a class="nav-link" href="/" target="_blank" rel="noopener">View website ↗</a>
     <button type="button" class="nav-link text-start border-0 bg-transparent w-100" (click)="lock()">Lock admin</button>
   </div>

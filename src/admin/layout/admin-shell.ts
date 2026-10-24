@@ -18,7 +18,7 @@ import { AdminAlerts } from '../core/alerts.service';
   styleUrl: './admin-shell.scss',
 })
 export class AdminShell {
-  private readonly auth = inject(AdminAuthService);
+  readonly auth = inject(AdminAuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly offcanvas = inject(NgbOffcanvas);
@@ -26,10 +26,17 @@ export class AdminShell {
   readonly store = inject(ContentStore);
 
   readonly nav = [
-    { path: 'products', label: 'Products', icon: '◆' },
-    { path: 'gold-rate', label: 'Gold rate', icon: '₹' },
-    { path: 'settings', label: 'Shop settings', icon: '⚙' },
-    { path: 'publish', label: 'Publish', icon: '⇪' },
+    { group: 'Catalogue', items: [
+      { path: 'products', label: 'Products', icon: '◆' },
+      { path: 'categories', label: 'Categories', icon: '▦' },
+      { path: 'gold-rate', label: 'Gold rate', icon: '₹' },
+    ] },
+    { group: 'Customers', items: [{ path: 'enquiries', label: 'Enquiries', icon: '✉' }] },
+    { group: 'Settings', items: [
+      { path: 'settings', label: 'Shop settings', icon: '⚙' },
+      { path: 'users', label: 'Admin users', icon: '☺' },
+      { path: 'publish', label: 'Publish', icon: '⇪' },
+    ] },
   ];
 
   /** Heading of the active page, from the child route's `data.heading`. */

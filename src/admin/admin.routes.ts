@@ -36,6 +36,24 @@ export const ADMIN_ROUTES: Routes = [
             data: { heading: 'Products' },
           },
           {
+            path: 'categories',
+            loadComponent: () => import('./pages/categories/categories-page').then((m) => m.CategoriesPage),
+            title: 'Categories | Admin',
+            data: { heading: 'Categories' },
+          },
+          {
+            path: 'enquiries',
+            loadComponent: () => import('./pages/enquiries/enquiries-page').then((m) => m.EnquiriesPage),
+            title: 'Enquiries | Admin',
+            data: { heading: 'Enquiries' },
+          },
+          {
+            path: 'users',
+            loadComponent: () => import('./pages/users/users-page').then((m) => m.UsersPage),
+            title: 'Admin users | Admin',
+            data: { heading: 'Admin users' },
+          },
+          {
             path: 'gold-rate',
             loadComponent: () => import('./pages/gold-rate/gold-rate-page').then((m) => m.GoldRatePage),
             title: 'Gold rate | Admin',

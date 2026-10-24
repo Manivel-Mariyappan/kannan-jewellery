@@ -15,6 +15,7 @@ import { Product } from '../../../app/core/models';
 import { ContentStore } from '../../../app/core/services/content-store';
 import { assetUrl } from '../../../app/core/utils/download';
 import { AdminAlerts } from '../../core/alerts.service';
+import { badge } from '../../shared/grid';
 import { ProductForm } from './product-form';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -167,6 +168,13 @@ export class ProductsPage {
       width: 110,
       filter: 'agNumberColumnFilter',
       type: 'rightAligned',
+    },
+    {
+      headerName: 'Stock',
+      colId: 'stock',
+      width: 140,
+      valueGetter: (p) => p.data?.stockStatus ?? 'In stock',
+      cellRenderer: badge({ 'In stock': 'success', 'Made to order': 'info', 'Out of stock': 'secondary' }),
     },
     { headerName: 'Published', field: 'published', width: 110, editable: true, cellDataType: 'boolean' },
     { headerName: 'New', field: 'isNew', width: 80, editable: true, cellDataType: 'boolean' },

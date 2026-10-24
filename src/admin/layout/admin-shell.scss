@@ -76,6 +76,45 @@
   }
 }
 
+.group {
+  margin: 1rem 0 0.35rem;
+  padding: 0 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #78716c;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.me {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 0.75rem 0.75rem;
+  font-size: 0.85rem;
+  color: #fff;
+
+  small {
+    display: block;
+    color: #a8a29e;
+  }
+}
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #44403c;
+  color: #f1dfb8;
+  font-weight: 700;
+}
+
 .icon {
   width: 1.4rem;
   text-align: center;

@@ -20,8 +20,18 @@ export interface Product {
   name: string;
   description: string;
   categories: string[];
+  /** Net gold weight in grams (shown on the website as "Weight"). */
   weightGrams: number | null;
   purity: Purity | null;
+  /** Admin-only details (optional so older products.json files stay valid). */
+  grossWeightGrams?: number | null;
+  stoneWeightGrams?: number | null;
+  makingChargePercent?: number | null;
+  wastagePercent?: number | null;
+  /** BIS hallmark unique ID (6 characters). */
+  huid?: string;
+  stockStatus?: 'In stock' | 'Made to order' | 'Out of stock';
+  quantity?: number | null;
   /** Paths relative to the site root (e.g. `images/kj-nk-101-1.webp`) or full URLs. */
   images: string[];
   model3d: Model3d | null;

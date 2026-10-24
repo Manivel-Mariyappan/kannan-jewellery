@@ -1,7 +1,10 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { APP_CONFIG } from '../../app/core/config/app-config';
+import { AdminDataService } from './admin-data.service';
 
-const SESSION_KEY = 'kj.admin.unlocked';
+const SESSION_KEY = 'kj.admin.session';
+/** Older sessions only stored a flag; treat them as the default admin account. */
+const LEGACY_KEY = 'kj.admin.unlocked';
 
 async function sha256Hex(value: string): Promise<string> {
   const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
@@ -9,44 +12,55 @@ async function sha256Hex(value: string): Promise<string> {
 }
 
 /**
- * Passcode lock for the browser-only admin portal.
+ * Username + password login for the browser-only admin portal.
+ *
+ * The username must be an active account on the Admin users screen. Until the ASP.NET Core
+ * Auth API is connected, every account signs in with the admin password configured in
+ * app-config.ts (stored there as a SHA-256 hash).
  *
  * This is NOT server-side security: anyone can read the site's JavaScript. It keeps casual
- * visitors out of the editing screens, and that is enough here because the portal cannot change
- * the live site — publishing needs access to the hosting. Real multi-user authentication needs
- * a backend (see README → "Moving to a backend").
+ * visitors out of the editing screens, which cannot change the live site by themselves.
  */
 @Injectable({ providedIn: 'root' })
 export class AdminAuthService {
-  readonly unlocked = signal(this.readSession());
+  private readonly data = inject(AdminDataService);
 
-  async unlock(passcode: string): Promise<boolean> {
-    const ok = (await sha256Hex(passcode)) === APP_CONFIG.adminPasscodeSha256;
-    if (ok) {
-      this.unlocked.set(true);
-      try {
-        sessionStorage.setItem(SESSION_KEY, '1');
-      } catch {
-        /* session-only unlock still works for this page view */
-      }
+  readonly username = signal<string | null>(this.readSession());
+  readonly unlocked = computed(() => this.username() !== null);
+  readonly currentUser = computed(() => this.data.users.all().find((u) => u.username === this.username()) ?? null);
+
+  /** Returns an error message, or null on success. */
+  async login(username: string, password: string): Promise<string | null> {
+    const name = username.trim().toLowerCase();
+    const user = this.data.users.all().find((u) => u.username.toLowerCase() === name);
+    const passwordOk = (await sha256Hex(password)) === APP_CONFIG.adminPasscodeSha256;
+    if (!user || !passwordOk) return 'Incorrect username or password.';
+    if (!user.active) return 'This account is disabled. Ask an admin to activate it.';
+    this.data.users.upsert({ ...user, lastLogin: new Date().toISOString() });
+    this.username.set(user.username);
+    try {
+      sessionStorage.setItem(SESSION_KEY, user.username);
+    } catch {
+      /* session-only login still works for this page view */
     }
-    return ok;
+    return null;
   }
 
   lock(): void {
-    this.unlocked.set(false);
+    this.username.set(null);
     try {
       sessionStorage.removeItem(SESSION_KEY);
+      sessionStorage.removeItem(LEGACY_KEY);
     } catch {
       /* ignore */
     }
   }
 
-  private readSession(): boolean {
+  private readSession(): string | null {
     try {
-      return sessionStorage.getItem(SESSION_KEY) === '1';
+      return sessionStorage.getItem(SESSION_KEY) ?? (sessionStorage.getItem(LEGACY_KEY) === '1' ? 'admin' : null);
     } catch {
-      return false;
+      return null;
     }
   }
 }

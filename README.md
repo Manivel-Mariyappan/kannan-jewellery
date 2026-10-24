@@ -32,7 +32,7 @@ npm run build        # production build → dist/KANNAN_JEWELLERY/browser
 1. **WhatsApp number & phone.** Admin → Shop settings (or edit `public/data/settings.json`). Until a WhatsApp number is set, enquiry buttons link to the Contact page and the floating button is hidden.
 2. **Full address.** `settings.json` currently has `102, Salem Main Road, Tamil Nadu`. Add the town and PIN code, and check the Google Maps search text.
 3. **Gold rate.** `public/data/gold-rate.json` ships with `null` values, so the site shows "Rate unavailable". No prices are invented.
-4. **Admin passcode.** Change the default (`kannan@admin`) in `src/app/core/config/app-config.ts` (checked by `src/admin/core/admin-auth.service.ts`). The command to generate a new hash is in that file.
+4. **Admin password.** Sign in at /admin with username `admin`. Change the default password (`kannan@admin`) in `src/app/core/config/app-config.ts` (checked by `src/admin/core/admin-auth.service.ts`). The command to generate a new hash is in that file.
 5. **Replace demo products.** All 16 sample products are flagged `"demo": true`, labelled "Demo" on the site, and use product shots rendered from the demo 3D models (`public/demo/shots/`). Admin → Products → *Remove demo products*.
 6. **Site URL.** Set `siteUrl` in `app-config.ts` (e.g. `https://www.kannanjewellery.in`) so canonical URLs and social previews are correct.
 
@@ -54,6 +54,8 @@ The admin portal lives in its own folder, `src/admin/`, and is lazy-loaded: webs
 - **Products:** AG Grid with search, sorting, filters and paging; tick Published / New / Featured directly in the grid; add or edit in a side panel (offcanvas) built from reusable section cards (`src/admin/shared/admin-card.ts`); delete with confirmation; upload multiple photos (compressed to WebP in the browser) or add them by path; choose a GLB model or a demo 3D shape; publish / unpublish; mark as New or Featured.
 - **Gold rate:** enter 22K and 24K per-gram rates (number-only inputs) with an effective date (dd-mm-yyyy) and time. The 8-gram values are calculated automatically.
 - **Shop settings:** address, phone, WhatsApp, email, opening hours, directions, certification.
+- **Categories, Enquiries, Admin users, Gold-rate history:** UI-only screens for the planned ASP.NET Core + MySQL backend (`/api/categories`, `/api/enquiries`, `/api/users`, `/api/gold-rates`). Their data is kept in this browser (`src/admin/core/admin-data.service.ts`) until those endpoints exist.
+- **Product details for the shop:** gross, stone and net weight; making charges %; wastage %; HUID; stock status and quantity.
 - **Publish:** download the updated JSON files.
 
 **How publishing works.** Edits are saved as *drafts* in that browser, and the owner sees them on the real pages, marked with a yellow "previewing" bar. To make them live for everyone:
@@ -63,7 +65,7 @@ The admin portal lives in its own folder, `src/admin/`, and is lazy-loaded: webs
 3. Rebuild and deploy (or `git push` if your host deploys from Git).
 4. Discard the drafts in Admin → Publish.
 
-> **Security note.** Without a server, the admin passcode is only a convenience lock. Anyone can read the site's JavaScript, so it is not real authentication. That is acceptable here because the admin portal **cannot change the live site**: only someone with access to the hosting or repository can publish. See *Moving to a backend* if staff need to publish directly.
+> **Security note.** Without a server, the admin login is only a convenience lock. Usernames come from the Admin users screen; until the Auth API exists every account uses the password configured in `app-config.ts`. Anyone can read the site's JavaScript, so it is not real authentication. That is acceptable here because the admin portal **cannot change the live site**: only someone with access to the hosting or repository can publish. See *Moving to a backend* if staff need to publish directly.
 
 ## Gold rate
 

@@ -133,6 +133,12 @@ html.kj-admin {
     flex-direction: column;
   }
 
+  .kj-offcanvas-lg {
+    --bs-offcanvas-width: min(680px, 100vw);
+    display: flex;
+    flex-direction: column;
+  }
+
   .kj-admin-menu {
     --bs-offcanvas-width: 260px;
     --bs-offcanvas-bg: #1c1917;

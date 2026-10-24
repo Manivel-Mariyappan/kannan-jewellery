@@ -3,20 +3,29 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbDateStruct, NgbInputDatepicker, NgbTimeStruct, NgbTimepicker } from '@ng-bootstrap/ng-bootstrap';
+import { AgGridAngular } from 'ag-grid-angular';
+import { ColDef } from 'ag-grid-community';
 import { GoldRateData } from '../../../app/core/models';
 import { ContentStore } from '../../../app/core/services/content-store';
 import { downloadJson } from '../../../app/core/utils/download';
 import { eightGramRate, formatInr, isValidRate } from '../../../app/core/utils/gold-math';
+import { AdminAuthService } from '../../core/admin-auth.service';
+import { AdminDataService } from '../../core/admin-data.service';
+import { GoldRateHistoryEntry } from '../../core/admin-models';
 import { AdminAlerts } from '../../core/alerts.service';
+import { newId } from '../../core/local-collection';
 import { NumbersOnlyDirective } from '../../core/numbers-only.directive';
 import { AdminCard } from '../../shared/admin-card';
+import { adminGridTheme, formatDateTime } from '../../shared/grid';
+import { UiOnlyNote } from '../../shared/ui-only-note';
 
 const toNumber = (v: string | number | null): number | null => (v === null || v === '' ? null : Number(v));
+const round2 = (v: number) => Math.round(v * 100) / 100;
 
 @Component({
   selector: 'app-gold-rate-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, DatePipe, NgbInputDatepicker, NgbTimepicker, NumbersOnlyDirective, AdminCard],
+  imports: [ReactiveFormsModule, DatePipe, NgbInputDatepicker, NgbTimepicker, NumbersOnlyDirective, AdminCard, AgGridAngular, UiOnlyNote],
   template: `
     <div class="row g-3">
       <div class="col-xl-7">
@@ -40,6 +49,20 @@ const toNumber = (v: string | number | null): number | null => (v === null || v 
                 @if (invalid('rate24k')) { <div class="invalid-feedback d-block">Enter a rate greater than zero.</div> }
               </div>
               <div class="col-sm-6">
+                <label class="form-label" for="r18">18K gold, per gram</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input id="r18" class="form-control" type="text" formControlName="rate18k" appNumbersOnly [decimals]="2" placeholder="Optional" />
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label" for="rsilver">Silver, per gram</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input id="rsilver" class="form-control" type="text" formControlName="silver" appNumbersOnly [decimals]="2" placeholder="Optional" />
+                </div>
+              </div>
+              <div class="col-sm-6">
                 <label class="form-label" for="rdate">Effective date</label>
                 <div class="input-group">
                   <input id="rdate" class="form-control" placeholder="dd-mm-yyyy" formControlName="date" ngbDatepicker #dp="ngbDatepicker" [maxDate]="today" readonly (click)="dp.toggle()" />
@@ -49,6 +72,10 @@ const toNumber = (v: string | number | null): number | null => (v === null || v 
               <div class="col-sm-6">
                 <label class="form-label">Effective time</label>
                 <ngb-timepicker formControlName="time" [meridian]="true" [spinners]="false" size="small" />
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="rnote">Note</label>
+                <input id="rnote" class="form-control" formControlName="note" placeholder="Optional, e.g. Morning rate" />
               </div>
             </div>
 
@@ -75,8 +102,8 @@ const toNumber = (v: string | number | null): number | null => (v === null || v 
             </div>
           </form>
           <div card-footer>
-            To make the rate live for everyone, download gold-rate.json, replace <code>public/data/gold-rate.json</code> and redeploy.
-            Rates older than 24 hours are labelled "Delayed" on the website.
+            18K, silver and the note are kept in the rate history only; the website shows 22K and 24K. To make the rate live for
+            everyone, download gold-rate.json, replace <code>public/data/gold-rate.json</code> and redeploy.
           </div>
         </admin-card>
       </div>
@@ -104,14 +131,34 @@ const toNumber = (v: string | number | null): number | null => (v === null || v 
           }
         </admin-card>
       </div>
+
+      <div class="col-12">
+        <admin-card heading="Gold rate history" subtitle="Every update made from this screen" icon="☰">
+          <admin-ui-only-note api="/api/gold-rates" />
+          <ag-grid-angular
+            style="display: block; height: 360px"
+            [theme]="theme"
+            [rowData]="data.goldRateHistory.all()"
+            [columnDefs]="historyColumns"
+            [defaultColDef]="{ sortable: true, filter: true, resizable: true, suppressHeaderMenuButton: true }"
+            [pagination]="true"
+            [paginationPageSize]="10"
+            [paginationPageSizeSelector]="[10, 25, 50]"
+            overlayNoRowsTemplate="No rate updates yet"
+          />
+        </admin-card>
+      </div>
     </div>
   `,
 })
 export class GoldRatePage {
   readonly store = inject(ContentStore);
+  readonly data = inject(AdminDataService);
   private readonly fb = inject(FormBuilder);
   private readonly alerts = inject(AdminAlerts);
+  private readonly auth = inject(AdminAuthService);
 
+  readonly theme = adminGridTheme;
   readonly current = this.store.goldRateFile;
   readonly submitted = signal(false);
 
@@ -121,9 +168,22 @@ export class GoldRatePage {
   readonly form = this.fb.group({
     rate22k: this.fb.control<string | number | null>(this.current().rate22k, [Validators.required, Validators.min(0.01)]),
     rate24k: this.fb.control<string | number | null>(this.current().rate24k, [Validators.required, Validators.min(0.01)]),
+    rate18k: this.fb.control<string | number | null>(null),
+    silver: this.fb.control<string | number | null>(null),
     date: this.fb.nonNullable.control<NgbDateStruct>(this.today, Validators.required),
     time: this.fb.nonNullable.control<NgbTimeStruct>({ hour: this.now.getHours(), minute: this.now.getMinutes(), second: 0 }, Validators.required),
+    note: this.fb.nonNullable.control(''),
   });
+
+  readonly historyColumns: ColDef<GoldRateHistoryEntry>[] = [
+    { headerName: 'Effective', field: 'effectiveAt', width: 200, sort: 'desc', valueFormatter: (p) => formatDateTime(p.value as string) },
+    { headerName: '22K / g', field: 'rate22k', width: 120, type: 'rightAligned', valueFormatter: (p) => this.fmt(p.value as number) },
+    { headerName: '24K / g', field: 'rate24k', width: 120, type: 'rightAligned', valueFormatter: (p) => this.fmt(p.value as number) },
+    { headerName: '18K / g', field: 'rate18k', width: 120, type: 'rightAligned', valueFormatter: (p) => this.fmt(p.value as number | null) },
+    { headerName: 'Silver / g', field: 'silver', width: 120, type: 'rightAligned', valueFormatter: (p) => this.fmt(p.value as number | null) },
+    { headerName: 'Updated by', field: 'updatedBy', width: 140 },
+    { headerName: 'Note', field: 'note', flex: 1, minWidth: 180 },
+  ];
 
   private readonly value = toSignal(this.form.valueChanges, { initialValue: this.form.getRawValue() });
   readonly preview = computed(() => {
@@ -133,8 +193,8 @@ export class GoldRatePage {
     return { r22, r24, r22x8: eightGramRate(r22), r24x8: eightGramRate(r24) };
   });
 
-  fmt(v: number | null): string {
-    return v === null ? '—' : formatInr(v);
+  fmt(v: number | null | undefined): string {
+    return v === null || v === undefined ? '—' : formatInr(v);
   }
 
   invalid(name: 'rate22k' | 'rate24k'): boolean {
@@ -148,7 +208,7 @@ export class GoldRatePage {
     const r24 = toNumber(rate24k);
     if (!isValidRate(r22) || !isValidRate(r24) || !date || !time) return null;
     const when = new Date(date.year, date.month - 1, date.day, time.hour, time.minute);
-    return { rate22k: Math.round(r22 * 100) / 100, rate24k: Math.round(r24 * 100) / 100, updatedAt: when.toISOString() };
+    return { rate22k: round2(r22), rate24k: round2(r24), updatedAt: when.toISOString() };
   }
 
   async save(): Promise<void> {
@@ -158,12 +218,25 @@ export class GoldRatePage {
       void this.alerts.error('Check the rates', 'Enter both rates as numbers greater than zero.');
       return;
     }
-    const ok = await this.alerts.confirm(
-      'Update gold rate?',
-      `22K: ${formatInr(data.rate22k!)} / g  •  24K: ${formatInr(data.rate24k!)} / g`,
-    );
+    const ok = await this.alerts.confirm('Update gold rate?', `22K: ${formatInr(data.rate22k!)} / g  •  24K: ${formatInr(data.rate24k!)} / g`);
     if (!ok) return;
     this.store.saveDraft('goldRate', data);
+
+    const { rate18k, silver, note } = this.form.getRawValue();
+    const optional = (v: string | number | null) => {
+      const n = toNumber(v);
+      return isValidRate(n) ? round2(n) : null;
+    };
+    this.data.goldRateHistory.upsert({
+      id: newId('rate'),
+      effectiveAt: data.updatedAt!,
+      rate22k: data.rate22k!,
+      rate24k: data.rate24k!,
+      rate18k: optional(rate18k),
+      silver: optional(silver),
+      updatedBy: this.auth.username() ?? '',
+      note: note.trim(),
+    });
     void this.alerts.success('Gold rate updated', 'Preview it on the website, then publish from the Publish page.');
   }
 
