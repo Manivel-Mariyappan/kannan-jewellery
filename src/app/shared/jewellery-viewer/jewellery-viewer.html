@@ -1,0 +1,38 @@
+@if (state() !== 'ready' && posterUrl()) {
+  <img class="poster" [src]="posterUrl()" [alt]="alt()" loading="lazy" decoding="async" />
+}
+
+<canvas
+  #canvas
+  [attr.tabindex]="interactive() ? 0 : -1"
+  [attr.aria-label]="interactive() ? '3D view of ' + alt() + '. Drag to rotate, scroll or pinch to zoom, arrow keys to turn.' : null"
+  [attr.aria-hidden]="interactive() ? null : true"
+  role="img"
+  (keydown)="onKey($event)"
+></canvas>
+
+@if (state() === 'loading') {
+  <div class="status" role="status"><span class="spinner" aria-hidden="true"></span>Preparing 3D view…</div>
+}
+
+@if (state() === 'fallback' && fallbackReason()) {
+  <p class="note fallback">{{ fallbackReason() }}</p>
+}
+
+@if (state() === 'ready' && interactive()) {
+  <div class="controls" role="toolbar" aria-label="3D view controls">
+    <button type="button" (click)="zoomIn()" aria-label="Zoom in">+</button>
+    <button type="button" (click)="zoomOut()" aria-label="Zoom out">−</button>
+    <button type="button" (click)="toggleSpin()" [attr.aria-pressed]="autoRotating()" aria-label="Auto-rotate">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v4h-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    </button>
+    <button type="button" (click)="reset()" aria-label="Reset view">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    </button>
+  </div>
+  <p class="hint">Drag to rotate · Pinch or scroll to zoom</p>
+}
+
+@if (state() === 'ready' && isProcedural() && showModelNote()) {
+  <p class="note">Demo 3D model</p>
+}

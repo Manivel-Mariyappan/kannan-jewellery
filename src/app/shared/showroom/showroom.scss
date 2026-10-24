@@ -1,0 +1,146 @@
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: stretch;
+}
+
+.stage {
+  position: relative;
+
+  app-jewellery-viewer {
+    height: clamp(420px, 68vh, 680px);
+  }
+}
+
+.stage-nav {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--champagne);
+
+  button {
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    color: inherit;
+    background: rgba(35, 24, 15, 0.45);
+    border: 1px solid rgba(232, 213, 169, 0.35);
+    backdrop-filter: blur(6px);
+    transition: border-color 0.2s, background 0.2s;
+
+    &:hover {
+      border-color: var(--gold-bright);
+      background: rgba(184, 137, 59, 0.25);
+    }
+  }
+}
+
+.count {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5rem;
+}
+
+.detail {
+  h3 {
+    font-size: clamp(2rem, 3.2vw, 2.8rem);
+  }
+
+  .desc {
+    color: inherit;
+    opacity: 0.85;
+  }
+}
+
+dl {
+  display: flex;
+  gap: 2.5rem;
+  margin: 1.5rem 0;
+
+  dt {
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+  }
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  max-height: 18rem;
+  overflow-y: auto;
+
+  button {
+    width: 100%;
+    display: flex;
+    gap: 1.25rem;
+    align-items: baseline;
+    padding: 0.85rem 0;
+    text-align: left;
+    color: inherit;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    opacity: 0.6;
+    transition: opacity 0.3s, padding 0.4s var(--ease);
+
+    &:hover,
+    &.active {
+      opacity: 1;
+      padding-left: 0.5rem;
+    }
+
+    &.active .name {
+      color: var(--gold-bright);
+    }
+  }
+
+  .num {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+  }
+
+  .name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 900px) {
+  :host {
+    grid-template-columns: 1fr;
+  }
+
+  .stage app-jewellery-viewer {
+    height: min(110vw, 520px);
+  }
+}

@@ -1,0 +1,34 @@
+<div class="bar container">
+  <a routerLink="/" class="brand" aria-label="Kannan Jewellery — home">
+    <span class="brand-mark">Kannan</span>
+    <span class="brand-sub">Jewellery</span>
+  </a>
+
+  <nav class="nav" aria-label="Main">
+    @for (link of links; track link.label) {
+      <a [routerLink]="link.path" [fragment]="link.fragment" routerLinkActive="active" [routerLinkActiveOptions]="link.match" ariaCurrentWhenActive="page">{{ link.label }}</a>
+    }
+  </nav>
+
+  <div class="actions">
+    @if (enquireHref(); as href) {
+      <a class="btn btn-whatsapp btn-sm enquire" [href]="href" target="_blank" rel="noopener"><app-icon name="whatsapp" [size]="16" />Enquire</a>
+    } @else {
+      <a class="btn btn-outline btn-sm enquire" routerLink="/contact">Visit us</a>
+    }
+    <button type="button" class="menu-toggle" (click)="toggle()" [attr.aria-expanded]="menuOpen()" aria-controls="mobile-menu" [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'">
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" [size]="26" />
+    </button>
+  </div>
+</div>
+
+<div id="mobile-menu" class="mobile-menu" [attr.inert]="menuOpen() ? null : ''">
+  <nav aria-label="Mobile">
+    @for (link of links; track link.label; let i = $index) {
+      <a [routerLink]="link.path" [fragment]="link.fragment" routerLinkActive="active" [routerLinkActiveOptions]="link.match" [style.transition-delay.ms]="menuOpen() ? 80 + i * 50 : 0">{{ link.label }}</a>
+    }
+  </nav>
+  @if (enquireHref(); as href) {
+    <a class="btn btn-whatsapp" [href]="href" target="_blank" rel="noopener"><app-icon name="whatsapp" />Enquire on WhatsApp</a>
+  }
+</div>

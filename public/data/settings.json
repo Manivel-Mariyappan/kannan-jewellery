@@ -1,0 +1,19 @@
+{
+  "shopName": "Kannan Jewellery",
+  "tagline": "Timeless Gold. Eternal Elegance.",
+  "addressLine1": "102, Salem Main Road",
+  "addressLine2": "",
+  "city": "",
+  "state": "Tamil Nadu",
+  "postalCode": "",
+  "phone": "+91 80984 13773",
+  "whatsappNumber": "918098413773",
+  "email": "",
+  "openingHours": [
+    { "days": "Monday – Saturday", "hours": "10:00 AM – 8:30 PM" },
+    { "days": "Sunday", "hours": "10:00 AM – 2:00 PM" }
+  ],
+  "mapsQuery": "Kannan Jewellery, 102 Salem Main Road, Tamil Nadu",
+  "directions": "",
+  "certification": ""
+}

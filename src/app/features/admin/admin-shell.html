@@ -1,0 +1,35 @@
+<div class="admin">
+  <aside class="admin-side">
+    <p class="admin-brand">Kannan <span>Admin</span></p>
+    <nav aria-label="Admin">
+      @for (item of nav; track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active">
+          {{ item.label }}
+          @if (item.path === 'publish' && store.hasDrafts()) {
+            <span class="pill">{{ store.draftKinds().length }}</span>
+          }
+        </a>
+      }
+    </nav>
+    <div class="admin-side-foot">
+      <a routerLink="/" class="admin-link">View website ↗</a>
+      <button type="button" class="admin-link" (click)="lock()">Lock admin</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    @if (store.hasDrafts()) {
+      <div class="admin-banner">
+        <strong>Unpublished changes.</strong>
+        You are previewing them in this browser only. Go to <a routerLink="publish">Publish</a> to download the updated files.
+      </div>
+    }
+    @if (store.state() === 'loading') {
+      <p class="admin-muted">Loading site data…</p>
+    } @else if (store.state() === 'error') {
+      <p class="admin-error">Could not load the data files in /data. Check that public/data/*.json exist and are valid JSON.</p>
+    } @else {
+      <router-outlet />
+    }
+  </main>
+</div>

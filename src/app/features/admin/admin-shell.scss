@@ -1,0 +1,271 @@
+.admin {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  min-height: calc(100vh - var(--header-h));
+  background: #fdfcf8;
+  font-size: 0.95rem;
+
+  h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+.admin-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 1.25rem;
+  background: var(--brown-deep);
+  color: #d8cab3;
+
+  nav {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  nav a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0.85rem;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+
+    &:hover {
+      background: rgba(232, 213, 169, 0.06);
+    }
+
+    &.active {
+      color: var(--champagne);
+      border-left-color: var(--gold);
+      background: rgba(232, 213, 169, 0.08);
+    }
+  }
+}
+
+.admin-brand {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--champagne);
+
+  span {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #9c8c75;
+    margin-left: 0.4rem;
+  }
+}
+
+.admin-side-foot {
+  margin-top: auto;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.admin-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #b8a78e;
+  text-align: left;
+  text-decoration: none;
+  font-size: 0.85rem;
+
+  &:hover {
+    color: var(--champagne);
+  }
+}
+
+.pill {
+  min-width: 1.4rem;
+  padding: 0 0.4rem;
+  font-size: 0.7rem;
+  line-height: 1.4rem;
+  text-align: center;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--brown-deep);
+}
+
+.admin-main {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  min-width: 0;
+}
+
+.admin-banner {
+  margin-bottom: 1.75rem;
+  padding: 0.9rem 1.1rem;
+  background: #fff6dc;
+  border: 1px solid #ecd28c;
+  color: #5c4310;
+}
+
+.admin-muted {
+  color: var(--muted);
+}
+
+.admin-error {
+  color: #a3261b;
+}
+
+.admin-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+
+  p {
+    margin: 0;
+    color: var(--muted);
+  }
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.admin-panel {
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: #fff;
+  border: 1px solid var(--line);
+
+  > h2 {
+    margin-bottom: 1rem;
+  }
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+.admin-check {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+
+  input {
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: var(--gold-deep);
+  }
+}
+
+.admin-help {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0.35rem 0 0;
+}
+
+.admin-invalid {
+  font-size: 0.8rem;
+  color: #a3261b;
+  margin: 0.3rem 0 0;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--line);
+
+  th,
+  td {
+    padding: 0.7rem 0.85rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--line);
+  }
+
+  th {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--cream);
+  }
+
+  img {
+    width: 48px;
+    height: 60px;
+    object-fit: cover;
+    display: block;
+    background: var(--cream);
+  }
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.btn-danger {
+  --btn-fg: #a3261b;
+  --btn-border: #e3b4ae;
+
+  &:hover {
+    --btn-bg: #a3261b;
+    --btn-fg: #fff;
+  }
+}
+
+.admin-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  z-index: 60;
+  transform: translateX(-50%);
+  padding: 0.8rem 1.25rem;
+  background: var(--brown-deep);
+  color: var(--champagne);
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 800px) {
+  .admin {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-side {
+    gap: 1rem;
+    padding: 1rem;
+
+    nav {
+      grid-auto-flow: column;
+      overflow-x: auto;
+    }
+
+    nav a {
+      border-left: 0;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+
+      &.active {
+        border-bottom-color: var(--gold);
+      }
+    }
+  }
+
+  .admin-side-foot {
+    grid-auto-flow: column;
+    justify-content: start;
+    gap: 1.5rem;
+  }
+}

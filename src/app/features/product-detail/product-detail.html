@@ -1,0 +1,113 @@
+@if (product(); as p) {
+  <nav class="container crumbs" aria-label="Breadcrumb">
+    <a routerLink="/">Home</a><span aria-hidden="true">/</span>
+    <a routerLink="/collections">Collections</a><span aria-hidden="true">/</span>
+    @if (categoryLinks()[0]; as c) {
+      <a [routerLink]="['/collections', c.slug]">{{ c.name }}</a><span aria-hidden="true">/</span>
+    }
+    <span aria-current="page">{{ p.name }}</span>
+  </nav>
+
+  <article class="container product">
+    <div class="media">
+      <div class="stage">
+        @if (view() === 'model' && p.model3d) {
+          <app-jewellery-viewer [model]="p.model3d" [poster]="p.images.at(0) ?? ''" [alt]="p.name" />
+        } @else {
+          @let i = $any(view());
+          <img [src]="images()[i]" [alt]="p.name + ' — photo ' + (i + 1)" width="1200" height="1500" fetchpriority="high" />
+        }
+      </div>
+
+      <div class="thumbs" role="tablist" aria-label="Views">
+        @if (p.model3d) {
+          <button type="button" role="tab" class="thumb model-thumb" [class.active]="view() === 'model'" [attr.aria-selected]="view() === 'model'" (click)="view.set('model')">
+            <app-icon name="cube" [size]="22" /><span>3D</span>
+          </button>
+        }
+        @for (src of images(); track src; let i = $index) {
+          <button type="button" role="tab" class="thumb" [class.active]="view() === i" [attr.aria-selected]="view() === i" (click)="view.set(i)" [attr.aria-label]="'Photo ' + (i + 1)">
+            <img [src]="src" alt="" loading="lazy" width="120" height="150" />
+          </button>
+        }
+      </div>
+      @if (p.demo) {
+        <p class="demo-note">Demo listing: illustrations and 3D model are placeholders until real photographs are added.</p>
+      }
+    </div>
+
+    <div class="info">
+      <p class="eyebrow">{{ categoryLinks()[0]?.name }}</p>
+      <h1>{{ p.name }}</h1>
+      <p class="code">Product code <strong>{{ p.code }}</strong></p>
+
+      <dl class="specs">
+        <div><dt>Purity</dt><dd>{{ p.purity ?? 'On request' }}</dd></div>
+        <div><dt>Weight</dt><dd>{{ p.weightGrams ? p.weightGrams + ' g' : 'On request' }}</dd></div>
+        <div><dt>Availability</dt><dd>Ask us</dd></div>
+      </dl>
+
+      <p class="desc">{{ p.description }}</p>
+
+      <div class="cta">
+        <app-whatsapp-button [message]="message()" />
+        @if (phone()) {
+          <a class="btn btn-outline" [href]="'tel:' + phone()"><app-icon name="phone" [size]="18" />Call the showroom</a>
+        }
+      </div>
+      <p class="price-note">
+        Prices depend on today's gold rate, the weight of the piece, making charges and GST. Message us for an exact quote.
+      </p>
+
+      <div class="tags">
+        @for (c of categoryLinks(); track c.slug) {
+          <a class="tag" [routerLink]="['/collections', c.slug]">{{ c.name }}</a>
+        }
+      </div>
+
+      <app-gold-rate-panel [compact]="true" class="rate" />
+    </div>
+  </article>
+
+  @if (related().length) {
+    <section class="section bg-cream">
+      <div class="container">
+        <div class="section-head">
+          <div appReveal>
+            <p class="eyebrow">You may also like</p>
+            <h2>From the same collection</h2>
+          </div>
+        </div>
+        <div class="related">
+          @for (r of related(); track r.id; let i = $index) {
+            <app-product-tile [product]="r" appReveal="fade-up" [revealDelay]="i * 80" />
+          }
+        </div>
+      </div>
+    </section>
+  }
+} @else {
+  <div class="container missing">
+    @if (store.state() === 'loading') {
+      <div class="product">
+        <div class="skeleton" style="aspect-ratio: 4 / 5"></div>
+        <div>
+          <div class="skeleton" style="height: 3rem; width: 70%; margin-bottom: 1rem"></div>
+          <div class="skeleton" style="height: 1rem; width: 40%"></div>
+        </div>
+      </div>
+    } @else if (store.state() === 'error') {
+      <div class="state-box">
+        <h3>We couldn't load this piece</h3>
+        <p>Please check your connection and try again.</p>
+        <button type="button" class="btn btn-outline" (click)="store.load()">Try again</button>
+      </div>
+    } @else {
+      <div class="state-box">
+        <h3>This piece is no longer listed</h3>
+        <p>It may have been sold or moved. Explore similar designs, or ask us on WhatsApp.</p>
+        <a class="btn btn-gold" routerLink="/collections">Browse collections</a>
+      </div>
+    }
+  </div>
+}

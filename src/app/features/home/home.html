@@ -1,0 +1,194 @@
+<!-- Hero -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow" appReveal="fade-up">Fine Gold Jewellery · Tamil Nadu</p>
+      <h1 class="display" appReveal="fade-up" [revealDelay]="100">
+        Timeless Gold.<br /><span class="gold-text">Eternal Elegance.</span>
+      </h1>
+      <p class="lead" appReveal="fade-up" [revealDelay]="200">
+        At {{ settings()?.shopName ?? 'Kannan Jewellery' }}, every necklace, bangle and bridal set is chosen for its craftsmanship,
+        purity and grace. Visit the showroom, or explore our collections here and in 3D.
+      </p>
+      <div class="hero-cta" appReveal="fade-up" [revealDelay]="300">
+        <a class="btn btn-gold" routerLink="/collections">Explore Our Collections</a>
+        <app-whatsapp-button [message]="messages.general(settings()?.shopName ?? 'Kannan Jewellery')" variant="outline" />
+      </div>
+    </div>
+
+    <div class="hero-visual" appReveal="fade-left" [revealDelay]="150">
+      @if (heroPiece(); as piece) {
+        <app-jewellery-viewer
+          [model]="piece.model3d"
+          [poster]="piece.images.at(0) ?? ''"
+          [alt]="piece.name"
+          [interactive]="false"
+          tone="dark"
+          [showModelNote]="false"
+        />
+        <a class="hero-caption" [routerLink]="['/jewellery', piece.slug]">
+          <span class="meta">{{ piece.code }}</span>
+          <span class="name">{{ piece.name }}</span>
+        </a>
+      } @else {
+        <img [src]="assetUrl('demo/bridal-1.svg')" alt="Gold bridal necklace" fetchpriority="high" width="1200" height="1500" />
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Gold rate -->
+<section class="bg-dark rate-band" id="gold-rate" aria-label="Today's gold rate">
+  <div class="container">
+    <app-gold-rate-panel />
+  </div>
+</section>
+
+<!-- Editorial collections -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div appReveal>
+        <p class="eyebrow">The Collections</p>
+        <h2>Gold for every chapter of life</h2>
+      </div>
+      <p class="lead" appReveal [revealDelay]="100">From daily-wear chains to heirloom temple pieces, each collection is chosen piece by piece.</p>
+    </div>
+
+    <div class="editorial">
+      @for (item of editorial; track item.category.slug; let i = $index) {
+        <a class="tile" [style.grid-area]="item.area" [routerLink]="['/collections', item.category.slug]" appReveal="fade-up" [revealDelay]="(i % 3) * 100">
+          <img [src]="assetUrl(item.category.image)" [alt]="item.category.name" loading="lazy" decoding="async" width="1200" height="1500" />
+          <span class="tile-text">
+            <span class="num">0{{ i + 1 }}</span>
+            <span class="tile-name">{{ item.category.name }}</span>
+            <span class="tile-blurb">{{ item.category.blurb }}</span>
+          </span>
+        </a>
+      }
+    </div>
+
+    <div class="center"><a class="link-arrow" routerLink="/collections">View all collections</a></div>
+  </div>
+</section>
+
+<!-- 3D showroom -->
+@if (showroomPieces().length) {
+  <section class="section bg-dark">
+    <div class="container">
+      <div class="section-head">
+        <div appReveal>
+          <p class="eyebrow">The 3D Showroom</p>
+          <h2>Turn it. Zoom in. <em class="serif-accent">Look closer.</em></h2>
+        </div>
+        <p class="lead" appReveal [revealDelay]="100">Rotate each piece through 360°, zoom in on the detail and see how the gold catches the light.</p>
+      </div>
+      <app-showroom [products]="showroomPieces()" appReveal="fade-up" />
+    </div>
+  </section>
+}
+
+<!-- Bridal highlight -->
+<section class="bridal">
+  <div class="bridal-media" appReveal="fade-right">
+    <img [src]="assetUrl('demo/bridal-1.svg')" alt="Layered gold bridal haram" loading="lazy" decoding="async" width="1200" height="1500" />
+  </div>
+  <div class="bridal-copy">
+    <p class="eyebrow" appReveal>Bridal Collection</p>
+    <h2 appReveal [revealDelay]="100">For the day you will <em class="serif-accent">remember forever</em></h2>
+    <p class="lead" appReveal [revealDelay]="150">
+      Harams, layered necklaces, kadas and jhumkas, in traditional and contemporary styles. Book an unhurried consultation and we will
+      help you build your complete bridal set.
+    </p>
+    <ul class="bridal-list" appReveal [revealDelay]="200">
+      @for (p of bridalPreview(); track p.id) {
+        <li><a [routerLink]="['/jewellery', p.slug]">{{ p.name }}</a><span class="meta">{{ p.code }}</span></li>
+      }
+    </ul>
+    <div class="hero-cta" appReveal [revealDelay]="250">
+      <a class="btn btn-gold" routerLink="/bridal">Discover Bridal</a>
+      <app-whatsapp-button [message]="messages.bridal()" label="Book a consultation" variant="light" />
+    </div>
+  </div>
+</section>
+
+<!-- New arrivals -->
+@if (newArrivals().length) {
+  <section class="section bg-cream">
+    <div class="container">
+      <div class="section-head">
+        <div appReveal>
+          <p class="eyebrow">New Arrivals</p>
+          <h2>Just in at the showroom</h2>
+        </div>
+        <a class="link-arrow" routerLink="/collections/latest" appReveal>See all new pieces</a>
+      </div>
+    </div>
+    <div class="strip" tabindex="0" aria-label="New arrivals, scroll horizontally">
+      @for (p of newArrivals(); track p.id) {
+        <app-product-tile [product]="p" />
+      }
+    </div>
+  </section>
+}
+
+<!-- Why choose us -->
+<section class="section">
+  <div class="container why">
+    <div class="why-intro" appReveal>
+      <p class="eyebrow">Why Kannan Jewellery</p>
+      <h2>Trust, set in gold</h2>
+      <p class="lead">Buying gold is a family decision. We make it a clear, comfortable and personal one.</p>
+      @if (settings()?.certification; as cert) {
+        <p class="cert">{{ cert }}</p>
+      }
+    </div>
+    <ol class="pillars">
+      @for (p of pillars; track p.title; let i = $index) {
+        <li appReveal="fade-up" [revealDelay]="i * 100">
+          <span class="num gold-text">0{{ i + 1 }}</span>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.text }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- Testimonials: only rendered when genuine testimonials are added in settings -->
+@if (settings()?.testimonials?.length) {
+  <section class="section bg-cream">
+    <div class="container">
+      <p class="eyebrow" appReveal>In their words</p>
+      <div class="quotes">
+        @for (t of settings()!.testimonials!; track t.name) {
+          <figure appReveal="fade-up">
+            <blockquote>“{{ t.quote }}”</blockquote>
+            <figcaption>{{ t.name }}@if (t.place) {, {{ t.place }}}</figcaption>
+          </figure>
+        }
+      </div>
+    </div>
+  </section>
+}
+
+<!-- Visit -->
+<section class="section visit bg-cream">
+  <div class="container visit-grid">
+    <div appReveal>
+      <p class="eyebrow">Visit the Showroom</p>
+      <h2>See it in person</h2>
+      <p class="lead">Photographs and 3D only go so far. Come and see the pieces in the light and try them on.</p>
+    </div>
+    <div class="visit-details" appReveal [revealDelay]="100">
+      <p class="address">{{ fullAddress() }}</p>
+      @for (h of settings()?.openingHours ?? []; track h.days) {
+        <p class="hours"><span>{{ h.days }}</span><span>{{ h.hours }}</span></p>
+      }
+      <div class="hero-cta">
+        <a class="btn btn-outline" routerLink="/contact">Directions & Contact</a>
+        <app-whatsapp-button [message]="messages.general(settings()?.shopName ?? 'Kannan Jewellery')" label="WhatsApp" />
+      </div>
+    </div>
+  </div>
+</section>

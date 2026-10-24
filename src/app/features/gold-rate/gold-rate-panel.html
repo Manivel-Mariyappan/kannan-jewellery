@@ -1,0 +1,42 @@
+@let v = view();
+<div class="head">
+  <div>
+    <p class="eyebrow">Today's Gold Rate</p>
+    @if (!compact()) {
+      <h2>The price of gold, <em class="serif-accent">today</em></h2>
+    }
+  </div>
+  <div class="stamp" [class]="v.status">
+    <span class="dot" aria-hidden="true"></span>
+    <span>
+      <strong>{{ statusLabel() }}</strong>
+      @if (v.updatedAt) {
+        <span class="time">Updated {{ v.updatedAt | date: 'd MMM y, h:mm a' }}</span>
+      }
+    </span>
+  </div>
+</div>
+
+@if (v.rows.length) {
+  <div class="rates" role="table" aria-label="Gold rates in Indian rupees">
+    @for (row of v.rows; track row.label; let i = $index) {
+      <div class="rate" role="row" appReveal="fade-up" [revealDelay]="i * 90">
+        <span class="purity" role="cell">{{ row.purity }}</span>
+        <span class="label" role="rowheader">{{ row.grams === 1 ? '1 Gram' : '8 Grams' }}</span>
+        <span class="price gold-text" role="cell">{{ format(row.price) }}</span>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="unavailable">
+    <p>Today's rate has not been published yet. Please contact the showroom for the current rate.</p>
+    @if (rateEnquiry(); as href) {
+      <a class="btn btn-light btn-sm" [href]="href" target="_blank" rel="noopener">Ask on WhatsApp</a>
+    }
+  </div>
+}
+
+<p class="disclaimer">
+  Rates are in Indian rupees (INR) and are indicative only. 8-gram rates are calculated as 8 × the per-gram rate.
+  The final price of jewellery includes making charges, wastage, GST and other applicable charges.
+</p>

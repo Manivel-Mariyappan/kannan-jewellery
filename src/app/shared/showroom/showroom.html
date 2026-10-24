@@ -1,0 +1,41 @@
+@if (active(); as piece) {
+  <div class="stage">
+    <app-jewellery-viewer [model]="piece.model3d" [poster]="piece.images.at(0) ?? ''" [alt]="piece.name" [tone]="tone()" />
+    <div class="stage-nav">
+      <button type="button" (click)="select(index() - 1)" aria-label="Previous piece"><app-icon name="arrow-left" /></button>
+      <span class="count" aria-live="polite">{{ index() + 1 }} / {{ items().length }}</span>
+      <button type="button" (click)="select(index() + 1)" aria-label="Next piece"><app-icon name="arrow-right" /></button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="detail" aria-live="polite">
+      <p class="meta">{{ categoryName(piece.categories.at(0) ?? '') }} · {{ piece.code }}</p>
+      <h3>{{ piece.name }}</h3>
+      <p class="desc">{{ piece.description }}</p>
+      <dl>
+        @if (piece.purity) {
+          <div><dt>Purity</dt><dd>{{ piece.purity }}</dd></div>
+        }
+        @if (piece.weightGrams) {
+          <div><dt>Weight</dt><dd>{{ piece.weightGrams }} g</dd></div>
+        }
+      </dl>
+      <div class="cta">
+        <app-whatsapp-button [message]="message()" [small]="true" />
+        <a class="link-arrow" [routerLink]="['/jewellery', piece.slug]">Details</a>
+      </div>
+    </div>
+
+    <ol class="list" aria-label="Pieces in the showroom">
+      @for (item of items(); track item.id; let i = $index) {
+        <li>
+          <button type="button" [class.active]="i === index()" [attr.aria-current]="i === index() ? 'true' : null" (click)="select(i)">
+            <span class="num">{{ (i + 1).toString().padStart(2, '0') }}</span>
+            <span class="name">{{ item.name }}</span>
+          </button>
+        </li>
+      }
+    </ol>
+  </div>
+}
