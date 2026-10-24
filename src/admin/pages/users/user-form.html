@@ -21,6 +21,7 @@
         </label>
         <input
           id="u-name"
+          placeholder="Enter full name"
           class="form-control"
           formControlName="fullName"
           [class.is-invalid]="invalid('fullName')"
@@ -31,6 +32,7 @@
         <label class="form-label" for="u-email">Email</label>
         <input
           id="u-email"
+          placeholder="Enter email address"
           class="form-control"
           type="email"
           formControlName="email"
@@ -44,6 +46,7 @@
           <span class="input-group-text">+91</span>
           <input
             id="u-mobile"
+            placeholder="Enter 10-digit mobile number"
             class="form-control"
             type="text"
             maxlength="10"
@@ -74,6 +77,7 @@
         </label>
         <input
           id="u-username"
+          placeholder="Enter username"
           class="form-control"
           formControlName="username"
           autocomplete="off"
@@ -88,6 +92,7 @@
         </label>
         <ng-select
           labelForId="u-role"
+          placeholder="Select role"
           formControlName="role"
           [items]="roles"
           bindLabel="label"
@@ -122,6 +127,7 @@
         <label class="form-label" for="u-pass">Password</label>
         <input
           id="u-pass"
+          placeholder="Enter password (min. 8 characters)"
           class="form-control"
           type="password"
           formControlName="password"
@@ -134,6 +140,7 @@
         <label class="form-label" for="u-pass2">Confirm password</label>
         <input
           id="u-pass2"
+          placeholder="Re-enter password"
           class="form-control"
           type="password"
           formControlName="confirmPassword"

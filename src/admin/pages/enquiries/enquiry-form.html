@@ -26,6 +26,7 @@
         </label>
         <input
           id="e-name"
+          placeholder="Enter customer name"
           class="form-control"
           formControlName="customerName"
           [class.is-invalid]="invalid('customerName')"
@@ -41,6 +42,7 @@
           <span class="input-group-text">+91</span>
           <input
             id="e-mobile"
+            placeholder="Enter 10-digit mobile number"
             class="form-control"
             type="text"
             maxlength="10"
@@ -58,6 +60,7 @@
         <label class="form-label" for="e-email">Email</label>
         <input
           id="e-email"
+          placeholder="Enter email address (optional)"
           class="form-control"
           type="email"
           formControlName="email"
@@ -77,7 +80,7 @@
           [items]="products()"
           bindLabel="label"
           bindValue="code"
-          placeholder="Search by name or product code"
+          placeholder="Search by product name or code"
           (change)="onProduct($event)"
         />
       </div>
@@ -111,6 +114,7 @@
         <label class="form-label" for="e-source">Source</label>
         <ng-select
           labelForId="e-source"
+          placeholder="Select source"
           formControlName="source"
           [items]="sources"
           [clearable]="false"
@@ -119,7 +123,13 @@
       </div>
       <div class="col-12">
         <label class="form-label" for="e-msg">Customer message</label>
-        <textarea id="e-msg" class="form-control" rows="3" formControlName="message"></textarea>
+        <textarea
+          id="e-msg"
+          placeholder="Enter the customer's message"
+          class="form-control"
+          rows="3"
+          formControlName="message"
+        ></textarea>
       </div>
     </div>
   </admin-card>
@@ -130,6 +140,7 @@
         <label class="form-label" for="e-status">Status</label>
         <ng-select
           labelForId="e-status"
+          placeholder="Select status"
           formControlName="status"
           [items]="statuses"
           [clearable]="false"
@@ -175,12 +186,18 @@
           [items]="users()"
           bindLabel="fullName"
           bindValue="username"
-          placeholder="Unassigned"
+          placeholder="Select staff member"
         />
       </div>
       <div class="col-12">
         <label class="form-label" for="e-notes">Internal notes</label>
-        <textarea id="e-notes" class="form-control" rows="2" formControlName="notes"></textarea>
+        <textarea
+          id="e-notes"
+          placeholder="Enter internal notes (not shown to the customer)"
+          class="form-control"
+          rows="2"
+          formControlName="notes"
+        ></textarea>
       </div>
     </div>
   </admin-card>

@@ -10,6 +10,7 @@
             </label>
             <input
               id="s-name"
+              placeholder="Enter shop name"
               class="form-control"
               formControlName="shopName"
               [class.is-invalid]="invalid('shopName')"
@@ -17,7 +18,12 @@
           </div>
           <div class="col-md-6">
             <label class="form-label" for="s-tag">Tagline</label>
-            <input id="s-tag" class="form-control" formControlName="tagline" />
+            <input
+              id="s-tag"
+              placeholder="Enter tagline"
+              class="form-control"
+              formControlName="tagline"
+            />
           </div>
         </div>
       </admin-card>
@@ -38,7 +44,7 @@
               appNumbersOnly
               [decimals]="0"
               [class.is-invalid]="invalid('whatsappNumber')"
-              placeholder="919876543210"
+              placeholder="Enter WhatsApp number with country code"
             />
             <div class="form-text">Digits only, with country code (91 for India).</div>
           </div>
@@ -48,13 +54,14 @@
               id="s-phone"
               class="form-control"
               formControlName="phone"
-              placeholder="+91 98765 43210"
+              placeholder="Enter phone number"
             />
           </div>
           <div class="col-12">
             <label class="form-label" for="s-email">Email</label>
             <input
               id="s-email"
+              placeholder="Enter email address"
               class="form-control"
               type="email"
               formControlName="email"
@@ -66,6 +73,8 @@
 
       <admin-card heading="Certification" subtitle="Shown on the home and about pages" icon="✓">
         <textarea
+          id="s-cert"
+          placeholder="Enter certification details, e.g. BIS hallmark registration number"
           class="form-control"
           rows="2"
           formControlName="certification"
@@ -87,6 +96,7 @@
             </label>
             <input
               id="s-a1"
+              placeholder="Enter door number and street"
               class="form-control"
               formControlName="addressLine1"
               [class.is-invalid]="invalid('addressLine1')"
@@ -94,11 +104,21 @@
           </div>
           <div class="col-md-6">
             <label class="form-label" for="s-a2">Address line 2</label>
-            <input id="s-a2" class="form-control" formControlName="addressLine2" />
+            <input
+              id="s-a2"
+              placeholder="Enter landmark (optional)"
+              class="form-control"
+              formControlName="addressLine2"
+            />
           </div>
           <div class="col-md-4">
             <label class="form-label" for="s-city">City / town</label>
-            <input id="s-city" class="form-control" formControlName="city" />
+            <input
+              id="s-city"
+              placeholder="Enter city or town"
+              class="form-control"
+              formControlName="city"
+            />
           </div>
           <div class="col-md-5">
             <label class="form-label" for="s-state">State</label>
@@ -106,13 +126,14 @@
               labelForId="s-state"
               formControlName="state"
               [items]="states"
-              placeholder="Choose state"
+              placeholder="Select state"
             />
           </div>
           <div class="col-md-3">
             <label class="form-label" for="s-pin">PIN code</label>
             <input
               id="s-pin"
+              placeholder="Enter PIN code"
               class="form-control"
               type="text"
               maxlength="6"
@@ -123,7 +144,12 @@
           </div>
           <div class="col-12">
             <label class="form-label" for="s-map">Google Maps search text</label>
-            <input id="s-map" class="form-control" formControlName="mapsQuery" />
+            <input
+              id="s-map"
+              placeholder="Enter text to search on Google Maps"
+              class="form-control"
+              formControlName="mapsQuery"
+            />
           </div>
           <div class="col-12">
             <label class="form-label" for="s-dir">Directions to the showroom</label>
@@ -132,7 +158,7 @@
               class="form-control"
               rows="2"
               formControlName="directions"
-              placeholder="e.g. Opposite the bus stand, next to …"
+              placeholder="Enter directions, e.g. opposite the bus stand"
             ></textarea>
           </div>
         </div>
@@ -153,13 +179,13 @@
               <input
                 class="form-control"
                 formControlName="days"
-                placeholder="Monday – Saturday"
+                placeholder="Enter days, e.g. Monday to Saturday"
                 aria-label="Days"
               />
               <input
                 class="form-control"
                 formControlName="hours"
-                placeholder="10:00 AM – 8:30 PM"
+                placeholder="Enter hours, e.g. 10:00 AM to 8:30 PM"
                 aria-label="Hours"
               />
               <button

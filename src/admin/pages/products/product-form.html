@@ -30,7 +30,7 @@
               class="form-control"
               formControlName="name"
               [class.is-invalid]="invalid('name')"
-              placeholder="e.g. Lakshmi Ruby Bead Necklace"
+              placeholder="Enter product name"
             />
             <div class="invalid-feedback">Product name is required.</div>
           </div>
@@ -44,7 +44,7 @@
               class="form-control text-uppercase"
               formControlName="code"
               [class.is-invalid]="invalid('code')"
-              placeholder="KJ-NK-103"
+              placeholder="Enter product code, e.g. KJ-NK-103"
             />
             <div class="invalid-feedback">Letters, numbers and dashes only.</div>
           </div>
@@ -55,6 +55,7 @@
             </label>
             <input
               id="pf-slug"
+              placeholder="Auto-filled from the product name"
               class="form-control"
               formControlName="slug"
               [class.is-invalid]="invalid('slug')"
@@ -68,7 +69,7 @@
               class="form-control"
               rows="3"
               formControlName="description"
-              placeholder="Short description shown on the product page"
+              placeholder="Enter a short description for the product page"
             ></textarea>
           </div>
         </div>
@@ -95,7 +96,7 @@
               [multiple]="true"
               [closeOnSelect]="false"
               [class.is-invalid]="invalid('categories')"
-              placeholder="Choose one or more categories"
+              placeholder="Select one or more categories"
             />
             @if (invalid('categories')) {
               <div class="invalid-feedback d-block">Choose at least one category.</div>
@@ -107,7 +108,7 @@
               labelForId="pf-purity"
               formControlName="purity"
               [items]="purities"
-              placeholder="Not specified"
+              placeholder="Select purity"
             />
           </div>
           <div class="col-sm-6">
@@ -117,7 +118,7 @@
               class="form-control text-uppercase"
               formControlName="huid"
               maxlength="6"
-              placeholder="AB12CD"
+              placeholder="Enter 6-character HUID"
               [class.is-invalid]="invalid('huid')"
             />
             <div class="invalid-feedback">HUID is 6 letters or numbers.</div>
@@ -200,7 +201,7 @@
                 formControlName="makingChargePercent"
                 appNumbersOnly
                 [decimals]="2"
-                placeholder="0"
+                placeholder="0.00"
               />
               <span class="input-group-text">%</span>
             </div>
@@ -215,7 +216,7 @@
                 formControlName="wastagePercent"
                 appNumbersOnly
                 [decimals]="2"
-                placeholder="0"
+                placeholder="0.00"
               />
               <span class="input-group-text">%</span>
             </div>
@@ -238,6 +239,7 @@
             <label class="form-label" for="pf-stock">Stock status</label>
             <ng-select
               labelForId="pf-stock"
+              placeholder="Select stock status"
               formControlName="stockStatus"
               [items]="stockStatuses"
               [clearable]="false"
@@ -324,7 +326,7 @@
           <input
             #path
             class="form-control"
-            placeholder="or add by path, e.g. images/kj-nk-103-front.webp"
+            placeholder="Or enter an image path, e.g. images/kj-nk-103.webp"
             (keydown.enter)="$event.preventDefault(); addImagePath(path)"
           />
           <button type="button" class="btn btn-outline-secondary" (click)="addImagePath(path)">
@@ -390,6 +392,7 @@
           <label class="form-label" for="pf-model">3D presentation</label>
           <ng-select
             labelForId="pf-model"
+            placeholder="Select 3D presentation"
             formControlName="modelKind"
             [items]="modelKinds"
             bindLabel="label"
@@ -406,7 +409,7 @@
                 id="pf-gltf"
                 class="form-control"
                 formControlName="gltfUrl"
-                placeholder="models/kj-nk-103.glb"
+                placeholder="Enter model path, e.g. models/kj-nk-103.glb"
               />
               <div class="form-text">
                 Copy the .glb file into
@@ -421,6 +424,7 @@
                 <label class="form-label" for="pf-shape">Shape</label>
                 <ng-select
                   labelForId="pf-shape"
+                  placeholder="Select shape"
                   formControlName="shape"
                   [items]="shapes"
                   bindLabel="label"
@@ -432,6 +436,7 @@
                 <label class="form-label" for="pf-gem">Stone</label>
                 <ng-select
                   labelForId="pf-gem"
+                  placeholder="Select stone"
                   formControlName="gem"
                   [items]="gems"
                   bindLabel="label"

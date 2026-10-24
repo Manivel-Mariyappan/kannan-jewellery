@@ -24,7 +24,7 @@
           class="form-control"
           formControlName="name"
           [class.is-invalid]="invalid('name')"
-          placeholder="e.g. Gold Necklaces"
+          placeholder="Enter category name"
         />
         <div class="invalid-feedback">Category name is required.</div>
       </div>
@@ -35,6 +35,7 @@
         </label>
         <input
           id="c-slug"
+          placeholder="Auto-filled from the category name"
           class="form-control"
           formControlName="slug"
           [class.is-invalid]="invalid('slug')"
@@ -49,13 +50,14 @@
           [items]="parents()"
           bindLabel="name"
           bindValue="id"
-          placeholder="None (top level)"
+          placeholder="Select parent category (optional)"
         />
       </div>
       <div class="col-md-6">
         <label class="form-label" for="c-order">Display order</label>
         <input
           id="c-order"
+          placeholder="Enter display order"
           class="form-control"
           type="text"
           formControlName="displayOrder"
@@ -67,6 +69,7 @@
         <label class="form-label" for="c-desc">Description</label>
         <textarea
           id="c-desc"
+          placeholder="Enter a short description"
           class="form-control"
           rows="3"
           formControlName="description"
@@ -110,7 +113,7 @@
       }
       <input
         class="form-control"
-        placeholder="or image path, e.g. images/necklaces.webp"
+        placeholder="Or enter an image path, e.g. images/necklaces.webp"
         [value]="image().startsWith('data:') ? '' : image()"
         (change)="image.set($any($event.target).value.trim())"
       />
@@ -145,13 +148,20 @@
   <admin-card heading="SEO" subtitle="Search engine title and description" icon="⌕">
     <div class="mb-3">
       <label class="form-label" for="c-mt">Meta title</label>
-      <input id="c-mt" class="form-control" formControlName="metaTitle" maxlength="70" />
+      <input
+        id="c-mt"
+        placeholder="Enter page title for search engines"
+        class="form-control"
+        formControlName="metaTitle"
+        maxlength="70"
+      />
       <div class="form-text">{{ form.controls.metaTitle.value.length }}/70</div>
     </div>
     <div>
       <label class="form-label" for="c-md">Meta description</label>
       <textarea
         id="c-md"
+        placeholder="Enter page description for search engines"
         class="form-control"
         rows="2"
         formControlName="metaDescription"
