@@ -11,12 +11,15 @@ html.kj-admin {
   --bs-link-hover-color: #6b480f;
   --bs-link-hover-color-rgb: 107, 72, 15;
   --bs-body-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --bs-body-bg: #f6f5f2;
+  /* White surfaces (cards, inputs, dropdowns); the page itself is light grey. */
+  --bs-body-bg: #ffffff;
+  --bs-card-bg: #ffffff;
+  --bs-card-cap-bg: #ffffff;
   --bs-border-radius: 0.5rem;
   --bs-focus-ring-color: rgba(168, 116, 31, 0.25);
 
   body {
-    background: var(--bs-body-bg);
+    background: #f6f5f2;
     font-size: 0.925rem;
   }
 
@@ -56,6 +59,11 @@ html.kj-admin {
   .form-check-input:checked {
     background-color: #a8741f;
     border-color: #a8741f;
+  }
+
+  .card {
+    --bs-card-bg: #ffffff;
+    --bs-card-cap-bg: #ffffff;
   }
 
   .border-dashed {

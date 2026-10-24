@@ -41,6 +41,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   `,
   styles: `
     :host {
+      background: #fff;
+      --bs-card-bg: #fff;
       --bs-card-border-radius: 0.75rem;
       --bs-card-inner-border-radius: 0.75rem;
       margin-bottom: 1.25rem;
@@ -63,6 +65,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     }
     .card-body {
       padding: 1.1rem;
+      background: #fff;
     }
     .card-actions:empty,
     .card-footer:empty {
@@ -70,8 +73,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     }
     .card-footer {
       padding: 0.7rem 1.1rem;
-      background: #faf9f6;
+      background: #fff;
       border-top: 1px solid #efebe4;
+      color: #6b6560;
       font-size: 0.85rem;
     }
   `,

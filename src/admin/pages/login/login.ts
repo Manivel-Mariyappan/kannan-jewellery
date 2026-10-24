@@ -9,7 +9,7 @@ import { AdminAuthService } from '../../core/admin-auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormsModule],
   template: `
-    <div class="min-vh-100 d-flex align-items-center justify-content-center p-3 bg-body-tertiary">
+    <div class="min-vh-100 d-flex align-items-center justify-content-center p-3 page">
       <form class="card shadow border-0 login" (ngSubmit)="submit()">
         <div class="card-body p-4 p-md-5">
           <div class="d-flex align-items-center gap-2 mb-4">
@@ -45,8 +45,12 @@ import { AdminAuthService } from '../../core/admin-auth.service';
     </div>
   `,
   styles: `
+    .page {
+      background: #f6f5f2;
+    }
     .login {
       width: min(440px, 100%);
+      background: #fff;
       border-radius: 1rem;
     }
     .mark {

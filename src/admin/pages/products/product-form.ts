@@ -28,7 +28,7 @@ type ModelKind = 'none' | 'gltf' | 'procedural';
       height: 100%;
     }
     .offcanvas-body {
-      background: #f6f5f2;
+      background: #f6f5f2; /* grey behind the white section cards */
     }
     .images {
       display: grid;
