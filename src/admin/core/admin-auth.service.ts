@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { APP_CONFIG } from '../config/app-config';
+import { APP_CONFIG } from '../../app/core/config/app-config';
 
 const SESSION_KEY = 'kj.admin.unlocked';
 

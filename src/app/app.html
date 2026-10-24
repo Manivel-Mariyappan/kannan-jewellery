@@ -1,4 +1,6 @@
-<a class="skip-link" href="#main">Skip to content</a>
+@if (!isAdmin()) {
+  <a class="skip-link" href="#main">Skip to content</a>
+}
 
 @if (store.hasDrafts() && !isAdmin()) {
   <div class="draft-bar" role="status">

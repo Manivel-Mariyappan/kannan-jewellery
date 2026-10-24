@@ -1,0 +1,138 @@
+/* Admin theme on top of Bootstrap 5 and ng-select. Loaded only on /admin (see core/admin-styles.ts). */
+
+html.kj-admin {
+  --bs-primary: #a8741f;
+  --bs-primary-rgb: 168, 116, 31;
+  --bs-primary-text-emphasis: #6b480f;
+  --bs-primary-bg-subtle: #fbf3e2;
+  --bs-primary-border-subtle: #ecd9b0;
+  --bs-link-color: #8a5d14;
+  --bs-link-color-rgb: 138, 93, 20;
+  --bs-link-hover-color: #6b480f;
+  --bs-link-hover-color-rgb: 107, 72, 15;
+  --bs-body-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --bs-body-bg: #f6f5f2;
+  --bs-border-radius: 0.5rem;
+  --bs-focus-ring-color: rgba(168, 116, 31, 0.25);
+
+  body {
+    background: var(--bs-body-bg);
+    font-size: 0.925rem;
+  }
+
+  .btn-primary {
+    --bs-btn-bg: #a8741f;
+    --bs-btn-border-color: #a8741f;
+    --bs-btn-hover-bg: #8a5d14;
+    --bs-btn-hover-border-color: #8a5d14;
+    --bs-btn-active-bg: #6b480f;
+    --bs-btn-active-border-color: #6b480f;
+    --bs-btn-disabled-bg: #a8741f;
+    --bs-btn-disabled-border-color: #a8741f;
+    --bs-btn-focus-shadow-rgb: 168, 116, 31;
+  }
+
+  .btn-outline-primary {
+    --bs-btn-color: #8a5d14;
+    --bs-btn-border-color: #a8741f;
+    --bs-btn-hover-bg: #a8741f;
+    --bs-btn-hover-border-color: #a8741f;
+    --bs-btn-active-bg: #8a5d14;
+    --bs-btn-active-border-color: #8a5d14;
+    --bs-btn-focus-shadow-rgb: 168, 116, 31;
+  }
+
+  .text-primary {
+    color: #8a5d14 !important;
+  }
+
+  .form-control:focus,
+  .form-select:focus,
+  .form-check-input:focus {
+    border-color: #d4a648;
+    box-shadow: 0 0 0 0.2rem rgba(168, 116, 31, 0.2);
+  }
+
+  .form-check-input:checked {
+    background-color: #a8741f;
+    border-color: #a8741f;
+  }
+
+  .border-dashed {
+    border-style: dashed !important;
+  }
+
+  /* ng-select (Chosen-style searchable selects) */
+  .ng-select .ng-select-container {
+    min-height: 38px;
+    border-color: var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+  }
+
+  .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container,
+  .ng-select.ng-select-focused > .ng-select-container {
+    border-color: #d4a648;
+    box-shadow: 0 0 0 0.2rem rgba(168, 116, 31, 0.2);
+  }
+
+  .ng-select.is-invalid .ng-select-container {
+    border-color: var(--bs-form-invalid-border-color);
+  }
+
+  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    background: #fbf3e2;
+    border: 1px solid #ecd9b0;
+    color: #6b480f;
+    border-radius: 999px;
+    padding-inline: 0.15rem;
+  }
+
+  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left {
+    border-right-color: #ecd9b0;
+  }
+
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+    background: #fbf3e2;
+    color: #1c1917;
+  }
+
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
+    background: #f3e3bf;
+    color: #1c1917;
+  }
+
+  /* ng-bootstrap datepicker / timepicker */
+  .ngb-dp-weekday {
+    color: #78716c !important;
+    font-style: normal !important;
+    font-weight: 600;
+  }
+
+  .ngb-dp-arrow-btn,
+  .ngb-dp-navigation-chevron {
+    color: #8a5d14;
+  }
+
+  ngb-timepicker .ngb-tp-input {
+    width: 3.5rem;
+  }
+
+  /* Wide offcanvas for the add / edit product form */
+  .kj-offcanvas-xl {
+    --bs-offcanvas-width: min(1040px, 100vw);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .kj-admin-menu {
+    --bs-offcanvas-width: 260px;
+    --bs-offcanvas-bg: #1c1917;
+  }
+
+  /* SweetAlert2 */
+  .swal2-popup {
+    font-family: var(--bs-body-font-family);
+    border-radius: 0.9rem;
+  }
+}

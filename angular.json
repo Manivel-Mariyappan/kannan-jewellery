@@ -31,10 +31,34 @@
             ],
             "styles": [
               "node_modules/aos/dist/aos.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "bundleName": "admin",
+                "inject": false
+              },
+              {
+                "input": "node_modules/@ng-select/ng-select/themes/default.theme.css",
+                "bundleName": "admin",
+                "inject": false
+              },
+              {
+                "input": "node_modules/sweetalert2/dist/sweetalert2.min.css",
+                "bundleName": "admin",
+                "inject": false
+              },
+              {
+                "input": "src/admin/admin-styles.scss",
+                "bundleName": "admin",
+                "inject": false
+              }
             ],
             "allowedCommonJsDependencies": [
-              "aos"
+              "aos",
+              "sweetalert2"
+            ],
+            "polyfills": [
+              "@angular/localize/init"
             ]
           },
           "configurations": {

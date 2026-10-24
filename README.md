@@ -25,14 +25,14 @@ npm run build        # production build → dist/KANNAN_JEWELLERY/browser
 | `/jewellery/:slug` | Product detail: 3D viewer, photos, code, purity, weight, WhatsApp enquiry, related pieces |
 | `/bridal` | Bridal collection: traditional & contemporary, 3D showroom, consultation booking |
 | `/about`, `/contact` | Story, values, pricing transparency · address, phone, WhatsApp, hours, Google Map, directions |
-| `/admin` | Admin portal (see below) |
+| `/admin` | Admin portal in `src/admin/` (see below) |
 
 ## Before going live: checklist
 
 1. **WhatsApp number & phone.** Admin → Shop settings (or edit `public/data/settings.json`). Until a WhatsApp number is set, enquiry buttons link to the Contact page and the floating button is hidden.
 2. **Full address.** `settings.json` currently has `102, Salem Main Road, Tamil Nadu`. Add the town and PIN code, and check the Google Maps search text.
 3. **Gold rate.** `public/data/gold-rate.json` ships with `null` values, so the site shows "Rate unavailable". No prices are invented.
-4. **Admin passcode.** Change the default (`kannan@admin`) in `src/app/core/config/app-config.ts`. The command to generate a new hash is in that file.
+4. **Admin passcode.** Change the default (`kannan@admin`) in `src/app/core/config/app-config.ts` (checked by `src/admin/core/admin-auth.service.ts`). The command to generate a new hash is in that file.
 5. **Replace demo products.** All 16 sample products are flagged `"demo": true`, labelled "Demo" on the site, and use product shots rendered from the demo 3D models (`public/demo/shots/`). Admin → Products → *Remove demo products*.
 6. **Site URL.** Set `siteUrl` in `app-config.ts` (e.g. `https://www.kannanjewellery.in`) so canonical URLs and social previews are correct.
 
@@ -48,10 +48,11 @@ Images go in `public/images/` and 3D models in `public/models/`. Reference them 
 
 ## Admin portal (`/admin`)
 
-The admin portal runs entirely in the browser:
+The admin portal lives in its own folder, `src/admin/`, and is lazy-loaded: website visitors never download its code. It uses **Bootstrap 5** form controls, **ng-select** (Chosen-style searchable dropdowns), **AG Grid Community** for the product table, **ng-bootstrap** for the date picker and the add/edit offcanvas, and **SweetAlert2** (ngx-sweetalert2) for confirmations. Bootstrap is loaded only on /admin (as the separate `admin.css` bundle), so it never affects the website.
 
-- **Products:** add, edit, delete; upload multiple photos (compressed to WebP in the browser) or add them by path; choose a GLB model or a demo 3D shape; publish / unpublish; mark as New or Featured.
-- **Gold rate:** enter 22K and 24K per-gram rates. The 8-gram values are calculated automatically.
+
+- **Products:** AG Grid with search, sorting, filters and paging; tick Published / New / Featured directly in the grid; add or edit in a side panel (offcanvas) built from reusable section cards (`src/admin/shared/admin-card.ts`); delete with confirmation; upload multiple photos (compressed to WebP in the browser) or add them by path; choose a GLB model or a demo 3D shape; publish / unpublish; mark as New or Featured.
+- **Gold rate:** enter 22K and 24K per-gram rates (number-only inputs) with an effective date (dd-mm-yyyy) and time. The 8-gram values are calculated automatically.
 - **Shop settings:** address, phone, WhatsApp, email, opening hours, directions, certification.
 - **Publish:** download the updated JSON files.
 
@@ -99,10 +100,11 @@ To let staff publish directly from the admin portal, with secure logins:
 ## Project structure
 
 ```
+src/admin/      admin portal: core (auth, alerts, numbers-only input), layout (fixed sidebar), shared (admin-card), pages
 src/app/
-  core/        config, models, services (content store, products, gold rate, WhatsApp, SEO, motion, admin auth), guard, utils
+  core/        config, models, services (content store, products, gold rate, WhatsApp, SEO, motion), utils
   shared/      header, footer, WhatsApp button & floating button, product tile, showroom, 3D viewer, icons, reveal directive
-  features/    home, collections, product-detail, bridal, about, contact, gold-rate, admin, not-found
+  features/    home, collections, product-detail, bridal, about, contact, gold-rate, not-found
 public/
   data/        products.json, gold-rate.json, settings.json
   demo/shots/  demo product shots rendered from the 3D models (replace with real photos)

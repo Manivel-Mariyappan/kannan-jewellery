@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, afterNextRender, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
@@ -26,6 +27,7 @@ export class App {
   constructor() {
     const router = inject(Router);
     const seo = inject(SeoService);
+    const doc = inject(DOCUMENT);
 
     router.events
       .pipe(
@@ -34,6 +36,11 @@ export class App {
       )
       .subscribe((e) => {
         this.isAdmin.set(e.urlAfterRedirects.startsWith('/admin'));
+        // Leaving the admin portal: drop its Bootstrap stylesheet (added by src/admin/core/admin-styles.ts).
+        if (!this.isAdmin()) {
+          doc.documentElement.classList.remove('kj-admin');
+          doc.getElementById('kj-admin-css')?.remove();
+        }
         // Let the new page render, then let AOS pick up its sections.
         setTimeout(() => this.motion.refresh(), 60);
       });

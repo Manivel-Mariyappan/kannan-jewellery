@@ -9,6 +9,6 @@ export const routes: Routes = [
   { path: 'bridal', loadComponent: () => import('./features/bridal/bridal').then((m) => m.Bridal) },
   { path: 'about', loadComponent: () => import('./features/about/about').then((m) => m.About) },
   { path: 'contact', loadComponent: () => import('./features/contact/contact').then((m) => m.Contact) },
-  { path: 'admin', loadChildren: () => import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES) },
+  { path: 'admin', loadChildren: () => import('../admin/admin.routes').then((m) => m.ADMIN_ROUTES) },
   { path: '**', loadComponent: () => import('./features/not-found').then((m) => m.NotFound) },
 ];

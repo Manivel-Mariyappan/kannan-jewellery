@@ -1,0 +1,175 @@
+<div class="offcanvas-header border-bottom bg-white">
+  <div>
+    <h2 class="offcanvas-title h5 mb-0" id="product-form-title">{{ product ? 'Edit product' : 'Add new product' }}</h2>
+    @if (product) {
+      <small class="text-body-secondary">{{ product.code }}</small>
+    }
+  </div>
+  <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+</div>
+
+<form class="offcanvas-body" [formGroup]="form" (ngSubmit)="save()" id="product-form" novalidate>
+  <div class="row g-3">
+    <div class="col-xl-7">
+      <!-- Basic details -->
+      <admin-card heading="Basic details" subtitle="Name, product code and description" icon="◆" [required]="true">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label" for="pf-name">Product name <span class="text-danger">*</span></label>
+            <input id="pf-name" class="form-control" formControlName="name" [class.is-invalid]="invalid('name')" placeholder="e.g. Lakshmi Ruby Bead Necklace" />
+            <div class="invalid-feedback">Product name is required.</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="pf-code">Product code <span class="text-danger">*</span></label>
+            <input id="pf-code" class="form-control text-uppercase" formControlName="code" [class.is-invalid]="invalid('code')" placeholder="KJ-NK-103" />
+            <div class="invalid-feedback">Letters, numbers and dashes only.</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="pf-slug">URL slug <span class="text-danger">*</span></label>
+            <input id="pf-slug" class="form-control" formControlName="slug" [class.is-invalid]="invalid('slug')" />
+            <div class="form-text">/jewellery/{{ form.controls.slug.value || '…' }}</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="pf-desc">Description</label>
+            <textarea id="pf-desc" class="form-control" rows="3" formControlName="description" placeholder="Short description shown on the product page"></textarea>
+          </div>
+        </div>
+      </admin-card>
+
+      <!-- Specifications -->
+      <admin-card heading="Specifications" subtitle="Category, purity and weight" icon="⚖" [required]="true">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label" for="pf-cats">Categories <span class="text-danger">*</span></label>
+            <ng-select
+              labelForId="pf-cats"
+              formControlName="categories"
+              [items]="categories"
+              bindLabel="name"
+              bindValue="slug"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              [class.is-invalid]="invalid('categories')"
+              placeholder="Choose one or more categories"
+            />
+            @if (invalid('categories')) {
+              <div class="invalid-feedback d-block">Choose at least one category.</div>
+            }
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="pf-purity">Purity</label>
+            <ng-select labelForId="pf-purity" formControlName="purity" [items]="purities" placeholder="Not specified" />
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="pf-weight">Weight</label>
+            <div class="input-group">
+              <input id="pf-weight" class="form-control" type="text" formControlName="weightGrams" appNumbersOnly [decimals]="3" placeholder="0.000" />
+              <span class="input-group-text">grams</span>
+            </div>
+          </div>
+        </div>
+        <div card-footer>The first category is shown as the main category. "Latest Arrivals" is automatic for products marked New.</div>
+      </admin-card>
+
+      <!-- Photographs -->
+      <admin-card heading="Photographs" subtitle="The first photo is the main image" icon="▣">
+        <label card-actions class="btn btn-sm btn-primary mb-0">
+          @if (uploading()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+          Upload photos
+          <input #file type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden (change)="upload(file)" />
+        </label>
+
+        @if (images().length) {
+          <div class="images mb-3">
+            @for (src of images(); track src + $index; let i = $index; let last = $last) {
+              <figure>
+                <img [src]="assetUrl(src)" [alt]="'Photo ' + (i + 1)" />
+                <figcaption class="p-1">
+                  <button type="button" class="btn btn-sm btn-light py-0" (click)="moveImage(i, -1)" [disabled]="i === 0" aria-label="Move left">←</button>
+                  @if (i === 0) {
+                    <span class="badge text-bg-warning main-badge align-self-center">Main</span>
+                  }
+                  <button type="button" class="btn btn-sm btn-light py-0 text-danger" (click)="removeImage(i)" aria-label="Remove photo">✕</button>
+                  <button type="button" class="btn btn-sm btn-light py-0" (click)="moveImage(i, 1)" [disabled]="last" aria-label="Move right">→</button>
+                </figcaption>
+              </figure>
+            }
+          </div>
+        } @else {
+          <div class="text-center text-body-secondary border border-dashed rounded-3 p-4 mb-3">No photographs yet</div>
+        }
+
+        <div class="input-group input-group-sm">
+          <input #path class="form-control" placeholder="or add by path, e.g. images/kj-nk-103-front.webp" (keydown.enter)="$event.preventDefault(); addImagePath(path)" />
+          <button type="button" class="btn btn-outline-secondary" (click)="addImagePath(path)">Add path</button>
+        </div>
+        <div card-footer>Uploaded photos are compressed to WebP (max 1400px). For many large photos, copy them into <code>public/images/</code> and add by path.</div>
+      </admin-card>
+    </div>
+
+    <div class="col-xl-5">
+      <!-- Visibility -->
+      <admin-card heading="Visibility" subtitle="Where this product appears" icon="◉">
+        <div class="vstack gap-2">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="pf-published" formControlName="published" />
+            <label class="form-check-label" for="pf-published">Published on website</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="pf-new" formControlName="isNew" />
+            <label class="form-check-label" for="pf-new">New arrival</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="pf-featured" formControlName="isFeatured" />
+            <label class="form-check-label" for="pf-featured">Featured collection</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="pf-demo" formControlName="demo" />
+            <label class="form-check-label" for="pf-demo">Demo / sample item</label>
+          </div>
+        </div>
+      </admin-card>
+
+      <!-- 3D model -->
+      <admin-card heading="3D model" subtitle="Optional 360° view" icon="⬢">
+        <div class="mb-3">
+          <label class="form-label" for="pf-model">3D presentation</label>
+          <ng-select labelForId="pf-model" formControlName="modelKind" [items]="modelKinds" bindLabel="label" bindValue="value" [clearable]="false" [searchable]="false" />
+        </div>
+        @switch (modelKind()) {
+          @case ('gltf') {
+            <div class="mb-3">
+              <label class="form-label" for="pf-gltf">Model path</label>
+              <input id="pf-gltf" class="form-control" formControlName="gltfUrl" placeholder="models/kj-nk-103.glb" />
+              <div class="form-text">Copy the .glb file into <code>public/models/</code>. Keep it under ~5 MB.</div>
+            </div>
+          }
+          @case ('procedural') {
+            <div class="row g-2 mb-3">
+              <div class="col-sm-6">
+                <label class="form-label" for="pf-shape">Shape</label>
+                <ng-select labelForId="pf-shape" formControlName="shape" [items]="shapes" bindLabel="label" bindValue="value" [clearable]="false" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label" for="pf-gem">Stone</label>
+                <ng-select labelForId="pf-gem" formControlName="gem" [items]="gems" bindLabel="label" bindValue="value" [clearable]="false" />
+              </div>
+            </div>
+          }
+        }
+        @if (previewModel(); as model) {
+          <app-jewellery-viewer class="preview" [model]="model" [poster]="images().at(0) ?? ''" [alt]="form.controls.name.value || 'Preview'" />
+        } @else if (images().at(0); as first) {
+          <img class="preview w-100 object-fit-cover" [src]="assetUrl(first)" alt="Main photo" />
+        } @else {
+          <div class="text-center text-body-secondary small">Add a photo or a 3D model to see a preview.</div>
+        }
+      </admin-card>
+    </div>
+  </div>
+</form>
+
+<div class="border-top bg-white p-3 d-flex justify-content-end gap-2">
+  <button type="button" class="btn btn-outline-secondary" (click)="offcanvas.dismiss()">Cancel</button>
+  <button type="submit" form="product-form" class="btn btn-primary px-4">{{ product ? 'Update product' : 'Add product' }}</button>
+</div>
